@@ -1,0 +1,28 @@
+#  ____     ___ |    / _____ _____
+# |  __    |    |___/    |     |
+# |___| ___|    |    \ __|__   |     gsKit Open Source Project.
+# ----------------------------------------------------------------------
+# Copyright 2004 - Chris "Neovanglist" Gilbert <Neovanglist@LainOS.org>
+# Licenced under Academic Free License version 2.0
+# Review gsKit README & LICENSE files for further details.
+#
+# Makefile.global - Makefile global variable include.
+# Only intended for compiling gsKit
+#
+
+include $(GSKITSRC)/ee/Rules.make
+
+EE_LIBS = -Xlinker --start-group
+
+EE_LIBS += -lc -lkernel
+
+EE_LIBS += -Xlinker --end-group
+
+# include dir
+EE_INCS += -I$(GSKITSRC)/ee/gs/include  -I$(GSKITSRC)/ee/dma/include -I$(PS2GDB)/ee
+EE_CFLAGS += -fno-builtin-printf
+
+# linker flags
+EE_LIB_DIRS += -L$(PS2SDK)/ee/lib -L$(PS2GDB)/lib
+EE_LDFLAGS += $(EE_LIB_DIRS)
+

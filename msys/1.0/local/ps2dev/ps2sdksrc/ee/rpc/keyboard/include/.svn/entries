@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/keyboard/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-09-14T14:41:46.000000Z
+577
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ps2kbd.h
+file
+
+
+
+
+2009-08-10T17:51:12.468750Z
+fff697005fd10b27a66e3f16a877831d
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+
+libkbd.h
+file
+
+
+
+
+2009-08-10T17:51:12.468750Z
+0ccd793e14688e420e5e687a9a68a8c2
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

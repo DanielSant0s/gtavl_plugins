@@ -1,0 +1,58 @@
+8
+
+dir
+1525
+svn://svn.ps2dev.org/ps2/trunk/gsKit/ee/toolkit
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile.global
+file
+
+
+
+
+2009-01-26T01:49:35.484375Z
+33f343f5e21407b36b7bdc0edf9efd01
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+
+Makefile
+file
+
+
+
+
+2009-01-26T01:49:35.484375Z
+e5557a17fa583b14eb59f48558a14f3d
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+

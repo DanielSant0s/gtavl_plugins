@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/libc/regress/testfiles
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-03-04T10:53:57.000000Z
+892
+gawd
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+dummy
+file
+
+
+
+
+2009-08-10T17:51:29.796875Z
+6f5902ac237024bdd0c176cb93063dc4
+2005-03-04T10:53:57.000000Z
+892
+gawd
+has-props
+

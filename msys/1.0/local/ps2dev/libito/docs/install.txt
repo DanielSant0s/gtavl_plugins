@@ -1,0 +1,12 @@
+
+
+Create a LIBITO enviroment variable which points at the root of the
+directory into which you have instaled libito.
+
+If you which to use the make target 'run' which uses ps2client to execute
+the ELF on the PS2. You need to installed ps2client and create a enviroment
+variable named PS2_IP, note the underscore, which holds the IP address of your
+PS2.
+
+You need the 3.2.2 toolchain to use libito, it also requires the lastest version
+of ps2sdk.

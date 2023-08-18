@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/multitap/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-09-14T14:41:46.000000Z
+577
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libmtap.h
+file
+
+
+
+
+2009-08-10T17:51:11.437500Z
+aa2b2e8a529c9e8d88a6418a52d55ace
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

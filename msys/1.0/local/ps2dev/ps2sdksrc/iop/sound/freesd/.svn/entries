@@ -1,0 +1,60 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/sound/freesd
+svn://svn.ps2dev.org/ps2
+
+
+
+2008-12-13T23:13:25.179624Z
+1475
+lukasz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:55.609375Z
+7ad5e80372f5a70935236fce5580dbd1
+2004-04-18T01:57:57.000000Z
+259
+oobles
+has-props
+
+README
+file
+
+
+
+
+2009-08-10T17:50:55.609375Z
+4f54bf9f667bf6d79ccded9041c78eb5
+2004-04-16T02:04:43.000000Z
+201
+oobles
+has-props
+

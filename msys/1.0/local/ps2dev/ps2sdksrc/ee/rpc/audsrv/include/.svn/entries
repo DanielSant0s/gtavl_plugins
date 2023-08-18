@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/audsrv/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-11-29T07:23:39.860515Z
+1239
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+audsrv.h
+file
+
+
+
+
+2009-08-10T17:51:13.562500Z
+a058b397338d258be42838a571dad419
+2005-11-29T07:23:39.860515Z
+1239
+radad
+has-props
+

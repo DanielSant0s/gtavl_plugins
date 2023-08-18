@@ -1,0 +1,46 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/usbd
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-08-11T02:42:17.365703Z
+1600
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:58.140625Z
+b5dc278007c8cf1a3964f05b2495a3c9
+2006-07-28T18:43:36.008125Z
+1340
+Herben
+

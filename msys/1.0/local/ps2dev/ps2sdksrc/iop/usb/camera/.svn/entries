@@ -1,0 +1,59 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/camera
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-02-15T10:29:52.076361Z
+1538
+Lion
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:56.781250Z
+b6a1d929b0f746b38797eb6dfeab3b69
+2009-01-22T09:48:56.163121Z
+1522
+radad
+
+readme
+file
+
+
+
+
+2009-08-10T17:50:56.781250Z
+b9a071a7ceb9d84f569115b3c84e0f72
+2005-03-13T11:18:13.000000Z
+907
+lion
+has-props
+

@@ -1,0 +1,66 @@
+.SUFFIXES: # Delete the default suffixes 
+.SUFFIXES: .c .o .s .elf
+
+include $(LIBITO)/Makefile.global
+
+# Include directories
+EE_INCS += -I$(LIBITO)/include -I$(LIBITO)/samples/common -I$(PS2SDK)/ee/include -I$(PS2SDK)/common/include
+
+# C compiler flags
+EE_CFLAGS += -D_EE -O2 -c -Wall -fno-builtin -ffreestanding -fsingle-precision-constant -ansi -pedantic -Wno-long-long $(EE_INCS)
+
+# C++ Compiler flats
+EE_CXXFLAGS += -D_EE -O2 -c -Wall -fno-rtti -fno-builtin -ffreestanding -fno-exceptions -fsingle-precision-constant -ansi -pedantic -Wno-long-long $(EE_INCS) $(USER_EE_CFLAGS)
+
+# Linker flags
+EE_LDFLAGS += -mno-crt0 -T$(PS2SDK)/ee/startup/linkfile 
+
+# Assembler flags
+EE_ASFLAGS += -mips3 -EL
+
+# Link with libs
+EE_LIBS += -L$(LIBITO)/lib -L$(PS2SDK)/ee/lib -lgcc -lito -lc -lkernel -lsyscall -lc -lgcc -lpad -lkernel 
+
+# EE_BIN_PACKED = packed_$(EE_BIN)
+
+# packed: $(EE_BIN_PACKED)
+	
+# PS2_IP = 192.168.0.10
+
+run: $(EE_BIN)
+	ps2client -h $(PS2_IP) reset
+	ps2client -h $(PS2_IP) execee host:$(EE_BIN)
+
+# run-packed: $(EE_BIN_PACKED)
+#	ps2client -h $(PS2_IP) reset
+#	ps2client -h $(PS2_IP) -t 3 execee host:packed_$(EE_BIN)
+
+clean:
+	rm -f -r $(EE_BIN) $(EE_BIN_PACKED) $(CLEAN_FILES) $(EE_OBJS) $(EE_OBJS_DIR)
+
+$(EE_OBJS_DIR)%.o : %.c
+	$(EE_CC) $(EE_CFLAGS) $< -o $@
+
+$(EE_OBJS_DIR)%.o : %.cpp
+	$(EE_CPP) $(EE_CXXFLAGS) $< -o $@
+
+$(EE_OBJS_DIR)%.o : %.s
+	$(EE_AS) $(EE_ASFLAGS) $< -o $@
+
+$(EE_OBJS_DIR)%.o : %.S
+	$(EE_CC) $(EE_CFLAGS) $< -o $@
+
+$(EE_LIB_DIR):
+	mkdir $(EE_LIB_DIR)
+
+$(EE_OBJS_DIR):
+	mkdir $(EE_OBJS_DIR)
+
+$(EE_LIB): $(EE_OBJS)
+	$(EE_AR) rcs $(EE_LIB) $(EE_OBJS)
+
+# $(EE_BIN_PACKED) : $(EE_BIN)
+#	$(PS2PACKER) $(EE_BIN) $(EE_BIN_PACKED)
+	
+$(EE_BIN) : $(EE_OBJS) $(PS2SDK)/ee/startup/crt0.o
+	$(EE_CPP) $(EE_LDFLAGS) -o $(EE_BIN) $(EE_OBJS) $(PS2SDK)/ee/startup/crt0.o $(EE_LIBS)

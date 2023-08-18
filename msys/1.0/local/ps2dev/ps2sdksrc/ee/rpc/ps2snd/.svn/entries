@@ -1,0 +1,61 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/ps2snd
+svn://svn.ps2dev.org/ps2
+
+
+
+2006-07-01T14:50:44.226419Z
+1328
+jbit
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+samples
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:15.953125Z
+085521265ca54e77defd9d23a860525e
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+
+README
+file
+
+
+
+
+2009-08-10T17:51:15.953125Z
+3c3740c75bc76b3169155476652f28aa
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+

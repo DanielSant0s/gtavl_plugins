@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools/adpenc/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-06-27T17:34:43.000000Z
+1187
+lukasz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+adpcm.c
+file
+
+
+
+
+2009-08-10T17:51:31.281250Z
+d3613b5d9919ca51c6696a8435b9931b
+2005-06-27T17:34:43.000000Z
+1187
+lukasz
+has-props
+
+main.c
+file
+
+
+
+
+2009-08-10T17:51:31.281250Z
+31031f2f6556b1d0edff671b528a6c03
+2005-06-27T17:34:43.000000Z
+1187
+lukasz
+has-props
+

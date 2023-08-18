@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/sound/audsrv/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-10-01T16:19:49.987285Z
+1221
+gawd
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+audsrv.h
+file
+
+
+
+
+2009-08-10T17:50:51.531250Z
+3538fb8974e5d50f7bb0e7ba58447e43
+2005-10-01T16:19:49.987285Z
+1221
+gawd
+has-props
+

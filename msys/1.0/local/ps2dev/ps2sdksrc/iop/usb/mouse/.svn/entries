@@ -1,0 +1,47 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/mouse
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-06-13T22:31:13.000000Z
+1158
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:57.062500Z
+044081ea8b3572a087beccb5c3a1515d
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

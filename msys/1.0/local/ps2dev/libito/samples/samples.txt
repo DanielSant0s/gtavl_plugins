@@ -1,0 +1,41 @@
+Overview over all the samples
+
+gif (GifPipe)
+===============================================================================
+sprite         - Shows how to use sprites
+point          - Shows how to use points (dots), star field.
+line           - Shows how to use lines and linestrips
+triangle       - Shows how to use triangles, triangle-/fans/strips
+indirect fb    - Shows how to setup indirect framebuffer access, fire effect.
+alphablending  - Shows how to usealphablending
+ztest          - Shows how to use zbuffer test
+bitmapfont     - Loads a bitmap font and renders a text using it
+fontm          - Loads FONTM from ROM and renders a text using it
+circuitblend   - Shows how use to reduce flicker in interlace resolutions.
+textureformats - Shows the different texture formats supported.
+
+vu0
+===============================================================================
+basic          - Loads a simple mesh and renders it with lightning
+math           - Shows all the vu0 macro math functions
+
+fpu
+===============================================================================
+basic         - Loads a simple mesh and renders it with lightning
+math          - Shows all the fpu math functions
+
+videmodes
+===============================================================================
+320x2nn       - Shows how to init a 320x224/256 (NTSC/PAL) resolution
+512x384       - Shows how to init a 512x384 resolution
+640x2nn       - Shows how to init a 640x224/256 (NTSC/PAL) resolution
+640x2nn-i     - Shows how to init a 640x224/256 (NTSC/PAL) interlaced resolution
+
+misc
+===============================================================================
+pad           - Shows how to to read joypad with Pad class, Pong game.
+threadsema    - Shows how to use Thread and Semaphore classes    
+scratchpad    - Shows how to move the stack onto scratchpad memory
+c-wrapper     - Shows how to access ito from C
+string        - Shows how to use the ito string class
+linkedlist    - shows how to use the ito linkedlist class

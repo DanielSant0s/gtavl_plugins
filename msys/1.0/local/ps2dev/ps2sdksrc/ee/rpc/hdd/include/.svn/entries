@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/hdd/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-07T01:56:53.526806Z
+1421
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libhdd.h
+file
+
+
+
+
+2009-08-10T17:51:11.781250Z
+e24335a4ea0af7b282eb02be40b97b50
+2007-07-07T01:56:53.526806Z
+1421
+radad
+has-props
+

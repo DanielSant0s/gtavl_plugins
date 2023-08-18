@@ -1,0 +1,197 @@
+  _____     ___ ____ 
+   ____|   |    ____|      PS2lib - PS2 OpenSource Project
+  |     ___|   |____       (C)2001, Gustavo Scotti (gustavo@scotti.com)
+  ----------------------------------------------------------------------
+                                                             Version 2.0
+
+Introduction
+------------
+
+Ps2lib is an open-sourced library for developing directly with Sony's 
+Playstation 2.  It was originally developed by Gustavo Scotti and released
+in October 2001.  As he described in the original README, "All the findings
+are based in disassembling the binaries with the whole symbol table,
+interpreting the results, and trying out with the bits."  As other 
+developers have joined the project we have kept to that original method.
+
+ps2lib today provides a large number of the basic software libraries 
+required to access the underlying PS2 system.  As the PS2 has two seperate
+CPU's (the Emotion Engine(EE) and IO Processor(IOP)), the library is split
+into two different major areas representing functions available on each
+processor.
+
+So far, the Emotion Engine(EE) libraries include four library files:
+
+libsyscall.a : This provides the entry points to the internal BIOS system
+               calls of the EE kernel.  As these functions are simply
+               system calls they require no further libraries to function
+               in your software.
+
+libkernel.a  : This library provides many of the basic requirments to access
+               important functions of the ps2.  The most important of these
+               is the SIF CMD & RPC interfaces.  The SIF is important as
+               it allows the EE to communicate with the IO Processor.  Any
+               fileio, controller, sound, etc used from the EE is accomplished
+               using these interfaces.
+
+	       libkernel also includes a tiny subset of the ANSI C library.
+	       Most of the string routines are included, as well as a few stdio
+	       routines (most notably printf()) and malloc/free.  If your code
+	       relies on libc routines not present in libkernel (check
+	       ee/include/kernel.h for a list of the included routines), you
+	       must obtain and install a full ANSI C library, such as Newlib.
+	       Details about obtaining and installing Newlib are listed below.
+
+libmc.a      : This library provides a (partial) interface to the memory card
+               access irx stored in ROM. Example code which demonstrates how to
+	       use this library is planned, and should be added to ps2lib soon.
+
+libpad.a     : This library provides a complete interface to pad access irx's. 
+               You may either use the irx stored in ROM, or a more recent 
+	       version with additional features. Example code which demonstrates 
+	       how to use this library is included in the ps2lib source tree.
+
+The IO Processor (IOP) libraries include a much larger variety of system
+calls.  The PS2 BIOS has inbuilt libraries for sound, fileio, contrller, memory
+card, standard c library and others.  Each of these functions is made
+available through a dynamic link library called a .irx file.  The libkernel.a
+file in the IOP provides access to these functions.  
+
+
+As ps2lib is improved we intend to open up more of the internal ps2 system
+functionality to developers.  ps2lib is also a work in progress and is likely
+to be never completely finished.  If you find anything missing that you
+feel should be part of ps2lib please let us know or even better contribute
+a patch.
+
+You can find more information on ps2lib from various location on the net.
+
+http://www.topica.com/lists/ps2dev/read
+http://www.topica.com/lists/ps2cvs/read
+http://ps2dev.livemedia.com.au
+http://ps2dev.sf.net
+
+ps2lib only provides base functionality for accessing the ps2.  You may 
+find these sites and libraries useful, depending on what you are developing.
+
+http://naplink.napalm-x.com
+http://www.mouthshut.net
+http://www.thethirdcreation.net 
+
+Last but not least.  ps2lib is not for use on ps2linux.  ps2lib provides
+base level access to ps2 kernel functions which are not always available
+in a ps2linux environment.
+
+ 
+Notes on License
+----------------
+
+PS2LIB now falls under the X11 license which is a BSD style of license.  
+Please read the LICENSE file for full details.  The intention of adding
+a license to ps2lib is to ensure that those using ps2lib and those 
+developers contributing to ps2lib are protected by a known license.  
+Previously it was unclear in what use ps2lib could be used; this should
+now be clearer.  
+
+If you plan on contributing modifications to ps2lib please ensure you use
+the same license in your files.  We can not accept files taken from a GPL
+style of license for inclusion in PS2LIB.
+
+Please direct any questions regarding license or copyright issues to one
+of the listed authors listed in the AUTHOR's file.
+
+
+Compiling and Installation
+--------------------------
+
+In order to compile PS2lib, you will need the following:
+
+- ee-gcc, ee-binutils
+- iop-gcc, iop-binutils (with Karmix's patches)
+- make
+- [Optional] Newlib (targeted for the PS2. See below for info on how to obtain
+  newlib)
+
+Depending on your system configuration you may need to modify the file
+Makefile.pref to your particular directory location and compiler names.
+
+The building process is controlled by a series of makefiles, which are executed
+by the "make" program. There are four make targets available:
+
+- "all" (default). This will build the libraries for EE and IOP (such as 
+                   libkernel, etc), samples and utils.
+- "lib"    This will build only the libraries for EE and IOP.
+- "samples". This will build EE and IOP sample programs.
+- "utils". This will build the various utilities which are present in PS2lib.
+- "clean". This will clean your source tree, removing all files created during
+           the build process (including libraries).
+
+Example - To build the libraries, sample code and utilities you would type:
+
+make all
+
+To build only the sample code you would type:
+
+make samples
+
+
+Obtaining Newlib
+----------------
+
+Newlib (targeted for the PS2) provides libc and libm for EE.  Note that Newlib
+is not required to build or link against PS2lib.  You will need to install
+Newlib only if you require libc support (or any routines from libm) that isn't
+included with PS2lib.
+
+There are two methods of obtaining newlib:
+
+1) You can download the pre-compiled libraries from http://ps2dev.livemedia.com.au
+   or http://ps2dev.sourceforge.net
+2) You can compile the source yourself. The method for this is beyond the scope
+   of this document and is not covered here.
+
+Assuming that you follow the "standard" development setup, this is how you can
+install newlib: 
+
+1) Download the pre-compiled libraries from http://ps2dev.livemedia.com.au or
+   http://ps2dev.sourceforge.net
+2) Extract the archive into your ps2dev root directory (/usr/local/ps2dev)
+   This will create a new directory (/usr/local/ps2dev/newlib) which will
+   hold the newlib libraries and header files.
+
+(for more info on the "standard" setup, please see either http://ps2dev.sf.net
+or http://ps2dev.livemedia.com.au)
+
+Setting up the environment variables
+-----------------------------------
+
+It has become standard to setup some environment variables which point to
+certain locations in your PS2dev directory tree. Many makefiles (such as
+the PS2lib makefiles) rely on these environment variables, and unless you want
+to spend a lot of time hacking at makefiles it is recommended that you also
+setup some environment variables in the following way..
+
+Assuming that you are developing under cygwin, using the cygwin bash shell, 
+you would have a file called "ps2dev.sh" in /etc/profile.d, with the contents
+of this file as shown below:
+
+PS2DEV=/usr/local/ps2dev
+EE=$PS2DEV/ee
+IOP=$PS2DEV/iop
+PS2LIB=$PS2DEV/ps2lib
+PATH=$PATH:$PS2DEV/bin:$EE/bin:$IOP/bin
+export PS2DEV EE IOP PS2LIB PATH
+
+It's not hard to modify this to work with native linux, native win32 etc.
+
+The actual directory locations which the environment variables hold are not
+important. You could have ps2lib wherever you want, newlib wherever you want
+etc. However, it IS important that the above environment variables are present
+and that the path names they hold are valid.
+
+Miscellaneous
+-------------
+
+Makefile.template and Makefile.include have been included in ee/. Their purpose
+is to ease the process of starting a new project by providing a working,
+PS2lib-aware makefile setup.

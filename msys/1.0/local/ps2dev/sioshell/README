@@ -1,0 +1,31 @@
+PS2 SIO Shell
+Copyright (c) TyRaNiD, Pixel 2005
+
+Not much of a readme to be honest. This is a simple shell program for use on the PS2
+over SIO. When built and executed (using ps2link/naplink etc) it gives you the ability
+to halt the EE, dump memory, set breakpoints, do single stepping etc. Nothing too 
+fancy but could be useful once in a while.
+
+BUILDING:
+To build you need the latest version of ps2sdk from CVS and also the latest build of 
+Pixel's ps2-packer. Without these you wont get far.
+
+In the source dir type "make", that should be all you need to do.
+
+USAGE:
+
+Setup your serial console, execute the elf file on the PS2. "SIOSHELL Installed" should
+be printed to your console. Now start your program you want to debug/monitor, while
+it is running hit a key on the serial console and the shell should appear. Type 
+"help" in the shell to see the command list and type "help [command]" to get a slightly
+more detailed usage. Type "exit" to exit the shell.
+
+NOTE: Try and avoid executing commands via naplink/ps2link while the shell is active.
+Also once the shell has been installed you do not need to install it again unless you
+reboot the machine.
+
+That is all...
+
+Thx to Herben for many many useful tips :)
+
+Greetz to all the usual shower.

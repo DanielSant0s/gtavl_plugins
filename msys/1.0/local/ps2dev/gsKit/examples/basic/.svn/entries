@@ -1,0 +1,54 @@
+8
+
+dir
+1525
+svn://svn.ps2dev.org/ps2/trunk/gsKit/examples/basic
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+basic.c
+file
+
+
+
+
+2009-01-26T01:49:40.468750Z
+0f451a08d4d882e0b6a21b0770f66672
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+has-props
+
+Makefile
+file
+
+
+
+
+2009-01-26T01:49:40.468750Z
+57621cc03cf7a8ae10e0fa7f9efa6d7b
+2009-01-08T14:27:43.233567Z
+1500
+oopo
+has-props
+

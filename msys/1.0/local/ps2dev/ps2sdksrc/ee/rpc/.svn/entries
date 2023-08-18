@@ -1,0 +1,92 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-06-22T21:43:32.154486Z
+1592
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+tcpip
+dir
+
+cdvd
+dir
+
+ahx
+dir
+
+poweroff
+dir
+
+mouse
+dir
+
+camera
+dir
+
+remote
+dir
+
+padx
+dir
+
+multitap
+dir
+
+hdd
+dir
+
+filexio
+dir
+
+keyboard
+dir
+
+memorycard
+dir
+
+pad
+dir
+
+audsrv
+dir
+
+ps2snd
+dir
+
+sior
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:16.468750Z
+4455487067e8fa1e8adbc15c4829850d
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+has-props
+

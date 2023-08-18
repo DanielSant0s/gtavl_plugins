@@ -1,0 +1,47 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/kernel
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-08-12T20:02:55.077748Z
+1601
+jbit
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:00.265625Z
+1cdf511376539769818b7ee442a67fe2
+2007-11-13T02:55:37.307668Z
+1459
+loser
+has-props
+

@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools/bin2s/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2006-02-20T18:14:29.963531Z
+1274
+drakonite
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+bin2s.c
+file
+
+
+
+
+2009-08-10T17:51:31.687500Z
+581fa83c9549d4bd1826c08f75c06262
+2006-02-20T18:14:29.963531Z
+1274
+drakonite
+has-props
+

@@ -1,0 +1,1811 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- $Revision: 1.26 $ -->
+
+<sect1 id="installation-copytomemcard">
+  <title>
+    <phrase lang="en">Copying SMS to your memory card (Independence/Modchip)</phrase>
+    <phrase lang="pt">#Copying SMS to your memory card (Independence/Modchip)#</phrase>
+    <phrase lang="ru">Как скопировать SMS на карту памяти (Independence/Модчип)</phrase>    
+  </title>
+  <para lang="en">
+    First download a copy of the latest <filename>SMS.ELF</filename>. The
+    latest release is  available at
+    <ulink url="http://home.casema.nl/eugene_plotnikov/"/>
+    also, some older versions are held at
+    <ulink url="http://ps2dev.org/ps2/Projects"/>. Developers can download the
+    source from svn://svn.ps2dev.org.
+  </para>
+  <para lang="pt">
+    Primeiro faça o download da última versão do <filename>SMS.ELF</filename>.
+    A última versão está disponível em
+    <ulink url="http://home.casema.nl/eugene_plotnikov/"/>
+    algumas das versões antigas também estão disponíveis em
+    <ulink url="http://ps2dev.org/ps2/Projects"/>. Os programadores podem
+    fazer download do código fonte em svn://svn.ps2dev.org.
+  </para>
+  <para lang="ru">
+    Прежде всего, скачайте последнюю версию <filename>SMS.ELF</filename> 
+    с <ulink url="http://home.casema.nl/eugene_plotnikov/"/>. 
+    Кроме того, предыдущие версии можно скачать с <ulink url="http://ps2dev.org/ps2/Projects"/>. 
+    Если есть желание помочь в разработке программы, то исходники можно взять 
+    на svn://svn.ps2dev.org.
+  </para>
+  
+  <para lang="en">
+    Now copy this file to your memory card (memory card 0). The recommended
+    (and probably easiest) way to copy the ELF file to your PS2 is using FTP.
+  </para>
+  <para lang="pt">
+    Agora copie o ficheiro para o seu cartão de memória (cartão de memória 0).
+    O método mais fácil e recomendado para o fazer é usando o FTP.
+  </para>
+  <para lang="ru">
+    Теперь надо записать этот файла на карту памяти (ту, которая будет 
+    вставлена в слот 0). Рекомендованный нами (и, скорее всего, самый
+    простой) способ скопировать ELF файл в PS2 - через FTP.
+  </para>
+  
+  <sect2>
+  <title id="installation-copytomemcard-ftp">
+    <phrase lang="en">Copying SMS to your memory card using FTP</phrase>
+    <phrase lang="pt">#Copying SMS to your memory card using FTP#</phrase>
+    <phrase lang="ru">Как скопировать SMS на карту памяти через FTP</phrase>
+  </title>
+  <para lang="en">
+    You'll need an
+    <emphasis role="bold">FTP server</emphasis> running on your PS2, and an
+    <emphasis role="bold">FTP client</emphasis> running on your PC, with either
+    a  crossover cable between the two, or patch cables linking them both to a
+    network switch.
+  </para>
+  <para lang="pt">
+    Necessitará de um <emphasis role="bold">servidor de FTP</emphasis>
+    a correr na PS2, e um <emphasis role="bold">cliente de FTP</emphasis> 
+    a correr no seu PC, com um cabo cruzado a ligar os dois ou ambos ligados
+    a um switcher com cabos direitos.
+  </para>
+  <para lang="ru">
+    Вам понадобится 
+    <emphasis role="bold">FTP сервер</emphasis>, запущенный на PS2, и 
+    <emphasis role="bold">FTP клиент</emphasis> на компьютере подключенном к
+    PS2 посредством кабеля-кроссовера или обычными кабелями через свич.
+  </para>
+
+  <sect3 id="installation-copytomemcard-ftp-ulaunchelf">
+  <title>
+    <phrase lang="en">Starting the FTP Server (uLaunchELF)</phrase>
+    <phrase lang="pt">Inicializando o servidor de FTP (uLaunchELF)</phrase>
+    <phrase lang="ru">Запускаем FTP сервер (uLaunchELF)</phrase>
+  </title>
+
+  <para lang="en">
+    The recommended (and again, probably easiest) PS2 FTP server to use is
+    the built in FTP server of 'unofficial' LaunchELF.
+    You can get the <filename>BOOT.ELF</filename> for uLaunchELF from here:
+    <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242"/>.
+  </para>
+  <para lang="pt">
+    O servidor de FTP de PS2 recomendado é o que está imbutido no 'unofficial'
+    LaunchELF.
+    Pode encontrar o ficheiro <filename>BOOT.ELF</filename> do uLaunchELF aqui:
+    <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242"/>.
+  </para>
+  <para lang="ru">
+    Самый удобный, и, пожалуй, самый простой, FTP сервер для PS2 - тот, 
+    который встроен в "неофициальный" загрузчик LaunchELF. Скачать файл
+    <filename>BOOT.ELF</filename> для uLaunchELF можно здесь:
+    <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242"/>.
+  </para>
+
+  
+  <para lang="en">
+    Assuming you've already copied the <filename>BOOT.ELF</filename> onto
+    your memory card using one of the exploit installation techniques, it
+    is very easy to start the FTP server.
+  </para>
+  <para lang="pt">
+    Assumindo que já copiou o <filename>BOOT.ELF</filename> para o seu cartão
+    de memória utilizando a técnica do exploit, é muito fácil iniciar o
+    servidor de FTP.
+  </para>
+  <para lang="ru">
+    Будем считать, что файл <filename>BOOT.ELF</filename> уже скопирован на
+    карту памяти, используя какую-нибудь систему по установке exploit-а. 
+    В таком случае, запуск FTP сервера - очень простая задача.
+  </para>
+
+  <para lang="en">
+    Turn on your PS2 and activate your exploit/modchip; first time you
+    use uLaunchELF, it will look something like this:
+  </para>
+  <para lang="pt">
+    Ligue a sua PS2 e active o seu exploit/modchip; da primeira vez que usar o
+    uLaunchELF, aparecerá qualquer coisa deste género:
+  </para>
+  <para lang="ru">
+    Включите PS2 и активируйте модчип или exploit. При первом запуске, 
+    uLaunchELF будет выглядеть примерно так:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF startup screen.
+      </phrase>
+      <phrase lang="pt">
+         Ecrã inicial do uLaunchELF.
+      </phrase>
+      <phrase lang="ru">
+         Экран при запуске uLaunchELF.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf01.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    Press <emphasis role="bold">SELECT</emphasis>, go to
+    <emphasis role="bold">Network Settings</emphasis>, then press
+    <emphasis role="bold">O</emphasis>
+  </para>
+  <para lang="pt">
+    Pressione <emphasis role="bold">SELECT</emphasis>, vá a
+    <emphasis role="bold">Network Settings</emphasis>, depois pressione
+    <emphasis role="bold">O</emphasis>
+  </para>
+  <para lang="ru">
+    Нажмите на <emphasis role="bold">SELECT</emphasis>. Затем, выберите 
+    <emphasis role="bold">Network Settings</emphasis>, и нажмите 
+    <emphasis role="bold">O</emphasis>
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF Network Settings - step 1
+      </phrase>
+      <phrase lang="pt">
+         Network Settings no uLaunchELF - passo 1
+      </phrase>
+      <phrase lang="ru">
+         Меню сетевых настроек uLaunchELF  - шаг 1
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf02.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    The next screen allows you to change the network settings using your
+    controller pad.  The settings are stored in the file
+    <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>.
+  </para>
+  <para lang="pt">
+    O próximo ecrã permite-lhe alterar as opções do Network utilizando o seu
+    comando.  As opções são guardadas no ficheiro
+    <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>.
+  </para>
+  <para lang="ru">
+    Следующим шагом будет изменение сетевых настроек, с помощью джойстика.
+    Параметры находятся в файле <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>.
+  </para>
+
+  <para lang="en">
+    You can change the IP address of your PS2 from the default
+    192.168.0.10 to anything you want, but it must be on the same subnet
+    as your PC.  For more information on network settings, please see the
+    <xref linkend="installation-configuration-ipconfig"/> section.
+    You can edit the values using the D-pad.
+  </para>
+  <para lang="pt">
+    Pode alterar o IP da sua PS2 de 198.162.0.10 para qualquer outro que 
+    deseje, mas deve pertencer à mesma subnet que o seu PC.  Para mais
+    informações sobre opções de network, por favor veja a secção
+    <xref linkend="installation-configuration-ipconfig"/>.
+    Pode alterar os valores utilizando as setas do comando.
+  </para>
+  <para lang="ru">
+    Вы можете сменить IP адрес вашей PS2 со стандартного 192.168.0.10 на все,
+    что душа пожелает, но надо помнить, что новый адрес должен быть в той
+    же подсетке, что и ваш компьютер. Более детально этот вопрос 
+    рассматривается в <xref linkend="installation-configuration-ipconfig"/> 
+    разделе. Данные можно редактировать с помощью клавиш на игровом пульте.
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF Network Settings - step 2
+      </phrase>
+      <phrase lang="pt">
+         Network Settings no uLaunchELF - passo 2
+      </phrase>
+      <phrase lang="ru">
+         Меню сетевых настроек uLaunchELF  - шаг 2
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf03.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    Once you are happy with the settings, select
+    <emphasis role="bold">SAVE</emphasis> and press
+    <emphasis role="bold">O</emphasis>:
+  </para>
+  <para lang="pt">
+    Quando estiver contente com as suas opções, seleccione
+    <emphasis role="bold">SAVE</emphasis> e pressione
+    <emphasis role="bold">O</emphasis>:
+  </para>
+  <para lang="ru">
+    После того, как нужные изменения произведены, выберите 
+    <emphasis role="bold">SAVE</emphasis> и нажмите
+    <emphasis role="bold">O</emphasis>:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF Network Settings - step 3
+      </phrase>
+      <phrase lang="pt">
+         Network Settings no uLaunchELF - passo 3
+      </phrase>
+      <phrase lang="ru">
+         Меню сетевых настроек uLaunchELF  - шаг 3
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf04.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    On the main screen select <emphasis role="bold">OK</emphasis> and press
+    <emphasis role="bold">O</emphasis>:
+  </para>
+  <para lang="pt">
+    No ecrã principal seleccione <emphasis role="bold">OK</emphasis> e
+    pressione <emphasis role="bold">O</emphasis>:
+  </para>
+  <para lang="ru">
+    В главном окне программы выберите <emphasis role="bold">OK</emphasis> 
+    и нажмите <emphasis role="bold">O</emphasis>:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF Network Settings - step 4
+      </phrase>
+      <phrase lang="pt">
+         Network Settings no uLaunchELF - passo 4
+      </phrase>
+      <phrase lang="ru">
+         Меню сетевых настроек uLaunchELF  - шаг 4
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf05.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    You should see a message saying that the configuration has been saved:
+  </para>
+  <para lang="pt">
+    Deverá ver uma mensagem dizendo que a configuração foi salva:
+  </para>
+  <para lang="ru">
+    Сверху экрана должно появиться сообщение о том, что параметры были успешно 
+    сохранены:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF Network Settings - step 5
+      </phrase>
+      <phrase lang="pt">
+         Network Settings no uLaunchELF - passo 5
+      </phrase>
+      <phrase lang="ru">
+         Меню сетевых настроек uLaunchELF  - шаг 5
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf06.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    Now you need to assign a button to launch the FTP server.  Press
+    <emphasis role="bold">SELECT</emphasis>, then move to any entry on the
+    list (here, we've used 'START').  Press
+    <emphasis role="bold">O</emphasis>, and navigate to
+    <emphasis role="bold">MISC</emphasis>, then
+    <emphasis role="bold">PS2Net</emphasis>.
+  </para>
+  <para lang="pt">
+    Agora pode atribuir um butão para executar o servidor de FTP.  Pressione
+    <emphasis role="bold">SELECT</emphasis>, depois mova para qualquer entrada
+    da lista (aqui usámos 'START').  Pressione
+    <emphasis role="bold">O</emphasis>, e navegue para
+    <emphasis role="bold">MISC</emphasis>, depois
+    <emphasis role="bold">PS2Net</emphasis>.
+  </para>
+  <para lang="ru">
+    Теперь надо назначить кнопку для запуска FTP сервера. Нажмите 
+    <emphasis role="bold">SELECT</emphasis>, после чего, выберите любую 
+    клавишу, которая вам больше нравится. В этом примере, мы выбрали "START").
+    Нажмите <emphasis role="bold">O</emphasis>, после чего, выберите 
+    <emphasis role="bold">MISC</emphasis>, а затем
+    <emphasis role="bold">PS2Net</emphasis>.
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF: Assigning a Menu Button - step 1
+      </phrase>
+      <phrase lang="pt">
+         Atribuindo um Butão no Menu no uLaunchELF - passo 1
+      </phrase>
+      <phrase lang="ru">
+         Назначаем кнопку запуска FTP сервера  - шаг 1
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf07.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF: Assigning a Menu Button - step 2
+      </phrase>
+      <phrase lang="pt">
+         Atribuindo um Butão no Menu no uLaunchELF - passo 2
+      </phrase>
+      <phrase lang="ru">
+         Назначаем кнопку запуска FTP сервера  - шаг 2
+      </phrase>
+      
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf08.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF: Assigning a Menu Button - step 3
+      </phrase>
+      <phrase lang="pt">
+         Atribuindo um Butão no Menu no uLaunchELF - passo 3
+      </phrase>
+      <phrase lang="ru">
+         Назначаем кнопку запуска FTP сервера  - шаг 3
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf09.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <note>
+    <para lang="en">
+      <application>PS2Net</application> is the name of the FTP server program
+      that comes built in to uLaunchELF's
+      <filename>BOOT.ELF</filename> file.
+    </para>
+    <para lang="pt">
+      <application>PS2Net</application> é o nome do programa de servidor de 
+      FTP que vem imbutido no ficheiro <filename>BOOT.ELF</filename> do 
+      uLaunchELF.
+    </para>
+    <para lang="ru">
+      <application>PS2Net</application>  - так называется FTP сервер, который
+      встроен в <filename>BOOT.ELF</filename> uLaunchELF'а.
+    </para>
+  </note>
+
+  <para lang="en">
+    Once you've pressed
+    <emphasis role="bold">O</emphasis> to confirm, then
+    <emphasis role="bold">OK</emphasis>, and
+    <emphasis role="bold">O</emphasis> again, you'll see the following 
+    screen:
+  </para>
+  <para lang="pt">
+    Assim que tiver pressionado 
+    <emphasis role="bold">O</emphasis> para confirmar, depois
+    <emphasis role="bold">OK</emphasis>, e
+    <emphasis role="bold">O</emphasis> de novo, deverá ver o seguinte ecrã:
+  </para>
+  <para lang="ru">
+    Нажмите <emphasis role="bold">O</emphasis> для подтверждения, затем
+    <emphasis role="bold">OK</emphasis>, и еще раз
+    <emphasis role="bold">O</emphasis>, после чего вы увидите такой экран:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF: Assigning a Menu Button - step 4
+      </phrase>
+      <phrase lang="pt">
+         Atribuindo um Butão no Menu no uLaunchELF - passo 4
+      </phrase>
+      <phrase lang="ru">
+         Назначаем кнопку запуска FTP сервера  - шаг 4
+      </phrase>      
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf10.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    You'll now see the above screen every time <filename>BOOT.ELF</filename>
+    starts up.
+  </para>
+  <para lang="pt">
+    Verá o ecrã enterior sempre que o ficheiro <filename>BOOT.ELF</filename>
+    iniciar.
+  </para>
+  <para lang="ru">
+    Этот экран будет появляться при каждом запуске <filename>BOOT.ELF</filename>.
+  </para>
+
+  <para lang="en">
+    This means that if you press <emphasis role="bold">START</emphasis>,
+    PS2Net will be launched, and if you press
+    <emphasis role="bold">SELECT</emphasis>, you will go to the config
+    screen.
+  </para>
+  <para lang="pt">
+    Isto significa que se pressionar <emphasis role="bold">START</emphasis>,
+    PS2Net será executado e se pressionar 
+    <emphasis role="bold">SELECT</emphasis>, irá parar ao ecrã de configuração.
+  </para>
+  <para lang="ru">
+    Он означает, что, при каждом нажатии на кнопку 
+    <emphasis role="bold">START</emphasis>, будет запущен PS2Net, а если вы 
+    решите нажать на кнопку <emphasis role="bold">SELECT</emphasis>, то 
+    откроется меню настроек.
+  </para>
+
+  <tip>
+    <para lang="en">
+      You can assign many buttons on this screen.  You will probably
+      want to later assign SMS to one of the buttons.  If you assign anything
+      to <emphasis role="bold">DEFAULT</emphasis>, it will launch
+      automatically after a pre-set delay.
+    </para>
+    <para lang="pt">
+      Pode atribuir muitos butões neste ecrã.  Provavelmente quererá atribuir 
+      o SMS a um dos butões.  Se atribuir alguma coisa a 
+      <emphasis role="bold">DEFAULT</emphasis>, este será executado 
+      automaticamente depois de um determinado intervalo de tempo.
+    </para>
+    <para lang="ru">
+      Вы можете назначить действия для многих кнопок, список которых
+      появится на этом экране. Вы наверняка позже захотите назначить 
+      кнопку для запуска SMS. Кстати, если вы назначите какую-либо программу
+      для <emphasis role="bold">DEFAULT</emphasis>, то она будет автоматически 
+      запущена после небольшой задержки.
+    </para>
+  </tip>
+
+  <para lang="en">
+    Now press
+    <emphasis role="bold">START</emphasis> to launch PS2Net.  The following
+    screen is shown while your FTP server is running:
+  </para>
+  <para lang="pt">
+    Agora pressione
+    <emphasis role="bold">START</emphasis> para executar o PS2Net.  O seguinte
+    ecrã é mostrado enquanto o servidor de FTP estiver a correr:
+  </para>
+  <para lang="ru">
+    Теперь нажмите <emphasis role="bold">START</emphasis> для запуска PS2Net.  
+    Экран будет выглядеть примерно так:
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         uLaunchELF: Starting the FTP server
+      </phrase>
+      <phrase lang="pt">
+         Iniciando o servidor de FTP no uLaunchELF.
+      </phrase>
+      <phrase lang="ru">
+         uLaunchELF: Запуск FTP сервера
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-ulaunchelf11.png"
+          format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>uLaunchELF</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    You can check that the connection between the PC and PS2 is working by 
+    starting a command prompt on the PC  (start->run, 'cmd' &lt;enter&gt;).
+    Then type <userinput>ping 192.168.0.10</userinput> (or whatever the IP 
+    address of your PS2 is). If it's working, you'll see
+    <computeroutput>reply from ...</computeroutput> shown on the screen.
+  </para>
+  <para lang="pt">
+    Pode testar se a ligação entre o PC e a PS2 está a funcionar utilizando o
+    command prompt no PC (iniciar->executar, 'cmd' &lt;enter&gt;). Depois
+    escreva <userinput>ping 192.168.0.10</userinput> (substitua 192.168.0.10
+    pelo IP da sua PS2).  Se estiver a funcionar, deverá ver
+    <computeroutput>reply from ...</computeroutput> na janela.
+  </para>
+  <para lang="ru">
+    Вы можете проверить связь между компьютером и PS2 с помощью "пинга". Для
+    этого, откройте окно ДОС (например, Start->Run, напечатайте 'cmd' (без 
+    кавычек) и нажмите Enter). В открывшемся окне, наберите 
+    <userinput>ping 192.168.0.10</userinput> (или адрес PS2, котрый вы 
+    задали в предыдущем разделе). Если все работает, как надо, то на экране
+    должны появиться несколько строк, начинающихся с 
+    <computeroutput>reply from ...</computeroutput>.
+  </para>
+  <para lang="en">
+    Now that you've got your FTP server running, skip ahead to
+    <xref linkend="installation-copytomemcard-ftp-ftpclient"/> for how to upload
+    SMS to your memcard.
+  </para>
+  <para lang="pt">
+    Agora que já tem o seu servidor de FTP a correr, salte para a secção
+    <xref linkend="installation-copytomemcard-ftp-ftpclient"/> para saber como
+    tranferir o SMS para o seu cartão de memória.
+  </para>
+ <para lang="ru">
+    Итак, ваш FTP сервер заработал? Если так, то вы можете перейти к главе
+    <xref linkend="installation-copytomemcard-ftp-ftpclient"/>, в которой
+    объясняется, как можно скопировать SMS на карту памяти.
+  </para>
+   
+  </sect3>
+
+  <sect3 id="installation-detail-copyftp-execftps">
+  <title>
+    <phrase lang="en">Starting the FTP Server (ExecFTPs)</phrase>
+    <phrase lang="pt">Inicializando o servidor de FTP (ExecFTPs)</phrase>
+    <phrase lang="ru">Запуск FTP сервера (ExecFTPs)</phrase>    
+  </title>
+
+  <para lang="en">
+    If you are <emphasis>not</emphasis>
+    <link linkend="installation-copytomemcard-ftp-ulaunchelf">using
+    uLaunchELF</link>, you'll need to load a seperate FTP server
+    application onto your memory card such as
+    <filename>EXECFTPS.ELF</filename>.  Activate your exploit, and boot
+    to your boot browser (e.g. LaunchELF).  You can either configure one of 
+    the buttons to start <filename>EXECFTPS.ELF</filename> directly, or
+    navigate to it using the filebrowser, then run it from there.
+  </para>
+  <para lang="pt">
+    Se <emphasis>não</emphasis> estiver a
+    <link linkend="installation-copytomemcard-ftp-ulaunchelf">usar o uLaunchELF
+    </link>, terá de correr uma aplicação de FTP em separado tal como o 
+    <filename>EXECFTPS.ELF</filename>.  Active o seu exploit, e inicie o seu
+    navegador de boot (e.g. LaunchELF).  Pode configurar um dos butões para
+    executar o <filename>EXECFTPS.ELF</filename> directamente, ou navegar até
+    ele utilizando o navegador de ficheiros, e corrê-lo daí.
+  </para>
+  <para lang="ru">
+    Если вы, по какой-то причине, <emphasis>не</emphasis> 
+    <link linkend="installation-copytomemcard-ftp-ulaunchelf">пользуетесь 
+    uLaunchELF</link>, вам понадобится загрузить программу FTP сервера на 
+    карту памяти. Например, <filename>EXECFTPS.ELF</filename>.  
+    Активируйте exploit и запустите менеджер загрузки (например, LaunchELF).  
+    Вы можете назначить кнопку запуска для <filename>EXECFTPS.ELF</filename>
+    или можете просто выбирать его из списка файлов и запускать его оттуда.
+  </para>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         Start ExecFTPs by navigating to the ELF using LaunchELF.
+      </phrase>
+      <phrase lang="pt">
+         Inicie o ExecFTPs navegando até ao ELF utilizando o LaunchELF.
+      </phrase>
+      <phrase lang="ru">
+         Запуск ExecFTPs из списка ELF файлов в LaunchELF.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-execftps01.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>LanuchELF browser</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <figure>
+    <title>
+      <phrase lang="en">
+         Starting ExecFTPs using a configured button (the configuration above
+         shows that by pressing start on controller 1, ExecFTPs will be started).
+      </phrase>
+      <phrase lang="pt">
+         Inicializando o ExecFTPs utilizando um butão configurado.
+      </phrase>
+      <phrase lang="ru">
+         Запуск ExecFTPs через кнопку быстрого доступа. Из данного примера
+         видно, что для запуска надо нажать кнопку START на контроллере 1.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-execftps02.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>LaunchELF main screen</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    Either way, once you've got the FTP server running, you should see your
+    TV screen show something like this:
+  </para>
+  <para lang="pt">
+    De qualquer modo, quando tiver o servidor de FTP a correr, deverá ver na 
+    sua TV algo deste género:
+  </para>
+  <para lang="ru">
+    Как бы то ни было, после того, как FTP сервер заработал, вы должны 
+    увидеть на экране вашеге телевизора что-то подобное:
+  </para>
+
+  
+  <figure id="installation-execftps03">
+    <title>
+       <phrase lang="en">
+         Screenshot of ExecFTPs running using default IP configuration.
+      </phrase>
+      <phrase lang="pt">
+         Screenshot do ExecFTPs a correr com a configuração de IP por defeito.
+      </phrase>
+       <phrase lang="ru">
+         Пример ExecFTPs, использующего стандартную конфигурацию IP.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-execftps03.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>ExecFTPS running with defaults.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         Screenshot of ExecFTPs running using custom IP configuration.
+      </phrase>
+      <phrase lang="pt">
+         Screenshot do ExecFTPs a correr com a configuração de IP alterada.
+      </phrase>
+       <phrase lang="ru">
+         Пример ExecFTPs, использующего измененную вами конфигурацию IP.
+      </phrase>
+      
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-execftps04.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>ExecFTPs running with custom configuration.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    You can check that the connection between the PC and PS2 is working by
+    starting a command prompt <emphasis role="bold">on the PC</emphasis>
+    (start->run, 'cmd' &lt;enter&gt;).  Then type
+    <userinput>ping 192.168.0.10</userinput> (or whatever the IP address of your
+    PS2 is). If it's working, you'll see
+    <computeroutput>reply from ...</computeroutput> shown on the screen.
+  </para>
+  <para lang="pt">
+    Pode certificar-se que a conecção entre o PC e a PS2 está a funcionar
+    iniciando o command prompt <emphasis role="bold">no PC</emphasis>
+    (iniciar->executar, 'cmd' &lt;enter&gt;).  Depois introduza
+    <userinput>ping 192.168.0.10</userinput> (ou qualquer que seja o IP da sua
+    PS2). Se estiver a funcionar, verá
+    <computeroutput>reply from ...</computeroutput> na janela.
+  </para>
+  <para lang="ru">
+    Вы можете проверить связь между компьютером и PS2 с помощью "пинга". Для
+    этого, откройте окно ДОС (например, Start->Run, напечатайте 'cmd' (без 
+    кавычек) и нажмите Enter). В открывшемся окне, наберите 
+    <userinput>ping 192.168.0.10</userinput> (или адрес PS2, котрый вы 
+    задали в предыдущем разделе). Если все работает, как надо, то на экране
+    должны появиться несколько строк, начинающихся с 
+    <computeroutput>reply from ...</computeroutput>.
+  </para>
+
+  <para lang="en">
+    The configuration settings for <application>ExecFTPs</application> are
+    stored in <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>, in the
+    form:
+  </para>
+  <para lang="pt">
+    The configuration settings for <application>ExecFTPs</application> are
+    stored in <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>, in the
+    form:
+  </para>
+  <para lang="ru">
+    Параметры <application>ExecFTPs</application> находятся в файле
+     <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename> в таком виде:
+  </para>
+
+  <screen>
+    &lt;ps2_ip_address&gt; &lt;ps2_subnet_mask&gt; &lt;ps2_default_gateway&gt;
+  </screen>
+
+  <para lang="en">
+    If you do not have a
+    <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename> file,
+    <application>ExecFTPs</application> will automatically use the following
+    defaults:
+  </para>
+  <para lang="pt">
+    Se não tiver um ficheiro
+    <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>, o 
+    <application>ExecFTPs</application> utilizará as seguintes definições:
+  </para>
+  <para lang="ru">
+    Если файла <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename> не 
+    существует, то <application>ExecFTPs</application> создаст его, используя
+    следующие параметры:
+  </para>
+
+  <informaltable frame='none'>
+  <tgroup cols='2'>
+  <tbody>
+  <row>
+    <entry morerows="3">
+      <para lang="en">PS2 Settings</para>
+      <para lang="pt">Definições da PS2</para>
+      <para lang="ru">Параметры PS2</para>      
+    </entry>
+    <entry>
+      <para lang="en">PS2 IP Address:</para>
+      <para lang="pt">Endereço de IP da PS2:</para>
+      <para lang="ru">IP адрес PS2:</para>      
+    </entry>
+    <entry>192.168.0.10</entry>
+  </row>
+  <row>
+    <entry>
+      <para lang="en">Subnet Mask:</para>
+      <para lang="pt">'Subnet Mask':</para>
+      <para lang="ru">Сетевая маска:</para>      
+    </entry>
+    <entry>255.255.255.0</entry>
+  </row>
+  <row>
+    <entry>
+      <para lang="en">Default Gateway:</para>
+      <para lang="pt">'Default Gateway':</para>
+      <para lang="ru">Адрес точки доступа:</para>      
+    </entry>
+    <entry>192.168.0.1</entry>
+  </row>
+  <row>
+    <entry>
+      <para lang="en">mc0:/BxDATA-SYSTEM/CONFIG.DAT</para>
+      <para lang="pt">mc0:/BxDATA-SYSTEM/CONFIG.DAT</para>
+      <para lang="ru">mc0:/BxDATA-SYSTEM/CONFIG.DAT</para>      
+    </entry>
+    <entry> file not created</entry>
+  </row>
+  </tbody>
+  </tgroup>
+  </informaltable>
+
+  <para lang="en">
+    If you want to use a custom IP configuration, you will need to modify
+    the file <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  However,
+    if you intend to use FTP to copy a custom
+    <filename>CONFIG.DAT</filename> file to your PS2, then you'll need to
+    get it working with the defaults first.  For more information on network
+    settings, please see
+    <xref linkend="installation-configuration-ipconfig"/>.
+  </para>
+  <para lang="pt">
+    Se quiser utilizar uma configuração de IP diferente, necessitará de
+    modificar o ficheiro <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  
+    No entanto, se tencionar utilizar FTP para copiar um ficheiro
+    <filename>CONFIG.DAT</filename> alterado para a sua PS2, primeiro terá 
+    de o colocar a funcionar com os valores padrão.  Para mais informações
+    sobre definições de rede, dirija-se a 
+    <xref linkend="installation-configuration-ipconfig"/>.
+  </para>
+  <para lang="ru">
+    Если вы хотите использовать свои собственные настройки, вы можете 
+    изменить файл <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  Однако,
+    если вы хотите использовать FTP для того, чтобы скопировать свой
+    собственный файл <filename>CONFIG.DAT</filename> на PS2, вы должны сначала
+    установить связь между копьютером и PS2, используя стандартные настройки.
+    Более детально вопросы сетевых настроек рассмотрены в главе 
+    <xref linkend="installation-configuration-ipconfig"/>.
+  </para>
+
+  <note>
+    <para lang="en">
+      ExecFTPs stores its settings in
+      <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  This is different
+      from the file <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> where
+      SMS and uLaunchELF/PS2Net store their settings.
+    </para>
+    <para lang="pt">
+      O ExecFTPs guarda as suas configurações em 
+      <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  É diferente do
+      ficheiro <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> onde o SMS e o
+      uLaunchELF/PS2Net guardam as suas configurações.
+    </para>
+    <para lang="ru">
+      Обратите внимание на то, что ExecFTPs сохраняет свои настройки в файле 
+      <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.  Это другой файл,
+      не такой же, как тот, в котором находятся настройки для SMS и 
+      uLaunchELF/PS2NetThis. Последние используют файл 
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> для записи параметров.
+    </para>
+  </note>
+
+  </sect3>
+
+  <sect3>
+  <title id="installation-copytomemcard-ftp-ftpclient">
+    <phrase lang="en">
+      Starting the FTP Client
+    </phrase>
+    <phrase lang="pt">
+      Iniciando o cliente de FTP
+    </phrase>
+    <phrase lang="ru">
+      Запуск FTP клиента
+    </phrase>
+  </title>
+  <para lang="en">
+    Once you've got the FTP server working, and successfully PINGed your PS2,
+    start your FTP client. Lots of people seem to be recommending FlashFXP
+    (<ulink url="http://www.inicom.net/pages/en.ffxp-download.php"/>), but I
+    was happier with the free (and non-nagware) GPL FileZilla
+    (<ulink url="http://sourceforge.net/projects/filezilla"/>). Not all FTP
+    clients will work. For example I couldn't get FTPexplorer to work for
+    some reason.
+  </para>
+  <para lang="pt">
+    Assim que tiver o servidor de FTP a funcionar, e tiver PINGado a PS2 com
+    sucesso, execute o seu cliente de FTP. Muitas pessoas parecem recomendar o
+    FlashFXP (<ulink url="http://www.inicom.net/pages/en.ffxp-download.php"/>), 
+    mas eu estou contente com o FileZilla
+    (<ulink url="http://sourceforge.net/projects/filezilla"/>). Nem todos os
+    clientes de FTP funcionam, eu não consegui meter o FTPexplorer a 
+    funcionar por alguma razão.
+  </para>
+  <para lang="ru">
+    После того, как FTP сервер заработал и вы успешно проверили его 
+    работоспособность с помощью пингов, необходимо запустить FTP клиент на
+    вашем компьютере. Многие рекомендуют использовать FlashFXP
+    (<ulink url="http://www.inicom.net/pages/en.ffxp-download.php"/>), но
+    мне больше нравится бесплатный (и без надоедливых напоминалок о том, что 
+    неплохо было бы и заплатить за него) клиент GPL FileZilla
+    (<ulink url="http://sourceforge.net/projects/filezilla"/>). Не все
+    FTP будут работать с PS2. Например, я так и не смог заставить FTPexplorer 
+    общаться с моей консолью.
+  </para>
+  <para lang="en">
+    Load the FTP client on your PC (example is FileZilla), then type in the
+    IP address of your PS2 in the 'Host:' box. Some people have also
+    recommended that you need to enable Passive (or PASV) mode. I've found
+    that this isn't necessary, but by all means go ahead if you like, the
+    setting is accessed by clicking the 'Advanced' button on the form below.
+  </para>
+  <para lang="pt">
+    Inicie o cliente de FTP no seu PC (exemplo: FileZilla), depois insira no
+    endereço de IP da sua PS2 na caixa 'Host:'. Algumas pessoas recomendam que
+    ligue o modo Passivo (ou PASV). Para mim não foi necessário, mas de qualquer
+    modo ligue-o se desejar, esta definição pode ser acedida clicando no butão
+    'Advanced' na fórmula em baixo.
+  </para>
+  <para lang="ru">
+    Запустите FTP клиент на вашем компьютере (в нашем примере это FileZilla), 
+    затем наберите IP адрес вашей PS2 в строке 'Host:' box. Некоторые 
+    рекомендуют, также, включить пассивный режим (PASV). Как мне кажется,
+    это не является необходимостью, но можете его включить, если вам так 
+    хочется. Сделать это можно, нажав кнопку 'Advanced'.
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         Setting up the IP to connect to (note that the default IP address
+         for the PS2 is 192.168.0.10).
+      </phrase>
+      <phrase lang="pt">
+         Configurando o IP ao qual se quer ligar (repare que o IP de defeito 
+         para a PS2 é 192.168.0.10).
+      </phrase>
+       <phrase lang="ru">
+         Настройки IP адреса для подключения к PS2. Обратите внимание, что 
+         стандартный адрес PS2 - 192.168.0.10).
+      </phrase>
+      
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-filezilla01.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>FileZilla configuration dialog.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+  
+  <para lang="en">
+    When you are ready, click 'Connect', and after a blur of messages at 
+    the top of the screen, you should see something like the following page:
+  </para>
+  <para lang="pt">
+    Quando estiver pronto, clique 'Connect', e depois de um monte de mensagens
+    no topo do ecrã, deverá ver algo deste género:
+  </para>
+  <para lang="ru">
+    Нажмите 'Connect' когда будете готовы и, после кучи различных сообщений
+    вверху экрана, вы увидите что-то такое:
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         FileZilla FTP client while connected to PS2.
+      </phrase>
+      <phrase lang="pt">
+         FileZilla ligado à PS2.
+      </phrase>
+       <phrase lang="ru">
+         FTP клиент FileZilla успешно подключен к PS2.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-filezilla02.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>FileZilla FTP client while connected to PS2.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    In the 'Remote Site' section you should see 'hdd, mc, pfs'. These are the
+    storage devices on your PS2. Hdd is the hard disc drive, and mc is the
+    memory card. (if you don't see anything, try pressing F5 to refresh).
+    Double click mc, then '0'. The two memory card slots are accessed via
+    <filename>/mc/0</filename> and <filename>/mc/1</filename> (slots 1 and 2
+    on the Playstation2).
+  </para>
+  <para lang="pt">
+    Na secção 'Remote Site' deverá ver 'hdd, mc, pfs'. Estes são os dispositivos
+    de armazenamento na PS2. HDD é o disco rigido, o MC é o cartão de memória.
+    (se não vir nada tente carregar F5 para 'refrescar'). Faça duplo clique no
+    MC, depois '0'. As duas slotes de cartão de memória são acedidas via 
+    <filename>/mc/0</filename> e <filename>/mc/1</filename> (slotes 1 e 2 na
+    Playstation 2).
+  </para>
+  <para lang="ru">
+    В разделе 'Remote Site' вы должны увидеть 'hdd, mc, pfs'. Это различные
+    устройства памяти на PS2. Hdd - это жесткий диск (если есть), а mc - карта
+    памяти. Если вы ничего не видите, попробуйте нажать F5, чтобы обновить 
+    список. Выбираем mc (двойной клик), затем '0'. Карты памяти доступны
+    через <filename>/mc/0</filename> и <filename>/mc/1</filename> (разъемы 1 
+    и 2 на Playstation2).
+  </para>
+
+  <para lang="en">
+    I'd recommend putting your <filename>SMS.ELF</filename> in a folder called
+    'SMS', as the settings will also be stored in
+    <filename>/mc/0/SMS</filename>, but you can put it where you wish.
+    Right click to create a new folder if necessary.
+  </para>
+  <para lang="pt">
+    Eu recomendo colocar o <filename>SMS.ELF</filename> numa pasta chamada
+    'SMS', visto que as definições também serão guardadas em 
+    <filename>/mc/0/SMS</filename>, mas pode colocá-las onde desejar.
+    Clique direito para criar um novo directório se necessário.
+  </para>
+  <para lang="ru">
+    Я бы порекомендовал записать <filename>SMS.ELF</filename> в директорию,
+    которая так и называется - 'SMS', так как настройки будут 
+    сохраняться в директории <filename>/mc/0/SMS</filename>, но если, по каким-
+    либо причинам вас это не устраивает, то дело ваше.
+    Нажмите правую клавишу мыши, чтобы создать директорию.
+  </para>
+
+  <para lang="en">
+    Navigate to your downloaded <filename>SMS.ELF</filename> in the local
+    site browser, then drag the file from the left window to the right window.
+    You should see a progress bar as the transfer completes:
+  </para>
+  <para lang="pt">
+    Navegue até ao seu ficheiro <filename>SMS.ELF</filename> no navegador 
+    'Local Site', depois arraste o ficheiro da janela da esquerda para a
+    janela da direita. Deverá ver uma barra de progresso durante a
+    transferência:
+  </para>
+  <para lang="ru">
+    Выберите файл <filename>SMS.ELF</filename> в списке локальных файлов и
+    перетащите его из левого окна в правое. На экране появится полоса, 
+    показывающая ход процесса копирования:
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         FileZilla FTP client: Transfer of file in progress.
+      </phrase>
+      <phrase lang="pt">
+         Cliente de FTP FileZilla: Transferência em progresso.
+      </phrase>
+       <phrase lang="ru">
+        FTP клиент FileZilla : процесс копирования файла.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/installation-filezilla03.png" format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>FileZilla FTP client: Transfer of file in progress.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    Congratulations, you've now copied the SMS executable to your memory 
+    card. Close down your FTP client then restart your PS2.
+  </para>
+  <para lang="pt">
+    Parabéns, conseguiu copiar o executável do SMS para o seu cartão de
+    memória. Feche o seu cliente de FTP e reinicie a PS2.
+  </para>
+  <para lang="ru">
+    Поздравляем, вы успешно скопировали файл SMS на карту памяти. Закройте FTP
+    клиент и перезагрузите PS2.
+  </para>
+
+  </sect3>
+  </sect2>
+</sect1>
+
+<sect1 id="installation-bootablecdr">
+  <title>
+    <phrase lang="en">Using a bootable SMS CDR (Modchip only)</phrase>
+    <phrase lang="pt">#Using a bootable SMS CDR (Modchip only)#</phrase>
+    <phrase lang="ru">Загрузка с SMS CD-диска (только для модчипа)</phrase>    
+  </title>
+  <para lang="en">
+    The author of the
+    <ulink url="http://www.ps2-scene.org/sms/">SMS website</ulink> has kindly
+    contributed
+    <ulink url="http://www.ps2-scene.org/sms/eng/cdimage.htm">pre-made
+    CD images for SMS</ulink>.  This means you don't need to
+    go to the bother of creating your own image.  PAL and NTSC versions are
+    available, on the page linked above.
+  </para>
+  <para lang="pt">
+    #The author of the
+    <ulink url="http://www.ps2-scene.org/sms/">SMS website</ulink> kindly
+    contributed
+    <ulink url="http://www.ps2-scene.org/sms/eng/cdimage.htm">pre-made
+    CD images for SMS</ulink>.  This means you don't need to
+    go to the bother of creating your own image.  PAL and NTSC versions are
+    available, on the page linked above.#
+  </para>
+  <para lang="ru">
+    Автор этого <ulink url="http://www.ps2-scene.org/sms/">сайта SMS</ulink> 
+    сделал <ulink url="http://www.ps2-scene.org/sms/eng/cdimage.htm">готовые
+    образы CD для SMS</ulink>.  Это значит, что вам не нужно напрягаться и
+    пытаться создать свой собственный образ диска. На странице, ссылка на
+    которую приведена выше, есть версии для PAL и NTSC.
+  </para>
+
+  <para lang="en">
+    When you first use this disc, you will get the default
+    <application>uLaunchELF</application> settings, which is just the file
+    browser. We suggest you go to the settings option, and map a button to
+    launch SMS. (SMS is under CDFS). These settings are saved, so you only
+    have to do this once.
+  </para>
+  <para lang="pt">
+    #When you first use this disc, you will get the default
+    <application>uLaunchELF</application> settings, which is just the file
+    browser. We suggest you go to the settings option, and map a button to
+    launch SMS. (SMS is under CDFS). These settings are saved, so you only
+    have to do this once.#
+  </para>
+  <para lang="ru">
+    Когда вы будете использовать такой диск в первый раз, вы увидите 
+    стандартное окно <application>uLaunchELF</application>, который
+    является простым файловым менеджером. Мы рекомендуем вам зайти в раздел
+    настроек и назначить кнопку быстрого запуска для SMS (SMS находится в 
+    CDFS). 
+  </para>
+
+  <para lang="en">
+    If you want to upgrade SMS later, you can copy the new
+    <filename>SMS.elf</filename> onto a USB drive.  Then use the
+    <application>uLaunchELF</application> file browser to copy it over to
+    your PS2's memory card.  Put it into the sms folder (otherwise it will
+    appear as 'corrupted data'), and adjust your key mappings to suit. it
+    takes up about half a meg on your memory card.
+  </para>
+  <para lang="pt">
+    #If you want to upgrade SMS later, you can copy the new
+    <filename>SMS.elf</filename> onto a USB drive.  Then use the
+    <application>uLaunchELF</application> file browser to copy it over to
+    your PS2's memory card.  Put it into the sms folder (otherwise it will
+    appear as 'corrupted data'), and adjust your key mappings to suit. it
+    takes up about half a meg on your memory card.#
+  </para>
+  <para lang="ru">
+    Если вы потом захотите обновить SMS, вы всегда можете скопировать новую
+    версию <filename>SMS.elf</filename> на USB флешку. Затем, используя
+    файловый менеджер <application>uLaunchELF</application>, скопируйте
+    SMS на карту памяти PS2.  Запишите ее в директорию sms (а иначе она будет
+    видна, как 'corrupted data') и обновите настройки кнопки быстрого запуска.
+    SMS занимает около половины мегабайта на карте памяти.
+  </para>
+
+  <para lang="en">
+    As the author of SMS does not work on the website himself, the version
+    of SMS in these CD Images will occasionally fall behind. Here are
+    instructions to make your own SMS disc:
+  </para>
+  <para lang="pt">
+    As the author of SMS does not work on the website himself, the version
+    of SMS in these CD Images will occasionally fall behind. Here are
+    instructions to make your own SMS disc:
+  </para>
+  <para lang="ru">
+    Поскольку автор SMS не обновляет вышеуказанным сайтом самолично, то всегда
+    есть возможность, что на сайте не будет образа для самой последней 
+    версии SMS. В таком случае, вам нужно будет сделать свой собственный
+    диск по нижеследующей инструкции:
+  </para>
+
+  <sect2>
+  <title id="installation-bootablecdr-create">
+    <phrase lang="en">
+      Creating Your Own CDR (Modchip Only)
+    </phrase>
+    <phrase lang="pt">
+      #Creating Your Own CDR (Modchip Only)#
+    </phrase>
+    <phrase lang="ru">
+      Создаем свой собственный CD диск (только для модчипа)
+    </phrase>
+  </title>
+
+  <itemizedlist mark="number">
+    <listitem>
+      <para lang="en">
+        You will need to find and download CDGenPS2 v3.0
+      </para>
+      <para lang="pt">
+        #You will need to find and download CDGenPS2 v3.0#
+      </para>
+      <para lang="ru">
+        Найдите и скачайте CDGenPS2 v3.0
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Download the latest 
+        <ulink url="http://home.casema.nl/eugene_plotnikov/">SMS Release</ulink>,
+        and the latest
+        <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242">uLaunchELF</ulink>
+        release.  You will need to sign up at the forums to view the
+        <application>uLaunchELF</application> pages.
+      </para>
+      <para lang="pt">
+        #Download the latest
+        <ulink url="http://home.casema.nl/eugene_plotnikov/">SMS Release</ulink>,
+        and the latest
+        <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242">uLaunchELF</ulink>
+        release.  You will need to sign up at the forums to view the
+        <application>uLaunchELF</application> pages.#
+      </para>
+      <para lang="ru">
+        Скачайте последнюю 
+        <ulink url="http://home.casema.nl/eugene_plotnikov/">версию SMS</ulink>,
+        а также, последнюю версию 
+        <ulink url="http://www.ps2-scene.org/forums/showthread.php?t=37242">uLaunchELF</ulink>
+        . Вам придется зарегистрироваться на форуме, чтобы получить доступ к
+        странице <application>uLaunchELF</application>.
+      </para>
+      
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Unzip the uLaunchELF zip file, and delete everything but BOOTc.ELF. 
+        (you don't need the other stuff)
+      </para>
+      <para lang="pt">
+        #Unzip the uLaunchELF zip file, and delete everything but BOOTc.ELF.
+        (you don't need the other stuff)#
+      </para>
+      <para lang="ru">
+        Распакуйтей файл uLaunchELF.zip и удалите все, кроме BOOTc.ELF. 
+        (остальные файлы вам не нужны)
+      </para>
+      
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Rename "<filename>BOOTc.ELF</filename>" to
+        "<filename>BOOT.ELF</filename>".
+      </para>
+      <para lang="pt">
+        #Rename "<filename>BOOTc.ELF</filename>" to
+        "<filename>BOOT.ELF</filename>".#
+      </para>
+      <para lang="ru">
+        Переименуйте "<filename>BOOTc.ELF</filename>" в
+        "<filename>BOOT.ELF</filename>".
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Rename "<filename>SMS Version x.y (Rev x).elf</filename>" to
+        "<filename>SMS.ELF</filename>"
+      </para>
+      <para lang="pt">
+        #Rename "<filename>SMS Version x.y (Rev x).elf</filename>" to
+        "<filename>SMS.ELF</filename>"#
+      </para>
+      <para lang="ru">
+        Переименуйте "<filename>SMS Version x.y (Rev x).elf</filename>" в
+        "<filename>SMS.ELF</filename>"
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+             Rename both files.
+          </phrase>
+          <phrase lang="pt">
+             #Rename both files.#
+          </phrase>
+          <phrase lang="ru">
+             Переименовываем оба файла.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-cdrrenameboth.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>rename both files</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Open Notepad, and paste this:
+      </para>
+      <para lang="pt">
+        #Open Notepad, and paste this:#
+      </para>
+      <para lang="ru">
+        Откройте текстовый редактор (например, Notepad), создайте новый файл
+        и скопируйте в него следующие строки:
+      </para>
+      <screen><![CDATA[BOOT2 = cdrom0:\BOOT.ELF;1
+VER = 1.00
+VMODE = NTSC
+]]></screen>
+     <para lang="en">
+        <emphasis>Note: Use PAL instead of NTSC if you have a PAL TV, and 
+        make sure to add a blank line after the last line (press enter after 
+        NTSC).</emphasis>
+      </para>
+     <para lang="pt">
+        #<emphasis>Note: Use PAL instead of NTSC if you have a PAL TV, and
+        make sure to add a blank line after the last line (press enter after
+        NTSC).</emphasis>#
+      </para>
+     <para lang="ru">
+        <emphasis>ВНИМАНИЕ: Если у вас телевизор системы PAL, то наберите
+        PAL вместо NTSC. Не забудьте добавить одну пустую строку (нажмите
+        Enter после NTSC).</emphasis>
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        File --> Save As: "<filename>system.cnf</filename>" (make sure it is 
+        a <filename>.cnf</filename> file, not a <filename>.txt</filename>
+        file).
+      </para>
+      <para lang="pt">
+        #File --> Save As: "<filename>system.cnf</filename>" (make sure it is
+        a <filename>.cnf</filename> file, not a <filename>.txt</filename>
+        file).#
+      </para>
+      <para lang="ru">
+        File --> Save As: "<filename>system.cnf</filename>" (убедитесь, что 
+        расширение именно <filename>.cnf</filename> а не <filename>.txt</filename>
+        ).
+      </para>
+      <para lang="en">
+        You should now have:
+      </para>
+      <para lang="pt">
+        You should now have:
+      </para>
+      <para lang="ru">
+        Теперь у вас должны быть такие файлы:
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+            Files ready for <application>CDGenPS2</application>.
+          </phrase>
+          <phrase lang="pt">
+            #Files ready for <application>CDGenPS2</application>.#
+          </phrase>
+          <phrase lang="ru">
+            Файлы для <application>CDGenPS2</application>.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-smsfolder.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Files ready for CDGenPS2</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Open <application>CDGenPS2</application>, and in order:
+      </para>
+      <para lang="pt">
+        Open <application>CDGenPS2</application>, and in order:
+      </para>
+      <para lang="ru">
+        Запустите <application>CDGenPS2</application>, после чего перетащите
+        файлы в главное окно программы в следующем порядке:
+      </para>
+      <itemizedlist mark="letter">
+        <listitem>
+          <para lang="en">
+            Drag <filename>system.cnf</filename> into the main window.
+          </para>
+          <para lang="pt">
+            #Drag <filename>system.cnf</filename> into the main window.#
+          </para>
+          <para lang="ru">
+            <filename>system.cnf</filename>
+          </para>
+        </listitem>
+        <listitem>
+          <para lang="en">
+            Drag <filename>BOOT.ELF</filename> into the main window.
+          </para>
+          <para lang="pt">
+            #Drag <filename>BOOT.ELF</filename> into the main window.#
+          </para>
+          <para lang="ru">
+            <filename>BOOT.ELF</filename>
+          </para>
+        </listitem>
+        <listitem>
+          <para lang="en">
+            Drag <filename>SMS.ELF</filename> into the main window.
+          </para>
+          <para lang="pt">
+            #Drag <filename>SMS.ELF</filename> into the main window.#
+          </para>
+          <para lang="ru">
+            <filename>SMS.ELF</filename>
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para lang="en">
+        (Don't rush, do them one at a time).
+      </para>
+            <para lang="ru">
+        Не спешите, добавляйте файлы по одному.
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Right click <filename>system.cnf</filename> -> edit.
+      </para>
+      <para lang="pt">
+        #Right click <filename>system.cnf</filename> -> edit.#
+      </para>
+      <para lang="ru">
+        Кликаем правой кнопкой мыши на <filename>system.cnf</filename> -> edit.
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        choose Fix LBA, and enter '12231':
+      </para>
+      <para lang="pt">
+
+      </para>
+      <para lang="ru">
+        Выбираем Fix LBA и вводим '12231':
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+            Fix LBA option in CDGenPS2.
+          </phrase>
+          <phrase lang="pt">
+            #Fix LBA option in CDGenPS2.#
+          </phrase>
+          <phrase lang="ru">
+            Окно Fix LBA в CDGenPS2.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-fixlba.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Fix LBA option in CDGenPS2</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Go ahead and add some other files and folders now if you want, such
+        as MP3s and videos... you might as well use the rest of the space on
+        the CD.
+      </para>
+      <para lang="pt">
+        #Go ahead and add some other files and folders now if you want, such
+        as MP3s and videos... you might as well use the rest of the space on
+        the CD.#
+      </para>
+      <para lang="ru">
+        Теперь вы можете добавить на этот диск любые файлы по своему 
+        усмотрению. Например, МР3 или видео. Зачем месту-то 
+        пропадать?
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        CDGenPS2 should look like this...
+      </para>
+      <para lang="pt">
+        #CDGenPS2 should look like this...#
+      </para>
+      <para lang="ru">
+        Окно CDGenPS2 должно выглядеть примерно так:
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+            CDGenPS2 window after adding files.
+          </phrase>
+          <phrase lang="pt">
+            #CDGenPS2 window after adding files.#
+          </phrase>
+          <phrase lang="ru">
+            Окно CDGenPS2 после добавления файлов.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-cdgenps2.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Fix LBA option in CDGenPS2</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Choose File -> Create CD. Save the file as type BIN files. (the name
+        doesn't matter, so long as you remember where you saved it).
+      </para>
+      <para lang="pt">
+        #Choose File -> Create CD. Save the file as type BIN files. (the name
+        doesn't matter, so long as you remember where you saved it).#
+      </para>
+      <para lang="ru">
+        Выберите File -> Create CD. Сохраните результат, как BIN. Имя файла
+        значения не имеет, пока вы помните, как вы его назвали и где его
+        искать.
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Burn the image using Disc at Once. If you already know how to burn a
+        CD image, you're done here. just burn the disc and put it in your PS2.
+        if not, read on.
+      </para>
+      <para lang="pt">
+        #Burn the image using Disc at Once. If you already know how to burn a
+        CD image, you're done here. just burn the disc and put it in your PS2.
+        if not, read on.#
+      </para>
+      <para lang="ru">
+        Запишите диск, используя опцию Disc at Once. Если вы уже знаете, как
+        записывать диски, то на этом ваши мучения по созданию диска завершены.
+        Если нет, то продолжайте читать.
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Open Nero, and cancel the wizard that appears.
+      </para>
+      <para lang="pt">
+        #Open Nero, and cancel the wizard that appears.#
+      </para>
+      <para lang="ru">
+        Запустите Nero и, первым делом, отключите надоедливый Wizard. 
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Choose Recorder -> Burn Image (Burn Image may also be under the File
+        menu in some versions of Nero)
+      </para>
+      <para lang="pt">
+        #Choose Recorder -> Burn Image (Burn Image may also be under the File
+        menu in some versions of Nero)#
+      </para>
+      <para lang="ru">
+        Выберите Recorder -> Burn Image (в некоторых версиях Nero раздел 
+        Burn Image может быть в меню File).
+      </para>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Browse and select the CUE file that was saved with your BIN file when
+        you made the CD image.
+      </para>
+      <para lang="pt">
+        #Browse and select the CUE file that was saved with your BIN file when
+        you made the CD image.#
+      </para>
+      <para lang="ru">
+        Найдите и откройте в Nero файл CUE, который был создан когда вы 
+        сохраняли файл типа BIN (на стадии создания образа диска)
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+            Burning the image, step 1.
+          </phrase>
+          <phrase lang="pt">
+            #Burning the image, step 1.#
+          </phrase>
+          <phrase lang="ru">
+            Запись образа, шаг 1.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-cdburn01.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Burning the image, step 1.</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+    </listitem>
+    <listitem>
+      <para lang="en">
+        Press Burn... I have no trouble myself with 40x, but you may want to
+        lower the speed.
+      </para>
+      <para lang="pt">
+        #Press Burn... I have no trouble myself with 40x, but you may want to
+        lower the speed.#
+      </para>
+      <para lang="ru">
+        Нажмите на кнопку Burn. У меня лично не было проблем с записью на 
+        скоростях до 40х, но, возможно, вы захотите уменьшить скорость
+        записи.
+      </para>
+      <figure>
+        <title>
+          <phrase lang="en">
+            Burning the image, step 2.
+          </phrase>
+          <phrase lang="pt">
+            #Burning the image, step 2.#
+          </phrase>
+          <phrase lang="ru">
+            Запись образа, шаг 1.
+          </phrase>
+        </title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-cdburn02.png"
+              format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Burning the image, step 2.</phrase>
+          </textobject>
+        </mediaobject>
+      </figure>
+    </listitem>
+  </itemizedlist>
+
+  <para lang="en">
+    That's it. you're done.  If you don't want to include uLaunchELF on the 
+    CD, just rename SMS.ELF to BOOT.ELF.
+  </para>
+  <para lang="pt">
+    That's it. you're done.  If you don't want to include uLaunchELF on the
+    CD, just rename SMS.ELF to BOOT.ELF.
+  </para>
+  <para lang="ru">
+    Ну, вот и все. Диск записан. Если вы не хотите записывать uLaunchELF на 
+    такой диск, просто переименуйте SMS.ELF в BOOT.ELF (до создания образа).
+  </para>
+  </sect2>
+</sect1>
+
+<sect1 id="installation-bootabledvdr">
+  <title>
+    <phrase lang="en">Using a bootable SMS DVDR (Modchip only)</phrase>
+    <phrase lang="pt">#Using a bootable SMS DVDR (Modchip only)#</phrase>
+    <phrase lang="ru">Загрузка с SMS DVD-диска (только для модчипа)</phrase>    
+  </title>
+  <para lang="en">
+    If you're fortunate enough to have a modchip, Swap Magic, or
+    HDLoader/HDAdvance, and access to a DVD writer, the easiest way to
+    get up and running with SMS is to download the
+    <ulink url="http://ps2-scene.org/sms/eng/cdimage.htm">DVD
+    .iso image</ulink> from the SMS Media Player website, and burn it to
+    a blank DVD-/+R.
+  </para>
+  <para lang="pt">
+    #If you're fortunate enough to have a modchip, Swap Magic, or
+    HDLoader/HDAdvance, and access to a DVD writer, the easiest way to
+    get up and running with SMS is to download the
+    <ulink url="http://ps2-scene.org/sms/eng/cdimage.htm">DVD
+    .iso image</ulink> from the SMS Media Player website, and burn it to
+    a blank DVD-/+R.#
+  </para>
+  <para lang="ru">
+    Если у вас есть модчип, Swap Magic или HDLoader/HDAdvance, а также 
+    доступ к DVD рекордеру, то самым простым способом работы с SMS будет
+    создание загрузочного DVD диска. Для этого, скачайте 
+    <ulink url="http://ps2-scene.org/sms/eng/cdimage.htm">образ DVD
+    .iso</ulink> с сайта SMS и запишите его на чистый DVD диск.
+  </para>
+  <para lang="en">
+    Refer to your DVD writer application instructions for how to burn
+    ISO images.
+  </para>
+  <para lang="pt">
+    #Refer to your DVD writer application instructions for how to burn
+    ISO images.#
+  </para>
+  <para lang="ru">
+    Используйте руководство пользователя к программе записи DVD дисков,
+    которая установлена на вашем компьютере, для того, чтобы записать
+    вышеприведенный DVD образ.
+  </para>
+  <para lang="en">
+    After you have burned your DVD, put it into your modchipped PS2 and
+    press reset...  that's it.
+  </para>
+  <para lang="pt">
+    #After you have burned your DVD, put it into your modchipped PS2 and
+    press reset...  that's it.#
+  </para>
+  <para lang="ru">
+    После того, как вы записали DVD, вставьте его в вашу аппаратно 
+    модифицированную PS2 и нажмите на сброс (ресет). Вот и все.
+  </para>
+</sect1>

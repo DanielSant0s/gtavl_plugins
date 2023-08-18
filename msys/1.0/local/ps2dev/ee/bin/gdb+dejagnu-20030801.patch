@@ -1,0 +1,128 @@
+diff -urN gdb+dejagnu-20030801/gdb/infcmd.c gdb+dejagnu-20030801-ps2/gdb/infcmd.c
+--- gdb+dejagnu-20030801/gdb/infcmd.c	2003-08-01 02:41:26.000000000 +0300
++++ gdb+dejagnu-20030801-ps2/gdb/infcmd.c	2003-08-05 18:08:42.000000000 +0300
+@@ -591,6 +591,8 @@
+ 
+   ERROR_NO_INFERIOR;
+ 
++  printf("in step_1\n");
++
+   if (count_string)
+     async_exec = strip_bg_char (&count_string);
+ 
+@@ -625,15 +627,22 @@
+ 	{
+ 	  clear_proceed_status ();
+ 
++      printf("in sync case, about to call get_current_frame\n");
++
+ 	  frame = get_current_frame ();
+ 	  if (!frame)		/* Avoid coredump here.  Why tho? */
+ 	    error ("No current frame");
+ 	  step_frame_id = get_frame_id (frame);
+ 	  step_sp = read_sp ();
+ 
++      printf("in sync case, done get_current_frame, step_sp is %8x\n",(int)step_sp);
++
+ 	  if (!single_inst)
+ 	    {
++          printf("about to call find_pc_line_pc_range, with stop_pc of %8x\n",(int)stop_pc);
+ 	      find_pc_line_pc_range (stop_pc, &step_range_start, &step_range_end);
++          printf("done find_pc_line_pc_range, step_range_start is %8x, step_range_end is %8x\n",(int)step_range_start,(int)step_range_end);
++
+ 	      if (step_range_end == 0)
+ 		{
+ 		  char *name;
+diff -urN gdb+dejagnu-20030801/gdb/mips-tdep.c gdb+dejagnu-20030801-ps2/gdb/mips-tdep.c
+--- gdb+dejagnu-20030801/gdb/mips-tdep.c	2003-07-28 18:31:08.000000000 +0300
++++ gdb+dejagnu-20030801-ps2/gdb/mips-tdep.c	2003-08-05 17:29:18.000000000 +0300
+@@ -1571,6 +1571,8 @@
+   t_inst inst;
+   CORE_ADDR *saved_regs;
+ 
++  printf("called mips_find_saved_regs\n");
++
+   if (get_frame_saved_regs (fci) != NULL)
+     return;
+   saved_regs = frame_saved_regs_zalloc (fci);
+@@ -1590,8 +1592,8 @@
+         (SIGFRAME_REGSAVE_OFF + MIPS_NUMREGS * MIPS_REGSIZE + 3 * MIPS_REGSIZE)
+ #endif
+ #ifndef SIGFRAME_REG_SIZE
+-  /* FIXME!  Is this correct?? */
+-#define SIGFRAME_REG_SIZE	MIPS_REGSIZE
++//#define SIGFRAME_REG_SIZE	MIPS_REGSIZE
++#define SIGFRAME_REG_SIZE	16
+ #endif
+   if ((get_frame_type (fci) == SIGTRAMP_FRAME))
+     {
+@@ -5912,6 +5914,7 @@
+     num_regs = 71;
+   else
+     num_regs = 90;
++  printf("num_regs is 90\n");
+   set_gdbarch_num_regs (gdbarch, num_regs);
+   set_gdbarch_num_pseudo_regs (gdbarch, num_regs);
+ 
+@@ -6035,6 +6038,24 @@
+ 		      "unknown ABI in switch");
+     }
+ 
++    set_gdbarch_push_dummy_call (gdbarch, mips_o32_push_dummy_call);
++    set_gdbarch_deprecated_store_return_value (gdbarch, mips_o32_store_return_value);
++    set_gdbarch_extract_return_value (gdbarch, mips_o32_extract_return_value);
++    tdep->mips_default_saved_regsize = 8;
++    tdep->mips_default_stack_argsize = 16;
++    tdep->mips_fp_register_double = 0;
++    tdep->mips_last_arg_regnum = A0_REGNUM + 4 - 1;
++    tdep->mips_last_fp_arg_regnum = FPA0_REGNUM + 4 - 1;
++    tdep->gdb_target_is_mips64 = 0;
++    tdep->default_mask_address_p = 0;
++    set_gdbarch_long_bit (gdbarch, 64);
++    set_gdbarch_ptr_bit (gdbarch, 32);
++    set_gdbarch_long_long_bit (gdbarch, 64);
++//    set_gdbarch_reg_struct_has_addr (gdbarch, 
++//				    mips_eabi_reg_struct_has_addr);
++//    set_gdbarch_use_struct_convention (gdbarch, 
++//					mips_eabi_use_struct_convention);
++
+   /* FIXME: jlarmour/2000-04-07: There *is* a flag EF_MIPS_32BIT_MODE
+      that could indicate -gp32 BUT gas/config/tc-mips.c contains the
+      comment:
+@@ -6078,6 +6099,8 @@
+   else
+     tdep->mips_fpu_type = MIPS_FPU_DOUBLE;
+ 
++  tdep->mips_fpu_type = MIPS_FPU_SINGLE;
++
+   /* MIPS version of register names.  NOTE: At present the MIPS
+      register name management is part way between the old -
+      #undef/#define REGISTER_NAMES and the new REGISTER_NAME(nr).
+diff -urN gdb+dejagnu-20030801/gdb/remote.c gdb+dejagnu-20030801-ps2/gdb/remote.c
+--- gdb+dejagnu-20030801/gdb/remote.c	2003-06-30 18:50:52.000000000 +0300
++++ gdb+dejagnu-20030801-ps2/gdb/remote.c	2003-08-05 15:15:24.000000000 +0300
+@@ -3443,7 +3443,10 @@
+     }
+ 
+   sprintf (buf, "g");
++  printf("ABOUT TO GET %d BYTES FROM TARGET\n",rs->remote_packet_size);
+   remote_send (buf, (rs->remote_packet_size));
++  printf("GOT %d BYTES FROM TARGET\n",strlen(buf));
++  printf("GOT %s\n",buf);
+ 
+   /* Save the size of the packet sent to us by the target.  Its used
+      as a heuristic when determining the max size of packets that the
+@@ -4389,7 +4392,12 @@
+ 	  puts_filtered ("Remote packet too long: ");
+ 	  puts_filtered (buf);
+ 	  puts_filtered ("\n");
+-
++	  puts_filtered ("");
++	  {
++		  char tempc[128];
++		  sprintf( tempc, "sizeof_buf is %d\n", sizeof_buf );
++		  puts_filtered (tempc);
++	  }
+ 	  return -1;
+ 	}
+     }

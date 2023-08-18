@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/memorycard/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-09T05:59:44.339183Z
+1426
+loser
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libmc.h
+file
+
+
+
+
+2009-08-10T17:51:12.750000Z
+cf2f173922847bd50495bdfb204b3ce6
+2007-07-09T05:59:44.339183Z
+1426
+loser
+has-props
+

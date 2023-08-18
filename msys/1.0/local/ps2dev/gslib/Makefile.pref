@@ -1,0 +1,12 @@
+####################################################
+# Change the settings, so they match yours
+####################################################
+
+include $(PS2SDK)/samples/Makefile.pref
+
+GSLIB = $(PS2DEV)/gslib
+GSLIB_DIR = $(GSLIB)
+GCCLIB = $(PS2DEV)/ee/lib/gcc-lib/ee/3.2.2
+CPPLIB = $(PS2DEV)/ee/ee/lib
+
+LIBGS = $(GSLIB_DIR)/lib/libgs.a

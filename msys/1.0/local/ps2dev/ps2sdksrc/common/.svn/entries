@@ -1,0 +1,70 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/common
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-15T09:14:34.921719Z
+1512
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+BuildRules.mak
+file
+
+
+
+
+2009-08-10T17:50:59.015625Z
+50255a49ffb02f8daa8cd4d80276d7a6
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+
+include
+dir
+
+Rules.release
+file
+
+
+
+
+2009-08-10T17:50:59.015625Z
+a6220508b0efb28df5c53c597a8b0346
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:59.015625Z
+7981a9abef7b6ab47c2b5f6c0a149013
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+

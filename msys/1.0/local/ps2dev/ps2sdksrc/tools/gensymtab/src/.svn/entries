@@ -1,0 +1,40 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools/gensymtab/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-01-08T09:55:03.777417Z
+1368
+jbit
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+main.c
+file
+
+
+
+
+2009-08-10T17:51:30.750000Z
+f788cf7bf6e4e50237d4063b8863653d
+2007-01-08T09:55:03.777417Z
+1368
+jbit
+

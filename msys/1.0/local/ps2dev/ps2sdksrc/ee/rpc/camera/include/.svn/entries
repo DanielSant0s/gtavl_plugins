@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/camera/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-03-13T11:05:57.000000Z
+906
+lion
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ps2cam_rpc.h
+file
+
+
+
+
+2009-08-10T17:51:04.421875Z
+31adb4689f47849586ab15e0156b2831
+2005-03-13T11:05:57.000000Z
+906
+lion
+has-props
+

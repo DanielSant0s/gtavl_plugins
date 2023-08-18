@@ -1,0 +1,57 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip/udptty
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-11-04T23:19:57.824439Z
+1454
+roman_ps2dev
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:35.031250Z
+2b6332ee1f8d1a1749a510ea1a3c175c
+2005-01-05T18:32:09.000000Z
+737
+pixel
+has-props
+
+README
+file
+
+
+
+
+2009-08-10T17:50:35.031250Z
+3ec943652a7311ec93f1f00651ce7e5c
+2004-04-16T02:41:37.000000Z
+204
+oobles
+has-props
+

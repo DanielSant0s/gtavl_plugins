@@ -1,0 +1,44 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/skeleton
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-04-22T04:56:26.000000Z
+1021
+loser
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+irx
+dir
+
+IRX.Rules
+file
+
+
+
+
+2009-08-10T17:50:13.203125Z
+51b1cc021d480bf6548dafd576bfd255
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+

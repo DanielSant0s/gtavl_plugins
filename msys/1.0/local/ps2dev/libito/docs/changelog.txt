@@ -1,0 +1,5 @@
+Libito changelog - www.lukasz.dk
+
+1.0.0
+===========================================================
+- Initial release

@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/cdvd/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-09-14T14:41:46.000000Z
+577
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libcdvd.h
+file
+
+
+
+
+2009-08-10T17:51:02.546875Z
+a0fcbb9e44174e1965f6d89649706b53
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

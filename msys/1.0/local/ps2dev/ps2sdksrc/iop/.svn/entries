@@ -1,0 +1,94 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-08-11T02:42:17.365703Z
+1600
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+hdd
+dir
+
+tcpip
+dir
+
+kernel
+dir
+
+system
+dir
+
+debug
+dir
+
+Rules.make
+file
+
+
+
+
+2009-08-10T17:50:58.156250Z
+e178fe89f3fbca17dd48c6a9f73a196d
+2009-01-22T09:48:56.163121Z
+1522
+radad
+has-props
+
+dev9
+dir
+
+fs
+dir
+
+sound
+dir
+
+usb
+dir
+
+Rules.release
+file
+
+
+
+
+2009-08-10T17:50:58.156250Z
+ad15da54a073f902d917151494373a96
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:58.156250Z
+e36975de2ec8cf062ce994f084177265
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

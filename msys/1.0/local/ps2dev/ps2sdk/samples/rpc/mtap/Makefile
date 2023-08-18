@@ -1,0 +1,34 @@
+# _____     ___ ____     ___ ____
+#  ____|   |    ____|   |        | |____|
+# |     ___|   |____ ___|    ____| |    \    PS2DEV Open Source Project.
+#-----------------------------------------------------------------------
+# Copyright 2001-2004, ps2dev - http://www.ps2dev.org
+# Licenced under Academic Free License version 2.0
+# Review ps2sdk README & LICENSE files for further details.
+#
+# $Id: Makefile.sample 577 2004-09-14 14:41:46Z pixel $
+
+
+EE_BIN = mtap_sample.elf
+EE_OBJS = mtap_sample.o
+EE_LIBS = -lpadx -lc -lmtap
+
+all: $(EE_BIN) freesio2.irx freemtap.irx freepad.irx
+
+clean:
+	rm -f *.elf *.o *.a freesio2.irx freemtap.irx freepad.irx
+
+freesio2.irx: 
+	cp $(PS2SDK)/iop/irx/freesio2.irx $@
+
+freemtap.irx:
+	cp $(PS2SDK)/iop/irx/freemtap.irx $@
+
+
+freepad.irx: 
+	cp $(PS2SDK)/iop/irx/freepad.irx $@
+
+
+include $(PS2SDK)/samples/Makefile.pref
+include $(PS2SDK)/samples/Makefile.eeglobal
+

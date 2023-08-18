@@ -1,0 +1,7 @@
+#
+# Include this in your makefile to setup vars for ps2lib/newlib. Check Makefile.template for an example.
+#
+
+LDFLAGS += -L$(PS2LIB)/ee/lib -T$(PS2LIB)/ee/startup/linkfile -nostartfiles
+CFLAGS += -I$(PS2LIB)/common/include -I$(PS2LIB)/ee/include
+OBJECTS += $(PS2LIB)/ee/startup/crt0.o

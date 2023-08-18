@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip/tcpip/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-07T12:21:26.859189Z
+1423
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ps2ip.h
+file
+
+
+
+
+2009-08-10T17:50:18.640625Z
+0c2e95a6d4d1b1a63a1d0c8870d00481
+2007-07-07T12:21:26.859189Z
+1423
+radad
+has-props
+

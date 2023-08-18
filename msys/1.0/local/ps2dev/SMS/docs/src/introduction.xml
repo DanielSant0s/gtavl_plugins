@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Revision: 1.26 $ -->
+
+<para lang="en">
+  Simple Media System (<application>SMS</application>) is a result the
+  original author's (Eugene Plotnikov's) curiosity about Sony's Playstation2,
+  MIPS, DivX and MP3.
+  His original goal was to create a simple DivX player able to play good
+  resolution movies at good frame rate on an unmodded PS2 without any extra
+  equipment such as HDD and network adapter.
+</para>
+<para lang="pt">
+  Simple Media System (<application>SMS</application>) é o resultado 
+  da curiosidade do autor (Eugene Plotnikov) acerca da Playstation 2, MIPS, 
+  DivX e MP3. 
+  O objectivo inicial era criar um simples leitor de DivX, capaz  de correr 
+  filmes com boa resolução e bom 'frame rate' numa PS2 não-modificada sem 
+  qualquer equipamento extra tal como o HDD ou o Adaptador de Rede.
+</para>
+<para lang="ru">
+  Simple Media System (<application>SMS</application>) является результатом
+  интереса создателя программы (Евгений Плотников) к игровой приставке Sony Playstation 2,
+  MIPS, DivX и MP3.
+  Его целью было создание простого плейера DivX, который смог бы воспроизводить фильмы
+  в достойной резолюции на немодифицированной PS2 без применения каких-либо
+  дополнительных средств, как, например, жесткий диск или адаптер сети.
+</para>
+
+<para lang="en">
+  Why create a complete "system"? Just because having only a player program
+  is not enough. Since the PS2 conventionally ignores "illegal" disks, he
+  took the idea of Drakonite with his UMCDR and developed his own "UMCDR".
+  (called CDDAFS). It just stores data on a CD audio disk format, which can
+  be read on (hopefully) any PS2.
+</para>
+<para lang="pt">
+  Porquê criar um 'sistema' completo? Simplesmente porque ter apenas um 
+  programa de leitura não é suficiente. Visto que a PS2 normalmente ignora 
+  discos "ilegais", ele usou a ideia do Drakonite e do seu UMCDR e desenvolveu
+  o seu próprio "UMCDR" (chamado CDDAFS). Basicamente os dados são gravados 
+  num CD de áudio, que pode ser lido em qualquer PS2.
+</para>
+<para lang="ru">
+  Зачем создавать "систему"? Просто потому, что одной только программы-плейера 
+  недостаточно. Поскольку PS2 была создана так, чтобы игнорировать "неправильные"
+  диски, он воспользовался идеей UMCDR от Drakonite и разработал свою собственную
+  систему UMCDR (которая называется CDDAFS). Эта система позволяет записывать данные
+  на диск в аудио CD формате, который может быть воспроизведен (при удачной фазе луны) 
+  на любой PS2.
+</para>
+
+<para lang="en">
+  This is the first component of SMS. The second component is a PC program
+  that makes cue/bin files in order to burn such a disk. And, finally, comes
+  a player program itself. This system is not complete yet, but it can play
+  DivX movies with sound at good frame rate already. Player's base is a
+  famous ffmpeg project. EEUG took just some parts of it (DivX 5XX and MP3)
+  and made some modifications specific to PS2 hardware. It has been tested
+  with many DivX/XviD movies with different screen resolutions and encoding
+  methods and it seems to be working.
+</para>
+<para lang="pt">
+  Este é o primeiro componente do SMS. O segundo componente é um programa de 
+  PC que cria ficheiros cue/bin para serem gravados num CD. E, finalmente, vem
+  o leitor propriamente dito. Este sistema ainda não está completo, mas já é 
+  capaz de correr filmes DivX com boa qualidade de som e bom 'frame rate'. A 
+  base do leitor é o famoso projecto ffmpeg. O autor (EEUG) tirou algumas 
+  partes do projecto e efectuou algumas alterações especificas para o hardware
+  da PS2. O programa já foi testado com vários filmes Xvid/DivX com diferentes
+  resoluções e 'frame rates' e parece funcionar às mil maravilhas.
+</para>
+<para lang="ru">
+  Но это только первая составляющая SMS. Вторая составляющая - это компьютерная
+  программа, которая создает файлы cue/bin, для того, чтобы записать такой диск.
+  И, наконец, сама программа плейера. Система еще не завершена, но она уже может 
+  воспроизводить фильмы в DivX со звуком с приличной частотой кадров. Плейер основан
+  на известном проекте ffmpeg. EEUG использовал  некоторые принципы из этого проекта,
+  как, например, поддержка DivX 5.xx и MP3, а также, сделал несколько изменений, которые
+  требовала специфика "железа" PS2. Система была проверена на многих DivX/XViD фильмах,
+  с различными разрешениями и закодированными разными методами и, похоже, что она 
+  вполне работоспособна.
+</para>
+
+<para lang="en">
+  Since the initial concept, the SMS project has now grown to include
+  support for network files, USB drives, hard disc drives. It now also allows
+  subtitles to be displayed, and contains a fully functional MP3 player.
+  All the software is now available in the subversion (SVN) repository at
+  ps2dev.org. It has been made available in the hope that it will be
+  interesting for PS2 enthusiasts who use it as a base for their own
+  development.
+</para>
+<para lang="pt">
+  Desde o conceito inicial, o projecto SMS tem crescido bastante. Neste 
+  momento já suporta dispositivos USB, ficheiros por rede, disco rigido (HDD).
+  Neste momento existe também suporte para legendas e um leitor completo para 
+  ficheiros de áudio MP3. O software está disponivel no 'subversion' (SVN) no 
+  ps2dev.org. O código fonte foi disponilizado com o intuito de chamar a 
+  atenção de entusiastas da PS2 que queiram usá-lo como base do seu próprio 
+  trabalho.
+</para>
+<para lang="ru">
+  По сравнению с первоначальной концепцией, проект SMS вырос настолько, что, на 
+  сегодняшний момент, он включает в себя поддержку сетевого окружения, USB дисков, 
+  а также жестких дисков. Кроме того, появилась поддержка субтитров и полнофункциональный
+  MP3-плейер. Все файлы проекта доступны в системе контроля версий "subversion" (SVN) 
+  на сайте PS2dev.org. Эти файлы были выложены в свободный доступ в надежде, что 
+  система окажется интересной для "фанатов" PS2, которые смогут использовать их в
+  качестве базиса для своих собственных проектов.
+</para>
+
+<para lang="en">
+  This document provides comprehensive installation and usage instructions.
+  Currently it is written/maintained in DocBook XML format, and processed
+  for output in a variety of formats including single HTML and HTML pages
+  grouped into sections.  Later it will (hopefully) be distributed in PDF
+  format as well.
+</para>
+<para lang="pt">
+  Este documento contém intruções para instalação e modo de usar. Neste 
+  momento, é escrito e mantido em formato DocBook XML, e processado para 
+  distribuição em vários formatos incluindo simples HTML e grupo de páginas 
+  HTML agrupadas em secções. Mais tarde passará a ser distribuido em formato 
+  PDF também.
+</para>
+<para lang="ru">
+  Этот документ является полным руководством по установке и использованию системы.
+  На сегодняшний момент, он поддерживается в формате DocBook XML и может быть
+  сконвертирован в любой из множества форматов, например, таких как одностраничный или
+  многостраничный HTML. Позже он будет (если получится) распространяться также в виде PDF
+  файла.
+</para>

@@ -1,0 +1,17 @@
+  _____     ___ ____ 
+   ____|   |    ____|      PSX2 OpenSource Project
+  |     ___|   |____       (C)2001, Gustavo Scotti (gustavo@scotti.com)
+  ------------------------------------------------------------------------
+                                                          version 1.0 beta
+
+  This is a first try out for the open-sourced library to Sony's Playstation 2.
+  All the findings are based in disassembling the binaries with the whole symbol
+  table, interpreting the results, and trying out with the bits.
+
+  This is a full disclosure, and the author is not responsible for any copyright 
+  infringments, any damage it can do in your equipment, or even if any code does
+  not work properly. This software is not intended, and should not be used to produce
+  commercial products. 
+
+  **Modified by now3d to fit the ps2dev.sf.net compilers and standard setup
+  

@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/draw/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2006-06-07T14:48:34.854899Z
+1317
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+erl-support.c
+file
+
+
+
+
+2009-08-10T17:51:24.453125Z
+e9993c293317964e80a99cc130baa7a4
+2005-06-13T09:20:53.000000Z
+1156
+pixel
+has-props
+
+draw.c
+file
+
+
+
+
+2009-08-10T17:51:24.468750Z
+ecab36107cd7b97f48706d9482d118f3
+2006-06-07T14:48:34.854899Z
+1317
+oopo
+has-props
+

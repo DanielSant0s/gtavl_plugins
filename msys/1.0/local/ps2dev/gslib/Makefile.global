@@ -1,0 +1,14 @@
+# include dir
+EE_INCS += -I$(GSLIB)/source -I$(GCCLIB)/include
+
+# C++ compiler flags
+EE_CXXFLAGS += -fno-exceptions -fno-rtti 
+
+# linker flags
+EE_LIB_DIRS = -L$(GSLIB)/lib -L$(GCCLIB) -L$(PS2SDK)/ee/lib -L$(CPPLIB)
+EE_LDFLAGS += $(EE_LIB_DIRS)
+
+# link with following libraries
+EE_LIBS += -lgs
+
+include $(PS2SDK)/samples/Makefile.eeglobal_cpp

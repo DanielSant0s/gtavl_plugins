@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/startup/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-16T23:49:17.801255Z
+1514
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+crt0.s
+file
+
+
+
+
+2009-08-10T17:51:26.625000Z
+f2868c88a5d839b15d40c964df37fc1c
+2009-01-16T23:49:17.801255Z
+1514
+radad
+has-props
+
+linkfile
+file
+
+
+
+
+2009-08-10T17:51:26.625000Z
+a096922e3a36651c7a77ac4cd6e9565e
+2005-02-07T06:21:37.000000Z
+798
+herben
+has-props
+

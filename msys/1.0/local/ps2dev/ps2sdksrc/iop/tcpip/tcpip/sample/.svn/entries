@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip/tcpip/sample
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-09-14T14:41:46.000000Z
+577
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ps2echo.c
+file
+
+
+
+
+2009-08-10T17:50:18.312500Z
+adc9822c15fd537f3207cca26d297b03
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

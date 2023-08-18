@@ -1,0 +1,59 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-22T09:48:56.163121Z
+1522
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+tcpip
+dir
+
+tcpips
+dir
+
+dns
+dir
+
+lwip-1.1.1
+dir
+
+udptty
+dir
+
+lwip
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:42.109375Z
+a202b12cb9fa36f207fc0187ecc729fb
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

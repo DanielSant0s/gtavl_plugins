@@ -1,0 +1,40 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/camera/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-22T09:48:56.163121Z
+1522
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ps2cam.h
+file
+
+
+
+
+2009-08-10T17:50:56.671875Z
+0728f1b638eceddb1d54e0637aad7246
+2009-01-22T09:48:56.163121Z
+1522
+radad
+

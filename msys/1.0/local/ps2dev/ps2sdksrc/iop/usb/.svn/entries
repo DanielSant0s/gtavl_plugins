@@ -1,0 +1,53 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-08-11T02:42:17.365703Z
+1600
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+keyboard
+dir
+
+camera
+dir
+
+mouse
+dir
+
+usbd
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:58.140625Z
+4e21f966c7b9509412391a85ace65a34
+2009-01-22T09:48:56.163121Z
+1522
+radad
+has-props
+

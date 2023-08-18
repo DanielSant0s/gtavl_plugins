@@ -1,0 +1,134 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-09-16T17:44:33.329613Z
+1610
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+kernel
+dir
+
+math3d
+dir
+
+erl
+dir
+
+rpc
+dir
+
+erl-loader
+dir
+
+debug
+dir
+
+mpeg
+dir
+
+math
+dir
+
+sbv
+dir
+
+draw
+dir
+
+libgs
+dir
+
+Rules.mak
+file
+
+
+
+
+2009-08-10T17:51:29.875000Z
+a5855fd54904bcb845550c1253aba3c7
+2004-11-06T13:04:43.000000Z
+652
+stefan
+has-props
+
+graph
+dir
+
+dma
+dir
+
+startup
+dir
+
+loader
+dir
+
+Rules.make
+file
+
+
+
+
+2009-09-18T17:05:27.174500Z
+3e4c3ea9c56820afb5a95c8980498971
+2009-09-16T17:44:33.329613Z
+1610
+jim
+has-props
+
+packet
+dir
+
+libvux
+dir
+
+libc
+dir
+
+Rules.release
+file
+
+
+
+
+2009-08-10T17:51:29.890625Z
+ddb882c87bd7c718e7e7568b67375418
+2005-06-12T11:42:08.000000Z
+1150
+pixel
+has-props
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:29.890625Z
+9a965a4c6124a1170b17483479a517dd
+2009-04-25T08:02:52.479370Z
+1577
+lion
+has-props
+

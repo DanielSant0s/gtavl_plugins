@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/loader/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-06-14T20:43:06.000000Z
+1159
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+loader.c
+file
+
+
+
+
+2009-08-10T17:51:26.781250Z
+1e396afa5e88f5e2fadbc29b04814407
+2005-06-14T20:43:06.000000Z
+1159
+oopo
+has-props
+

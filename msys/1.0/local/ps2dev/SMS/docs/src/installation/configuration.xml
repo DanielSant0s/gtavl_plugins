@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- $Revision: 1.26 $ -->
+
+<sect1 id="installation-configuration">
+  <title>
+    <phrase lang="en">
+      Configuration
+    </phrase>
+    <phrase lang="pt">
+      Configuração
+    </phrase>
+    <phrase lang="ru">
+      Настройки программы
+    </phrase>
+
+  </title>
+
+  <tip>
+    <para lang="en">
+      Normally there is no need to change any configuration files to
+      get SMS running.  If you are just using SMS in standalone mode,
+      you can skip this section.  You only need to change the configuration
+      if you want to use SMS in network mode (i.e. play files over a LAN).
+    </para>
+    <para lang="pt">
+      Normalmente não é necessário modificar nenhum dos ficheiros de
+      configuração para que o SMS funcione.  Se estiver apenas a usar o SMS de
+      forma simples, pode saltar esta secção.  Só necessita de alterar a
+      configuração do SMS se quiser que este funcione em rede.
+    </para>
+    <para lang="ru">
+      Обычно, нет необходимости вносить изменения в какие-либо файлы 
+      конфигурации, чтобы начать работать с SMS. Если SMS используется в 
+      обычном режиме, то вы можете пропустить этот раздел. Однако, если вы 
+      хотите использовать SMS в режиме сетевого плейера (например, 
+      воспроизводить файлы через сеть), то вам, скорее всего, придется 
+      "поиграться" с настройками.
+    </para>
+  </tip>
+
+  <sect2 id="installation-configuration-ipconfig">
+    <title>
+      <phrase lang="en">
+        Network Configuration
+      </phrase>
+      <phrase lang="pt">
+        Configuração de Rede
+      </phrase>
+      <phrase lang="ru">
+        Настройки сети
+      </phrase>
+    </title>
+
+    <para lang="en">
+      If you have an official <trademark>Sony</trademark> Network adaptor,
+      and you intend to use SMS to play media files stored on a network,
+      you will need to assign an IP address and subnet to the PS2.  Chances are 
+      you'll want this in a semi permanent set-up, so this section helps you
+      pick settings that will be compatible with your home network.
+    </para>
+    <para lang="pt">
+      Se tiver um adaptador de rede oficial da <trademark>Sony</trademark>,
+      e pretender usar o SMS para vizualizar ficheiros através da rede, terá 
+      de atribuir um endereço de IP e subnet à PS2.  Provavelmente quererá isto
+      num modo semi-permanente, esta secção ajudá-lo-á a escolher opções 
+      compatíveis com a seua rede doméstica.
+    </para>
+    <para lang="ru">
+      Если у вас есть официальный сетевой адаптер от <trademark>Sony</trademark> 
+      и вы хотите воспроизводить медиа-файлы, находящиеся в вашей локальной
+      сети, вам придется назначить IP адрес и подсетку для PS2. Скорее всего,
+      вы захотите сделать эти настройки для долговременного пользования,
+      так что этот раздел призван помочь вам выбрать правильные настройки,
+      которые будут совместимы с вашей сетью.
+    </para>
+
+    <para lang="en">
+      IP configuration data for SMS is stored in
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>. (not
+      <filename>CONFIG.DAT</filename>).  Note that the two files are seperate. SMS
+      will not look for settings in
+      <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.
+    </para>
+    <para lang="pt">
+      Configuração de IP para o SMS está guardado em
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>. (não
+      <filename>CONFIG.DAT</filename>).  Repare que os dois ficheiros estão
+      separados. O SMS não procurará por definições em 
+      <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.
+    </para>
+    <para lang="ru">
+      Настройки IP SMS находятся в файле
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>, а не в 
+      <filename>CONFIG.DAT</filename>).  Обратите внимание на то, что эти два
+      файла являются отличными друг от друга. SMS не будет искать параметры 
+      настроек в <filename>mc0:/BxDATA-SYSTEM/CONFIG.DAT</filename>.
+    </para>
+
+    <para lang="en">
+      To set the IP address for your PS2, you will need to create a file
+      named
+      <filename>IPCONFIG.DAT</filename> (e.g. using notepad) and it should 
+      have just one line of text:
+    </para>
+    <para lang="pt">
+      Para atribuir um endereço de IP à PS2, terá de criar um ficheiro 
+      chamado <filename>IPCONFIG.DAT</filename> (e.g. usando o notepad) 
+      e deverá ter apenas uma linha de texto:
+    </para>
+    <para lang="ru">
+      Для того, чтобы настроить IP адрес для вашей PS2, вам необходимо 
+      создать файл с названием <filename>IPCONFIG.DAT</filename> в любом
+      текстовом редакторе (не Word!), например, в Notepad, входящем в комплект
+      поставки Windows. Этот файл должен иметь всего одну текстовую строку:
+    </para>
+    <screen>
+      &lt;ps2_ip_address&gt; &lt;ps2_subnet_mask&gt; &lt;ps2_default_gateway&gt;
+    </screen>
+
+    <para lang="en">
+      If you created a <filename>CONFIG.DAT</filename> file in the
+      <xref linkend="installation"/> section, you can use the same file, but
+      remember rename it to <filename>IPCONFIG.DAT</filename>.  Once you have
+      created this file, you must copy it to your PS2, into the location
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>.  You can do this
+      using the FTP technique described in the
+      <link linkend="installation-copytomemcard-ftp">installation</link>
+      section.
+    </para>
+    <para lang="pt">
+      Se crou um ficheiro <filename>CONFIG.DAT</filename> na secção
+      <xref linkend="installation"/> pode usar o mesmo ficheiro, mas lembre-se
+      de o renomear para <filename>IPCONFIG.DAT</filename>.  Assim the tiver
+      criado este ficheiro, tem de copiá-lo para a sua PS2, para a localização
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename>. Pode fazer isto
+      utilizando a técnica de FTP referida na secção
+      <link linkend="installation-copytomemcard-ftp">instalação</link>.
+    </para>
+    <para lang="ru">
+      Если вы создали файл <filename>CONFIG.DAT</filename> в разделе
+      <xref linkend="installation"/>, вы можете его использовать в этом 
+      разделе, только не забудьте переименовать его в <filename>IPCONFIG.DAT</filename>.  
+      После успешного создания такового файла, необходимо скопировать его в
+      <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> на вашей PS2, используя
+      FTP, как описано в разделе 
+      <link linkend="installation-copytomemcard-ftp">installation</link>
+    </para>
+
+    <para lang="en">
+      If you are using <application>uLaunchELF</application> as your boot
+      browser, it's easy to configure your SMS IP settings.  Just use the
+      boot browser's <emphasis role="bold">Network Settings</emphasis>
+      option to change the settings with your D-Pad.  There's no need to
+      create an <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> file
+      manually.
+    </para>
+    <para lang="ru">
+      Если вы решили использовать <application>uLaunchELF</application> в 
+      качестве менеджера запуска программ, вы можете легко сконфигурировать
+      настройки IP для SMS. Просто воспользуйтесь опцией 
+      <emphasis role="bold">Network Settings</emphasis>, чтобы изменить
+      настройки, используя игровой джойстик. В этом случае, нет необходимости
+      создания файла <filename>mc0:/SYS-CONF/IPCONFIG.DAT</filename> вручную.
+    </para>
+        
+    <para lang="en">
+      You'll need to choose an IP address for your PS2 that is different from
+      the IP address of any other node on your network, but on the same subnet
+      as your PC.  You will have to turn DHCP off on your PC, and use a manual
+      (or static) IP configuration.  SMS cannot autoconfigure it's IP address
+      from a DHCP server (see <link linkend="faq-dhcp">DHCP FAQ</link>.
+    </para>
+    <para lang="pt">
+      Terá de escolher um endereço de IP que seja diferente de todos os outros
+      endereços de IP dos PC's na seua rede local, mas com a mesma subnet que
+      o seu PC.  Terá de desligar a opção DHCP no seu PC, e usar uma
+      configuração de IP manual (ou estático).
+    </para>
+    <para lang="ru">
+      Не забудьте, что адрес PS2 должен быть уникальным в вашей сети и, в то
+      же время, быть в той же самой подсети, что и все остальные устройства.
+      Вам придется отключить DHCP сервер (или ограничить диапазон 
+      распределяемых им адресов) на вашем компьютере или маршрутизаторе и
+      использовать статические настройки IP. SMS не умеет работать с DHCP
+      серверами (см <link linkend="faq-dhcp">DHCP FAQ</link>.
+    </para>
+
+    <informaltable frame='none'>
+    <tgroup cols='2'>
+    <tbody>
+    <row>
+      <entry morerows="2">
+        <para lang="en">PS2 Settings</para>
+        <para lang="pt">Definições da PS2</para>
+        <para lang="ru">настройки PS2</para>        
+      </entry>
+      <entry>
+        <para lang="en">PS2 IP Address:</para>
+        <para lang="pt">Endereço de IP da PS2:</para>
+        <para lang="ru">IP адрес PS2:</para>        
+      </entry>
+      <entry>192.168.a.x</entry>
+    </row>
+    <row>
+      <entry>
+        <para lang="en">PS2 Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' da PS2:</para>
+        <para lang="ru">Маска подсети PS2:</para>        
+      </entry>
+      <entry>255.255.255.0</entry>
+    </row>
+    <row>
+      <entry>
+        <para lang="en">PS2 Default Gateway:</para>
+        <para lang="pt">'Gateway' da PS2:</para>
+        <para lang="ru">Адрес точки доступа сети:</para>        
+      </entry>
+      <entry>192.168.a.z</entry>
+    </row>
+    <row>
+      <entry morerows="2">
+        <para lang="en">PC Settings</para>
+        <para lang="pt">Definições do PC</para>
+        <para lang="ru">Настройки компьютера</para>        
+      </entry>
+      <entry>
+        <para lang="en">PC IP Address:</para>
+        <para lang="pt">Endereço de IP do PC:</para>
+        <para lang="ru">IP адрес компьютера:</para>        
+      </entry>
+      <entry>192.168.a.y</entry>
+    </row>
+    <row>
+      <entry>
+        <para lang="en">PC Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' do PC:</para>
+        <para lang="ru">Маска подсети компьютера:</para>        
+      </entry>
+      <entry>255.255.255.0</entry>
+    </row>
+    <row>
+      <entry>
+        <para lang="en">PC Default Gateway:</para>
+        <para lang="pt">'Gateway' do PC:</para>
+        <para lang="ru">Точка доступа сети компьютера:</para>        
+      </entry>
+      <entry>192.168.a.z</entry>
+    </row>
+    </tbody>
+    </tgroup>
+    </informaltable>
+    
+
+
+    <sect3>
+      <title>
+        <phrase lang="en">Example configuration 1</phrase>
+        <phrase lang="pt">Configuração de Exemplo 1</phrase>
+        <phrase lang="ru">Конфигурация: Пример 1</phrase>        
+      </title>
+      <para lang="en">
+        This configuration is for a PS2 and PC connected directly
+        with a crossover cable, or for both connected to a network 
+        switch.  There is no internet gateway device to connect to, so the
+        gateway is set to the IP address of the PC.
+      </para>
+      <para lang="pt">
+        Esta configuração é para um PC e PS2 ligados directamente com um cabo
+        cruzado, ou ambos ligados a um 'switcher'.  Não existe nenhum 'gateway'
+        de internet ao qual se ligar, por isso o 'gateway' é o IP do PC.
+      </para>
+      <para lang="ru">
+        В этом примере приведены настройки для случая, когда PS2 и компьютер
+        подключены друг к другу посредством кабеля-кроссовера или, когда
+        они подключены через сетевой свич или хаб. В этом примере нет
+        маршрутизатора, так что, в качестве адреса точки доступа, будет 
+        выступать адрес компьютера.
+      </para>
+
+      <informaltable frame='none'>
+      <tgroup cols='2'>
+      <tbody>
+      <row>
+        <entry morerows="3">
+        <para lang="en">PS2 Settings</para>
+          <para lang="pt">Definições da PS2</para>
+        <para lang="ru">настройки PS2</para>        
+      </entry>
+      <entry>
+        <para lang="en">PS2 IP Address:</para>
+          <para lang="pt">Endereço de IP da PS2:</para>
+        <para lang="ru">IP адрес PS2:</para>        
+      </entry>
+        <entry>192.168.0.2</entry>
+      </row>
+      <row>
+      <entry>
+        <para lang="en">PS2 Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' da PS2:</para>
+        <para lang="ru">Маска подсети PS2:</para>        
+      </entry>
+        <entry>255.255.255.0</entry>
+      </row>
+      <row>
+      <entry>
+        <para lang="en">PS2 Default Gateway:</para>
+        <para lang="pt">'Gateway' da PS2:</para>
+        <para lang="ru">Адрес точки доступа сети:</para>        
+      </entry>
+        <entry>192.168.0.1</entry>
+      </row>
+      <row>
+        <entry>
+          <para lang="en">mc0:/SYS-CONF/IPCONFIG.DAT</para>
+          <para lang="pt">mc0:/SYS-CONF/IPCONFIG.DAT</para>
+          <para lang="ru">mc0:/SYS-CONF/IPCONFIG.DAT</para>          
+        </entry>
+        <entry>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-ipconfig.dat1.png"
+            format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Sample ipconfig.dat file screenshot.</phrase>
+          </textobject>
+        </mediaobject>
+        </entry>
+      </row>
+      <row>
+        <entry morerows="2">
+        <para lang="en">PC Settings</para>
+          <para lang="pt">Definições do PC</para>
+        <para lang="ru">Настройки компьютера</para>        
+        </entry>
+        <entry>
+        <para lang="en">PC IP Address:</para>
+          <para lang="pt">Endereço de IP do PC:</para>
+        <para lang="ru">IP адрес компьютера:</para>        
+        </entry>
+        <entry>192.168.0.1</entry>
+      </row>
+      <row>
+        <entry>
+        <para lang="en">PC Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' do PC:</para>
+        <para lang="ru">Маска подсети компьютера:</para>        
+        </entry>
+        <entry>255.255.255.0</entry>
+      </row>
+      <row>
+      <entry>
+        <para lang="en">PC Default Gateway:</para>
+        <para lang="pt">'Gateway' do PC:</para>
+        <para lang="ru">Точка доступа сети компьютера:</para>        
+      </entry>
+      <entry>192.168.0.1</entry>
+    </row>
+    </tbody>
+    </tgroup>
+    </informaltable>
+    </sect3>
+
+    <sect3>
+      <title>
+        <phrase lang="en">Example configuration 2</phrase>
+        <phrase lang="pt">Configuração de Exemplo 2</phrase>
+        <phrase lang="ru">Конфигурация: Пример 2</phrase>                
+      </title>
+      <para lang="en">
+        Here is the configuration I use at home.  Both PS2 and PC are on the
+        same 192.168.2._ subnet, and my internet access point / router is
+        at 192.168.2.1.
+      </para>
+      <para lang="pt">
+        Aqui está a configuração que uso em casa.  PC e PS2 estão na mesma 
+        'subnet' 192.168.2.___, e o meu router/access point são 192.168.2.1.
+      </para>
+      <para lang="ru">
+        В этом примере рассматривается конфигурация, которую я использую дома.
+        Мой компьютер и PS2 находятся в подсети 192.168.2._ а точка доступа
+        к интернету (маршрутизатор) имеет адрес 192.168.2.1.
+      </para>
+
+      <informaltable frame='none'>
+      <tgroup cols='2'>
+      <tbody>
+      <row>
+        <entry morerows="3">
+        <para lang="en">PS2 Settings</para>
+          <para lang="pt">Definições da PS2</para>
+        <para lang="ru">настройки PS2</para>        
+        </entry>
+        <entry>
+        <para lang="en">PS2 IP Address:</para>
+          <para lang="pt">Endereço de IP da PS2:</para>
+        <para lang="ru">IP адрес PS2:</para>        
+        </entry>
+        <entry>192.168.2.22</entry>
+      </row>
+      <row>
+        <entry>
+        <para lang="en">PS2 Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' da PS2:</para>
+        <para lang="ru">Маска подсети PS2:</para>        
+        </entry>
+        <entry>255.255.255.0</entry>
+      </row>
+      <row>
+        <entry>
+        <para lang="en">PS2 Default Gateway:</para>
+        <para lang="pt">'Gateway' da PS2:</para>
+        <para lang="ru">Адрес точки доступа сети:</para>        
+        </entry>
+        <entry>192.168.2.1</entry>
+      </row>
+      <row>
+        <entry>
+          <para lang="en">mc0:/SYS-CONF/IPCONFIG.DAT</para>
+          <para lang="pt">mc0:/SYS-CONF/IPCONFIG.DAT</para>
+          <para lang="ru">mc0:/SYS-CONF/IPCONFIG.DAT</para>          
+          
+        </entry>
+        <entry>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="../images/installation-ipconfig.dat2.png"
+            format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Sample ipconfig.dat file screenshot.</phrase>
+          </textobject>
+        </mediaobject>
+        </entry>
+      </row>
+      <row>
+        <entry morerows="2">
+        <para lang="en">PC Settings</para>
+          <para lang="pt">Definições do PC</para>
+        <para lang="ru">Настройки компьютера</para>        
+        </entry>
+        <entry>
+        <para lang="en">PC IP Address:</para>
+          <para lang="pt">Endereço de IP do PC:</para>
+        <para lang="ru">IP адрес компьютера:</para>        
+        </entry>
+        <entry>192.168.2.23</entry>
+      </row>
+      <row>
+        <entry>
+        <para lang="en">PC Subnet Mask:</para>
+        <para lang="pt">'Subnet Mask' do PC:</para>
+        <para lang="ru">Маска подсети компьютера:</para>        
+        </entry>
+        <entry>255.255.255.0</entry>
+      </row>
+      <row>
+      <entry>
+        <para lang="en">PC Default Gateway:</para>
+        <para lang="pt">'Gateway' do PC:</para>
+        <para lang="ru">Точка доступа сети компьютера:</para>        
+      </entry>
+      <entry>192.168.2.1</entry>
+    </row>
+    </tbody>
+    </tgroup>
+    </informaltable>
+
+
+    <warning>
+      <para lang="en">
+        If you are connected to the internet via the same network that
+        you are using to connect to your PS2
+        <emphasis role="bold">be very careful</emphasis> when you change
+        your PC's IP settings.  You must make sure that your PC is set to be
+        on the same subnet as your access point/router (i.e. the first three
+        numbers of the PC IP address are the same as the access
+        point/router), and that the PC Default Gateway remains the same
+        (this will normally be the IP address of your access point.
+        Failure to do this may break your internet connection.  If you
+        are not sure what you are doing, please make a note of your starting
+        settings by typing <userinput>ipconfig /all</userinput> at the
+        command prompt.
+      </para>
+      <para lang="pt">
+        Se estiver ligado a internet pela mesma rede que usa para se ligar à 
+        PS2 <emphasis role="bold">tenha muito cuidado</emphasis> quando 
+        alterar a configuração de rede do seu PC.  Verifique que o seu PC se
+        encontra na mesma 'subnet' que o seu router/access point (i.e. os 
+        primeiros três números do IP do seu PC têm de ser os mesmos do IP do
+        router), e de que o 'Gateway' permanece o mesmo (isto será normalmente
+        o endereço de IP do router. Não fazer isto pode resultar numa perda de
+        ligação à internet. Se não tiver a certeza do que está a fazer, por 
+        favor tome nota das suas definições iniciais escrevendo 
+        <userinput>ipconfig /all</userinput> no command prompt.
+      </para>
+      <para lang="ru">
+        Если ваш компьютер подключен к Интернету посредством той же 
+        локальной сети, в которой будет находиться PS2, то будьте 
+        <emphasis role="bold">предельно осторожны</emphasis>, когда вы будете
+        вносить изменения в IP конфигурацию вашего компьютера. Вы должны 
+        убедиться в том, что компьютер находится в той же подсети, что и ваш
+        маршрутизатор (точка доступа). Это значит, что первые три числа в 
+        адресе вашего компьютера должны совпадать с адресом маршрутизатора.
+        Также, убедитесь в том, что адрес точки доступа по умолчанию для 
+        компьютера остался тем же, что и был (там должен быть адрес вашей 
+        точки доступа или маршрутизатора). Если вы этого не сделаете, то 
+        соединение с Интернетом может перестать работать. Если вы не уверены
+        в правильности своих действий, то, перед тем, как что либо предпринять,
+        запишите установки сети до того, как вы будете их менять (например,
+        напечатав <userinput>ipconfig /all</userinput> в окне ДОС).
+      </para>
+    </warning>
+
+    </sect3>
+
+
+  </sect2>
+
+  <sect2 id="installation-configration-generalconfig">
+    <title>
+      <phrase lang="en">
+        General Configuration
+      </phrase>
+      <phrase lang="pt">
+        Configuração Geral
+      </phrase>
+      <phrase lang="ru">
+       Общие настройки
+      </phrase>
+      
+    </title>
+
+    <para lang="en">
+      SMS general configuration information is stored in
+      <filename>mc0:/SMS/SMS.cfg</filename>. This file is written by the
+      application when you save the configuration data, and is not designed to
+      be edited by hand.
+      <emphasis role="bold">You do not need to create this file</emphasis>.
+      SMS will create the file when you save the configuration from within
+      SMS (see configuration menu in 
+      <link linkend="usage-controls-navigation">usage</link> section).
+    </para>
+    <para lang="pt">
+      A configuração geral do SMS está guardada em 
+      <filename>mc0:/SMS/SMS.cfg</filename>. Este ficheiro é criado pela
+      aplicação quando você salva as suas definições, e não está feito para
+      ser editado à mão.
+      <emphasis role="bold">Não precisa de criar este ficheiro</emphasis>.
+      O SMS cria-lo-á quando salvar as definições no SMS (veja o menu de 
+      configuração na secção 
+      <link linkend="usage-controls-navigation">Utilização</link>).
+    </para>
+    <para lang="ru">
+      Общие настройки SMS находятся в файле <filename>mc0:/SMS/SMS.cfg</filename>. 
+      Этот файл создается автоматически, когда вы сохраняете настройки из
+      программы и не предназначен для редактирования вручную.
+      <emphasis role="bold">Вы не должны сами создавать этот файл</emphasis>.
+      SMS сама создаст этот файл, когда вы будете сохранять настройки из 
+      меню SMS (см меню настроек в разделе  
+      <link linkend="usage-controls-navigation">Работа с программой</link>).
+    </para>
+
+    <note>
+      <para lang="en">
+        If you are having problems with the configuration settings, it is
+        suggested that you delete your <filename>mc0:/SMS/SMS.cfg</filename>
+        file, and let SMS create a new one for you next time it runs.
+      </para>
+      <para lang="pt">
+        Se tiver problemas com as definições, é aconselhável que apague o seu
+        ficheiro <filename>mc0:/SMS/SMS.cfg</filename> , e deixe o SMS criar 
+        um novo da próxima vez que for executado.
+      </para>
+      <para lang="ru">
+        Если у вас возникли трудности при конфигурировании программы, лучше
+        всего будет просто удалить файл <filename>mc0:/SMS/SMS.cfg</filename>
+        и дать возможность SMS создать новый файл при следующем запуске 
+        программы.
+      </para>
+      
+    </note>
+
+  </sect2>
+
+</sect1>

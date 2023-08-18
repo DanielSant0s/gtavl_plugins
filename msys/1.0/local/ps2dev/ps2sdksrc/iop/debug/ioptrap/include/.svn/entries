@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/debug/ioptrap/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-09-21T19:14:27.000000Z
+598
+lukasz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ioptrap.h
+file
+
+
+
+
+2009-08-10T17:50:47.484375Z
+19a195e9d4d95a14b81d9b8873d1e136
+2004-09-21T19:14:27.000000Z
+598
+lukasz
+has-props
+

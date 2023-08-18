@@ -1,0 +1,327 @@
+000 sysmem 101
+004 AllocSysMemory
+005 FreeSysMemory
+006 QueryMemSize
+007 QueryMaxFreeMemSize
+008 QueryTotalFreeMemSize
+014 Kprintf
+
+000 modload 101
+004 ReBootStart
+006 LoadModule
+007 LoadStartModule
+008 StartModule
+010 LoadModuleBuffer
+
+000 sifcmd 101
+004 sceSifInitCmd
+006 sceSifGetSreg
+007 sceSifSetSreg
+008 sceSifSetCmdBuffer
+010 sceSifAddCmdHandler
+012 sceSifSendCmd
+013 isceSifSendCmd
+014 sceSifInitRpc
+015 sceSifBindRpc
+016 sceSifCallRpc
+017 sceSifRegisterRpc
+018 sceSifCheckStatRpc
+019 sceSifSetRpcQueue
+020 sceSifGetNextRequest
+021 sceSifExecRequest
+022 sceSifRpcLoop
+023 sceSifGetOtherData
+024 sceSifRemoveRpc
+025 sceSifRemoveRpcQueue
+
+000 sifman 101
+005 sceSifInit
+006 sceSifSetDChain
+007 sceSifSetDma
+008 sceSifDmaStat
+029 sceSifCheckInit
+
+000 sysclib 101
+004 setjmp
+005 longjmp
+006 toupper
+007 tolower
+008 look_ctype_table
+011 memcmp
+012 memcpy
+013 memmove
+014 memset
+016 sysclib
+017 bzero
+019 sprintf
+020 strcat
+021 strchr
+022 strcmp
+023 strcpy
+025 index
+027 strlen
+028 strncat
+029 strncmp
+030 strncpy
+032 strrchr
+034 strstr
+036 strtol
+
+000 timrman 101
+004 AllocHardTimer
+005 ReferHardTimer
+006 FreeHardTimer
+007 SetTimerMode
+008 GetTimerStatus
+010 GetTimerCounter
+011 SetTimerCompare
+016 GetHardTimerIntrCode
+004 AllocHardTimer
+006 FreeHardTimer
+007 SetTimerMode
+008 GetTimerStatus
+011 SetTimerCompare
+016 GetHardTimerIntrCode
+020 SetTimerHandler
+022 SetupHardTimer
+023 StartHardTimer
+024 StopHardTimer
+
+000 intrman 102
+004 RegisterIntrHandler
+005 ReleaseIntrHandler
+006 EnableIntr
+007 DisableIntr
+008 CpuDisableIntr
+009 CpuEnableIntr
+017 CpuSuspendIntr
+018 CpuResumeIntr
+
+000 thbase 101
+004 CreateThread
+005 DeleteThread
+006 StartThread
+008 ExitThread
+010 TerminateThread
+011 iTerminateThread
+014 ChangeThreadPriority
+016 RotateThreadReadyQueue
+020 GetThreadId
+021 CheckThreadStack
+022 ReferThreadStatus
+024 SleepThread
+025 WakeupThread
+026 iWakeupThread
+027 CancelWakeupThread
+033 DelayThread
+034 GetSystemTime
+035 SetAlarm
+039 USec2SysClock
+040 SysClock2USec
+041 GetSystemStatusFlag
+
+000 cdvdman 101
+004 sceCdInit
+006 sceCdRead
+007 sceCdSeek
+008 sceCdGetError
+010 sceCdSearchFile
+011 sceCdSync
+012 sceCdGetDiskType
+013 sceCdDiskReady
+028 sceCdStatus
+029 sceCdApplySCmd
+037 sceCdCallback
+039 sceCdBreak
+051 _sceCdRC
+056 sceCdStInit
+057 sceCdStRead
+058 sceCdStSeek
+059 sceCdStStart
+060 sceCdStStat
+061 sceCdStStop
+067 sceCdStPause
+068 sceCdStResume
+075 sceCdMmode
+077 sceCdStSeekF
+
+000 loadcore 103
+004 FlushIcache
+005 FlushDcache
+006 RegisterLibraryEntries
+011 QueryLibraryEntryTable
+012 QueryBootMode
+
+000 thsemap 101
+004 CreateSema
+005 DeleteSema
+006 SignalSema
+007 iSignalSema
+008 WaitSema
+009 PollSema
+011 ReferSemaStatus
+
+000 stdio 102
+004 printf
+
+000 libsd 104
+004 sceSdInit
+005 sceSdSetParam
+006 sceSdGetParam
+007 sceSdSetSwitch
+008 sceSdGetSwitch
+009 sceSdSetAddr
+010 sceSdGetAddr
+011 sceSdSetCoreAttr
+012 sceSdGetCoreAttr
+013 sceSdNote2Pitch
+015 sceSdProcBatch
+017 sceSdVoiceTrans
+018 sceSdBlockTrans
+019 sceSdVoiceTransStatus
+020 sceSdBlockTransStatus
+021 sceSdSetTransCallback
+022 sceSdSetIRQCallback
+023 sceSdSetEffectAttr
+024 sceSdGetEffectAttr
+025 sceSdClearEffectWorkArea
+026 sceSdSetTransIntrHandler
+027 sceSdSetSpu2IntrHandler
+
+000 usbd 101
+004 sceUsbdRegisterLdd
+005 sceUsbdUnregisterLdd
+006 sceUsbdScanStaticDescriptor
+007 sceUsbdSetPrivateData
+008 sceUsbdGetPrivateData
+009 sceUsbdOpenPipe
+011 sceUsbdTransferPipe
+012 sceUsbdOpenPipeAligned
+013 sceUsbdGetDeviceLocation
+
+000 ioman 104
+004 open
+005 close
+006 read
+007 write
+008 lseek
+009 ioctl
+020 AddDrv
+021 DelDrv
+
+000 thevent 101
+004 CreateEventFlag
+005 DeleteEventFlag
+006 SetEventFlag
+007 iSetEventFlag
+008 ClearEventFlag
+010 WaitEventFlag
+
+000 thmsgbx 101
+004 CreateMbx
+006 SendMbx
+009 PollMbx
+
+000 ilink 202
+004 sce1394Initialize
+027 sce1394SbEui64
+028 sce1394SbNodeId
+
+000 ilsocket 202
+004 sceILsockInit
+005 sceILsockReset
+008 sceILsockOpen
+009 sceILsockClose
+010 sceILsockBind
+011 sceILsockConnect
+012 sceILsockSend
+013 sceILsockSendTo
+014 sceILsockRecv
+015 sceILsockRecvFrom
+
+000 inet 101
+004 sceInetName2Address
+005 sceInetAddress2String
+006 sceInetCreate
+007 sceInetOpen
+008 sceInetClose
+009 sceInetRecv
+010 sceInetSend
+011 sceInetAbort
+012 sceInetRecvFrom
+013 sceInetSendTo
+014 sceInetAddress2Name
+015 sceInetControl
+024 sceInetGetInterfaceList
+025 sceInetInterfaceControl
+027 sceInetGetRoutingTable
+030 sceInetGetNameServers
+036 sceInetChangeThreadPriority
+038 sceInetGetLog
+
+000 inetctl 101
+004 sceInetCtlSetConfiguration
+007 sceInetCtlSetAutoMode
+008 sceInetCtlRegisterEventHandler
+009 sceInetCtlUnregisterEventHandler
+
+000 modhsyn 104
+004 sceHSyn_Init
+005 sceHSyn_ATick
+006 sceHSyn_Load
+007 sceHSyn_VoiceTrans
+008 sceHSyn_SetReservVoice
+009 sceHSyn_SetEffectAttr
+010 sceHSyn_SetVolume
+011 sceHSyn_GetVolume
+012 sceHSyn_AllNoteOff
+013 sceHSyn_AllSoundOff
+014 sceHSyn_ResetAllControler
+015 sceHSyn_SetVoiceStatBuffer
+017 sceHSyn_GetChStat
+018 sceHSyn_SetOutputMode
+
+000 modmidi 104
+004 sceMidi_Init
+005 sceMidi_ATick
+006 sceMidi_Load
+007 sceMidi_SelectSong
+008 sceMidi_SongPlaySwitch
+009 sceMidi_SongSetVolume
+012 sceMidi_SongSetRelativeTempo
+013 sceMidi_SongSetLocation
+014 sceMidi_SelectMidi
+015 sceMidi_MidiPlaySwitch
+016 sceMidi_MidiSetLocation
+017 sceMidi_MidiSetVolume
+018 sceMidi_MidiVolumeChange
+019 sceMidi_MidiSetAbsoluteTempo
+020 sceMidi_MidiGetAbsoluteTempo
+021 sceMidi_MidiSetRelativeTempo
+022 sceMidi_MidiGetRelativeTempo
+
+000 modmsyn 101
+004 sceMSIn_Init
+007 sceMSIn_PutMsg
+
+000 modsesq 101
+005 sceSESq_ATick
+006 sceSESq_Load
+007 sceSESq_SelectSeq
+008 sceSESq_UnselectSeq
+009 sceSESq_SeqPlaySwitch
+011 sceSESq_SeqIsInPlay
+
+000 msifrpc 101
+004 sceSifMInitRpc
+017 sceSifMEntryLoop
+
+000 netcnf 101
+006 sceNetCnfLoadEntry
+
+000 vblank 101
+004 WaitVblankStart
+005 WaitVblankEnd
+006 WaitVblank
+008 RegisterVblankHandler
+009 ReleaseVblankHandler

@@ -1,0 +1,52 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/mpeg/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-02-15T07:19:11.969384Z
+1381
+eeug
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libmpeg_internal.h
+file
+
+
+
+
+2009-08-10T17:51:17.281250Z
+1e0838140bc6649e3de0b5159d9b7b1b
+2007-02-15T07:19:11.969384Z
+1381
+eeug
+
+libmpeg.h
+file
+
+
+
+
+2009-08-10T17:51:17.281250Z
+1d1cb207a9f341430a5c21080423ad62
+2007-02-15T07:19:11.969384Z
+1381
+eeug
+

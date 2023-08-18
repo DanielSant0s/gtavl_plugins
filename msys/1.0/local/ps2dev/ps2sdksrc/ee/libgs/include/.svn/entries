@@ -1,0 +1,40 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/libgs/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-05-25T21:08:44.233599Z
+1589
+lion
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+libgs.h
+file
+
+
+
+
+2009-08-10T17:51:24.687500Z
+7b36a3f00217fef552149b75db9bd2f3
+2009-05-25T21:08:44.233599Z
+1589
+lion
+

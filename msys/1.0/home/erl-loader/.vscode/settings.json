@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "erl.h": "c",
+        "linkfile": "c",
+        "wrappers.h": "c",
+        "hashtab.h": "c",
+        "recycle.h": "c"
+    }
+}

@@ -1,0 +1,85 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-01-08T09:55:03.777417Z
+1368
+jbit
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+Rules.make
+file
+
+
+
+
+2009-08-10T17:51:31.703125Z
+332f51c89ed0f3da445314407c9cedde
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+
+bin2o
+dir
+
+gensymtab
+dir
+
+ps2adpcm
+dir
+
+Rules.release
+file
+
+
+
+
+2009-08-10T17:51:31.703125Z
+5c2b21ba901f99034d5fb4dced6982cf
+2005-04-22T04:56:26.000000Z
+1021
+loser
+has-props
+
+adpenc
+dir
+
+bin2c
+dir
+
+bin2s
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:31.718750Z
+ddf5da723b919bb3fa38ff280aa7685f
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+has-props
+

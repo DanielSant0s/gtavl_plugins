@@ -1,0 +1,67 @@
+# _____     ___ ____     ___ ____
+#  ____|   |    ____|   |        | |____|
+# |     ___|   |____ ___|    ____| |    \    PS2DEV Open Source Project.
+#-----------------------------------------------------------------------
+# Copyright 2001-2004, ps2dev - http://www.ps2dev.org
+# Licenced under Academic Free License version 2.0
+# Review ps2sdk README & LICENSE files for further details.
+#
+# $Id$
+
+
+TARGET = $(PS2SDK)/samples/$(SAMPLE_DIR)
+
+#
+# The only valid target is release, but there are here just in case.
+#
+
+all:
+	@$(ECHO) Nothing to do here.
+
+clean:
+	@$(ECHO) Nothing to do here.
+
+
+#
+# Default release target creates the directory and copies files.
+#
+
+release: sample-dir sample-files
+	@$(ECHO) Released: $(SAMPLE_DIR)
+
+
+#
+# Creates the base target directory in samples directory.
+#
+
+
+sample-dir:
+	@if test -z $(SAMPLE_DIR) ; then \
+	  $(ECHO) SAMPLE_DIR must define the target directory. ; \
+	  exit 1; \
+	fi
+	$(MKDIR) -p $(TARGET)
+
+
+#
+# Any file in the include directory will be copied to the ee/include
+# directory.  This does not currently handle subdirectories. 
+#
+
+sample-files:
+	@for file in *; do \
+	   if [ $$file = "Makefile" ] ; then \
+	      $(ECHO) Skipping Makefile. ; \
+	   elif [ $$file = "Makefile.sample" ] ; then \
+	      $(ECHO) Installing $$file to $(TARGET)/Makefile ; \
+	      cp -f $$file $(TARGET)/Makefile ; \
+	      chmod 644 $(TARGET)/Makefile ; \
+	   elif test -f $$file  ; then \
+	      $(ECHO) Installing $$file to $(TARGET) ; \
+	      cp -f $$file $(TARGET) ; \
+	      chmod 644 $(TARGET)/$$file ; \
+	   fi ; \
+	done
+
+
+

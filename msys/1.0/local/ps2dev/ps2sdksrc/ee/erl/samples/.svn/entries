@@ -1,0 +1,47 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/erl/samples
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-06-29T18:30:00.000000Z
+1192
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+cpp-hello
+dir
+
+hello
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:01.234375Z
+584dd8650a2563baf4fc3016904ffece
+2005-06-29T18:30:00.000000Z
+1192
+pixel
+has-props
+

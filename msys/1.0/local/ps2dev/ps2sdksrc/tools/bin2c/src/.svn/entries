@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools/bin2c/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-11-10T22:21:38.000000Z
+658
+pixel
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+bin2c.c
+file
+
+
+
+
+2009-08-10T17:51:31.468750Z
+cc69986129fef5e2addd6c65c3357683
+2004-11-10T22:21:38.000000Z
+658
+pixel
+has-props
+

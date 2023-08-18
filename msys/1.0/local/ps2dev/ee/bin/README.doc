@@ -1,0 +1,32 @@
+First release of ps2-ish remote GDB, for Win32 running Cygwin. I've included a patch so Linux users can give that a go.
+You'll need to get and build ps2gdb from the ps2dev.org cvs to play with this. Released under the GPL, see COPYING
+for details.
+
+This is only a proof of concept build, hacked up mercilessly, see the disclaimer.
+
+I've insterted debug printfs too, making it ugly. To use, do the following:-
+
+1. Copy mips64r5900-sf-elf-gdb.exe to you ee/bin folder (e.g. on my system it's c:\cygwin\usr\local\ps2dev\ee\bin).
+2. Make a link with "ln -s mips64r5900-sf-elf-gdb.exe ee-gdb.exe" and you should be ready to go.
+
+There's a ps2.cmd command file there to try out. It loads the stub, inserts a breakpoint and continues execution to that
+breakpoint. Launch with "ee-gdb -x ps2.cmd".
+
+Here's that disclaimer.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR
+ BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ THE POSSIBILITY OF SUCH DAMAGE.
+
+Have fun and stay safe!
+
+MrHTFord.
+

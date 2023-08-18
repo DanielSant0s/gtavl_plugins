@@ -1,0 +1,47 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/keyboard
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-08T01:36:08.684895Z
+1424
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:56.453125Z
+9ac2cfeda07802c571c1d529303c9af2
+2004-09-14T14:41:46.000000Z
+577
+pixel
+has-props
+

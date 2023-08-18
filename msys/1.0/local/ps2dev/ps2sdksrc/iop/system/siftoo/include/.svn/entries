@@ -1,0 +1,41 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/system/siftoo/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2004-10-11T00:45:00.000000Z
+629
+mrbrown
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+siftoo.h
+file
+
+
+
+
+2009-08-10T17:50:44.656250Z
+a912c7f5d8ced19171d6e9dad9e4be44
+2004-10-11T00:45:00.000000Z
+629
+mrbrown
+has-props
+

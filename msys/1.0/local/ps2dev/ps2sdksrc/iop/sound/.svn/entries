@@ -1,0 +1,53 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/sound
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-01-04T23:46:22.630847Z
+1491
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+ahx
+dir
+
+audsrv
+dir
+
+freesd
+dir
+
+ps2snd
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:55.875000Z
+c30c80ad347b4a888a7546d67a85f950
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+has-props
+

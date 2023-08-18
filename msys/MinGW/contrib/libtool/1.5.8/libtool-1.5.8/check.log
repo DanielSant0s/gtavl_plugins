@@ -1,0 +1,133 @@
+Making check in .
+make[1]: Entering directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8'
+make[1]: Niets te doen voor `check-am'.
+make[1]: Leaving directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8'
+Making check in libltdl
+make[1]: Entering directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/libltdl'
+make[1]: Niets te doen voor `check'.
+make[1]: Leaving directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/libltdl'
+Making check in doc
+make[1]: Entering directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/doc'
+make[1]: Niets te doen voor `check'.
+make[1]: Leaving directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/doc'
+Making check in tests
+make[1]: Entering directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/tests'
+make  check-TESTS
+make[2]: Entering directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/tests'
+PASS: cdemo-static.test
+FAIL: cdemo-make.test
+SKIP: cdemo-exec.test
+PASS: demo-static.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+SKIP: demo-inst.test
+PASS: demo-unst.test
+PASS: depdemo-static.test
+FAIL: depdemo-make.test
+SKIP: depdemo-exec.test
+SKIP: depdemo-inst.test
+PASS: depdemo-unst.test
+PASS: mdemo-static.test
+FAIL: mdemo-make.test
+SKIP: mdemo-exec.test
+SKIP: mdemo-inst.test
+PASS: mdemo-unst.test
+PASS: cdemo-conf.test
+FAIL: cdemo-make.test
+SKIP: cdemo-exec.test
+PASS: demo-conf.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+SKIP: demo-inst.test
+PASS: demo-unst.test
+SKIP: deplibs.test
+PASS: depdemo-conf.test
+FAIL: depdemo-make.test
+SKIP: depdemo-exec.test
+SKIP: depdemo-inst.test
+PASS: depdemo-unst.test
+PASS: mdemo-conf.test
+FAIL: mdemo-make.test
+SKIP: mdemo-exec.test
+SKIP: mdemo-inst.test
+PASS: mdemo-unst.test
+FAIL: dryrun.test
+PASS: demo-nofast.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+SKIP: demo-inst.test
+PASS: demo-unst.test
+PASS: demo-pic.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+PASS: demo-nopic.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+PASS: depdemo-nofast.test
+FAIL: depdemo-make.test
+SKIP: depdemo-exec.test
+SKIP: depdemo-inst.test
+PASS: depdemo-unst.test
+PASS: cdemo-shared.test
+FAIL: cdemo-make.test
+SKIP: cdemo-exec.test
+PASS: demo-shared.test
+FAIL: demo-make.test
+SKIP: demo-exec.test
+SKIP: demo-inst.test
+SKIP: hardcode.test
+SKIP: build-relink.test
+SKIP: noinst-link.test
+PASS: demo-unst.test
+PASS: depdemo-shared.test
+FAIL: depdemo-make.test
+SKIP: depdemo-exec.test
+SKIP: depdemo-inst.test
+SKIP: build-relink2.test
+PASS: depdemo-unst.test
+PASS: mdemo-shared.test
+FAIL: mdemo-make.test
+SKIP: mdemo-exec.test
+SKIP: mdemo-inst.test
+PASS: mdemo-unst.test
+PASS: assign.test
+PASS: link.test
+PASS: link-2.test
+PASS: nomode.test
+FAIL: quote.test
+PASS: sh.test
+PASS: suffix.test
+PASS: pdemo-conf.test
+FAIL: pdemo-make.test
+SKIP: pdemo-exec.test
+SKIP: pdemo-inst.test
+PASS: mdemo-conf.test
+FAIL: mdemo-make.test
+PASS: mdemo2-conf.test
+SKIP: mdemo2-make.test
+SKIP: mdemo2-exec.test
+PASS: tagdemo-static.test
+FAIL: tagdemo-make.test
+SKIP: tagdemo-exec.test
+PASS: tagdemo-conf.test
+FAIL: tagdemo-make.test
+SKIP: tagdemo-exec.test
+PASS: tagdemo-shared.test
+FAIL: tagdemo-make.test
+SKIP: tagdemo-exec.test
+PASS: f77demo-static.test
+FAIL: f77demo-make.test
+SKIP: f77demo-exec.test
+PASS: f77demo-conf.test
+FAIL: f77demo-make.test
+SKIP: f77demo-exec.test
+PASS: f77demo-shared.test
+FAIL: f77demo-make.test
+SKIP: f77demo-exec.test
+====================================
+26 of 68 tests failed
+(42 tests were not run)
+Please report to bug-libtool@gnu.org
+====================================
+make[2]: Leaving directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/tests'
+make[1]: Leaving directory `/cygdrive/k/Devel/libtool/1.5.8/libtool-1.5.8/tests'

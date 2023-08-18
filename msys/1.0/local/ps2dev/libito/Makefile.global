@@ -1,0 +1,22 @@
+####################################################
+# Change the settings, so they match yours         #
+####################################################
+
+EE_PREFIX = ee-
+EE_CC = $(EE_PREFIX)gcc
+EE_CPP = $(EE_PREFIX)g++
+EE_AS = $(EE_PREFIX)as
+EE_LD = $(EE_PREFIX)ld
+EE_AR = $(EE_PREFIX)ar
+EE_OBJCOPY = $(EE_PREFIX)objcopy
+EE_STRIP = $(EE_PREFIX)strip
+
+VU_PATH = ee-dvp-
+VU_AS = $(VU_PATH)as
+
+# Tools
+IIT = $(LIBITO)/tools/iit/iit
+BIN2S = $(PS2SDK)/bin/bin2s
+BIN2C = $(PS2SDK)/bin/bin2c
+
+# PS2PACKER = $(LIBITO)/tools/ps2-packer/ps2-packer-lite

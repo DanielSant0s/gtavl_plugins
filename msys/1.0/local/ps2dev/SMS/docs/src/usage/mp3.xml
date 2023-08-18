@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Revision: 1.31 $ -->
+
+<sect1 id="usage-mp3">
+  <title>
+    <phrase lang="en">
+      MP3 Audio Playback
+    </phrase>
+    <phrase lang="pt">
+      Leitura de ficheiros MP3
+    </phrase>
+    <phrase lang="ru">
+      Воспроизведение MP3
+    </phrase>
+  </title>
+
+  <para lang="en">
+    SMS (v1.5 onwards) contains an MP3 player with M3U playlist support.
+    All files can be accessed in exactly the same ways as video files
+    (via
+    <xref linkend="usage-network"/>,
+    <xref linkend="usage-cddafs"/>,
+    <xref linkend="usage-dvdr"/>,
+    <xref linkend="usage-hdd"/> or
+    <xref linkend="usage-usb"/>).
+  </para>
+  <para lang="pt">
+    SMS (1.5 para a frente) contém um leitor de MP3 com suporte para
+    ficheiros de 'playlist' M3U. Todos os ficheiros podem ser acedidos
+    da mesma maneira que os ficheiros de video
+    (via
+    <xref linkend="usage-network"/>,
+    <xref linkend="usage-cddafs"/>,
+    <xref linkend="usage-dvdr"/>,
+    <xref linkend="usage-hdd"/> or
+    <xref linkend="usage-usb"/>).
+  </para>
+  <para lang="ru">
+    SMS (начиная с версии v1.5) включает в себя плейер MP3 с поддержкой 
+    плейлистов в формате M3U. Доступ к аудио файлам осуществляется точно
+    так же, как и к видео файлам, через
+    <xref linkend="usage-network"/>,
+    <xref linkend="usage-cddafs"/>,
+    <xref linkend="usage-dvdr"/>,
+    <xref linkend="usage-hdd"/> или
+    <xref linkend="usage-usb"/>).
+  </para>
+
+  <sect2 id="usage-mp3-single">
+    <title>
+      <phrase lang="en">Playing single MP3 files</phrase>
+      <phrase lang="pt">Correndo um só ficheiro MP3</phrase>
+      <phrase lang="ru">Воспроизведение MP3 файлов по одному</phrase>
+    </title>
+
+    <para lang="en">
+      Playing a single MP3 is done just as though you are playing an AVI
+      video file. Locate the file using the browser, then press
+      <emphasis role="bold">X</emphasis> to start the playback.
+    </para>
+    <para lang="pt">
+      Para tocar um ficheiro de MP3 deverá fazer o mesmo que faz para
+      ver um ficheiro AVI. Basta navegar até ao ficheiro e pressionar
+      <emphasis role="bold">X</emphasis> para começar a tocar.
+    </para>
+    <para lang="ru">
+      Воспроизведение одного отдельного MP3 файла включается аналогично 
+      AVI видео файлам. Найдите, с помощью браузера, нужный 
+      вам файл и нажмите <emphasis role="bold">X</emphasis> для начала 
+      воспроизведения.
+    </para>
+
+    <figure>
+      <title>
+        <phrase lang="en">Screenshot showing selection of MP3 file in file
+        browser.</phrase>
+        <phrase lang="pt">Screenshot mostrando uma lista de ficheiros MP3
+        no gestor de ficheiros.</phrase>
+        <phrase lang="ru">Выбор MP3 файла из списка.</phrase>
+      </title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/usage-sms-mp3browsing.png"
+          format="PNG"/>
+        </imageobject>
+        <textobject>
+          <phrase>SMS MP3 browsing.</phrase>
+        </textobject>
+      </mediaobject>
+    </figure>
+
+    <figure>
+      <title>
+        <phrase lang="en">Screenshot showing MP3 playback.</phrase>
+        <phrase lang="pt">Screenshot mostrando MP3 a tocar.</phrase>
+        <phrase lang="ru">Экран при воспроизведении MP3 файла.</phrase>        
+      </title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/usage-sms-mp3playing.png"
+          format="PNG"/>
+        </imageobject>
+        <textobject>
+          <phrase>SMS MP3 playback.</phrase>
+        </textobject>
+      </mediaobject>
+    </figure>
+
+  </sect2>
+
+  <sect2 id="usage-mp3-noplaylist">
+    <title>
+      <phrase lang="en">Playing multiple MP3 files without a Playlist</phrase>
+      <phrase lang="pt">#Playing multiple MP3 files without a Playlist#</phrase>
+      <phrase lang="ru">Воспроизведение нескольких МР3 файлов без плейлиста</phrase>      
+    </title>
+
+    <para lang="en">
+      You can play the contents of a folder as an automatic playlist by
+      pressing '<emphasis role="bold">O</emphasis>' on the folder name.  The 
+      files will be played in alphabetical order.
+    </para>
+    <para lang="pt">
+      #You can play the contents of a folder as an automatic playlist by
+      pressing '<emphasis role="bold">O</emphasis>' on the folder name.  The 
+      files will be played in alphabetical order.#
+    </para>
+    <para lang="ru">
+      SMS может воспроизвести все аудиофайлы в папке без создания плейлиста.
+      Для этого, выберите папку и нажмите <emphasis role="bold">O</emphasis>
+      на ней. Файлы будут проигрываться в алфавитном порядке.
+    </para>
+  </sect2>
+
+  <sect2>
+    <title>
+      <phrase lang="en">Playing multiple MP3 files using a Playlist</phrase>
+      <phrase lang="pt">Tocando múltiplos ficheiros MP3 numa
+      'Playlist'</phrase>
+      <phrase lang="ru">Воспроизведение нескольких МР3 файлов с помощью плейлиста</phrase>            
+    </title>
+
+    <para lang="en">
+      
+      Multiple MP3 files can be played using an <filename>.m3u</filename>
+      playlist. You may need to modify the <filename>.m3u</filename> file 
+      to make sure it only contains 
+      <emphasis role="bold">relative paths</emphasis> and not 
+      <emphasis role="bold">absolute paths</emphasis>.
+    </para>
+    <para lang="pt">
+      Múltiplos ficheiros MP3 podem ser tocados usando uma 'playlist'
+      <filename>.m3u</filename>. Poderá ter de editar o ficheiro 
+      <filename>.m3u</filename> para se certificar que este só contém
+      <emphasis role="bold">caminhos relativos</emphasis> e não 
+      <emphasis role="bold">caminhos absolutos</emphasis>.
+    </para>
+    <para lang="ru">
+      Список из нескольких МР3 файлов может быть воспроизведен с помощью
+      плейлиста <filename>.m3u</filename>. Вам, возможно, придется 
+      отредактировать файл <filename>.m3u</filename> с тем, чтобы он включал
+      в себя только <emphasis role="bold">относительные пути</emphasis> а не 
+      <emphasis role="bold">абсолютные</emphasis>.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para lang="en">
+          <emphasis role="bold">On your PC</emphasis>, Using windows media
+          player/winamp etc create an m3u playlist. (In WMP this is
+          File->Save Playlist As), navigate to the folder where the mp3
+          files are stored, select <filename>.m3u</filename> format and
+          type a filename.
+        </para>
+        <para lang="pt">
+          <emphasis role="bold">No seu PC</emphasis>, utilizando o 
+          Windows Media Player/Winamp/etc. poderá criar um ficheiro .m3u.
+          (no WMP basta fazer: File->Save Playlist As), navegue até ao
+          directório onde os ficheiros MP3 estão localizados, seleccione
+          o formato <filename>.m3u</filename> e insira um nome.
+        </para>
+        <para lang="ru">
+          Создайте плейлист, используя Windows Media Player или Winamp на 
+          <emphasis role="bold">вашем компьютере</emphasis>. Для того, чтобы 
+          создать такой файл в Windows Media Player-e, выберите 
+          File->Save Playlist As, затем укажите папку, в которой хранятся
+          МР3 файлы, выберите <filename>.m3u</filename> формат и наберите
+          имя файла будущего плейлиста.
+        </para>
+        
+      </listitem>
+
+      <listitem>
+        <para lang="en">
+          Open the m3u file in a text editor (e.g. 
+          <application>Notepad</application> and delete the path names. 
+          (i.e. Convert '<filename>c:\my music\myfile.mp3</filename>' to 
+          '<filename>myfile.mp3</filename>'). If you saved the m3u file in
+          the right place, windows media player should have removed these for
+          you, if not, manually remove them yourself, and save the file.
+        </para>
+        <para lang="pt">
+          Abra o ficheiro m3u num editor de texto (i.e. 
+          <application>Notepad</application>) e apague os caminhos. 
+          (i.e. Converta '<filename>c:\my music\myfile.mp3</filename>' para 
+          '<filename>myfile.mp3</filename>'). Se tiver gravado o ficheiro
+          m3u no local correcto, o WMP deverá ter removido os caminhos, caso
+          contrário terá de os remover manualmente e salvar o ficheiro.
+        </para>
+        <para lang="ru">
+          Откройте файл .m3u в текстовом редакторе (например, 
+          в <application>Блокноте</application>) и удалите пути к файлам. 
+          Например, поменяйте <filename>c:\my music\myfile.mp3</filename> на 
+          <filename>myfile.mp3</filename>. Вообще-то, если вы записали файл 
+          m3u в правильное место, но Windows Media Player должен был проделать
+          эту работу за вас. Если это не произошло, отредактируйте файл
+          вручную, как показано выше, и запишите плейлист.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para lang="en">
+          The path names are allowed to include a directory relative to
+          where the m3u file is (e.g. .m3u file can point to files in a
+          subdirectory), but it must not contain your full system path
+          (this is because SMS won't know what to do when it sees
+          <filename>C:\...</filename>!).
+        </para>
+        <para lang="pt">
+          Os nomes podem conter um directório relativo ao local onde o
+          ficheiro m3u se encontra (e.g. .m3u pode apontar para ficheiros
+          num sub-directório), mas não pode conter caminhos completos
+          (porque o SMS não saberia o que fazer quando vê 
+          <filename>C:\...</filename>!).
+        </para>
+        <para lang="ru">
+          Имена файлов могут включать в себя поддиректории, относительно 
+          той папки, в которой находится плейлист m3u. Но он не должен
+          содержать полного полного пути к файлу. Это требование связано с тем,
+          что SMS не имеет никакого понятия что делать, когда ей говорят,
+          что файл находится в папке <filename>C:\...</filename>!
+        </para>
+      </listitem>
+
+      <listitem>
+        <para lang="en">
+          On your PS2, start up SMS, and navigate to the
+          <filename>.m3u</filename> file you created. Press
+          <emphasis role="bold">X</emphasis> to start playback.  Use
+          <emphasis role="bold">LEFT</emphasis> and
+          <emphasis role="bold">RIGHT</emphasis> to skip forwards or
+          backwards. (you can only skip once a file is playing).
+        </para>
+        <para lang="pt">
+          Na PS2, ligue o SMS e navegue até ao ficheiro 
+          <filename>.m3u</filename> que criou. Pressione
+          <emphasis role="bold">X</emphasis> para começar a tocar. Use
+          <emphasis role="bold">ESQUERDA</emphasis> e
+          <emphasis role="bold">DIREITA</emphasis> para mudar de faixas
+          (só pode mudar assim que a faixa estiver a tocar).
+        </para>
+        <para lang="ru">
+          Запустите SMS на вашей PS2 и выберите файл 
+          <filename>.m3u</filename> который вы создали ранее. Нажмите кнопку
+          <emphasis role="bold">X</emphasis> для начала воспроизведения.
+          Используйте кнопки <emphasis role="bold">ВЛЕВО</emphasis> и
+          <emphasis role="bold">ВПРАВО</emphasis> для перемещения по файлу.
+          Вы можете перематывать файл только когда воспроизведение началось.
+        </para>
+      </listitem>
+
+    </itemizedlist>
+
+    <figure>
+      <title>
+        <phrase lang="en">Screenshot showing M3U file loading.</phrase>
+        <phrase lang="pt">Screenshot o carregamento de um M3U.</phrase>
+        <phrase lang="ru">Загрузка файла M3U.</phrase>        
+      </title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/usage-sms-mp3playlist01.png"
+          format="PNG"/>
+        </imageobject>
+        <textobject>
+          <phrase>M3U file loading</phrase>
+        </textobject>
+      </mediaobject>
+    </figure>
+
+    <figure>
+      <title>
+        <phrase lang="en">Screenshot showing M3U playlist playing.</phrase>
+        <phrase lang="en">Screenshot mostrando uma 'playlist' M3U a tocar.</phrase>
+        <phrase lang="ru">Воспроизведение файлов из плейлиста M3U.</phrase>        
+      </title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/usage-sms-mp3playlist02.png"
+          format="PNG"/>
+        </imageobject>
+        <textobject>
+          <phrase>M3U file playing</phrase>
+        </textobject>
+      </mediaobject>
+    </figure>
+
+    <warning>
+      <para lang="en">
+        M3U support is still in development; some users have experienced
+        unexpected crashes. Keeping mp3 filenames as short as possible will
+        help reduce this until the problems are permanently fixed.  If you
+        are experiencing problems, try shortenning your filenames.
+      </para>
+      <para lang="pt">
+        Suporte para ficheiros M3U ainda está em desenvolvimento; alguns
+        utilizadores tiveram 'crashes'. Manter os nomes dos MP3 o mais curto
+        possivel ajudará a evitar estes problemas até que eles sejam 
+        corrigidos permanentemente. Se tiver qualquer problema, experimente
+        encurtar os nomes dos seus MP3.
+      </para>
+      <para lang="ru">
+        Поддержка M3U все еще находится на стадии разработки, так что
+        некоторые пользователи могут столкнуться с неожиданными проблемами.
+        Постарайтесь использовать короткие имена MP3 файлов - это помогает
+        решить проблему до того момента, пока не будет найдена причина
+        возникновения таковых ошибок.
+      </para>
+      
+    </warning>
+
+    <note>
+      <para lang="en">
+        It is not possible to edit a playlist on the PS2, playlists can only
+        be edited on a PC then transfered to the PS2.
+      </para>
+      <para lang="pt">
+        Não é possível editar 'playlists' na PS2, terão de ser editadas no
+        PC e de seguida transferidas para a PS2.
+      </para>
+      <para lang="ru">
+        Изменять плейлист на PS2 невозможно. Вы должны отредактировать его
+        на компьютере, а затем скопировать его в PS2.
+      </para>
+      
+    </note>
+    
+  </sect2>
+</sect1>

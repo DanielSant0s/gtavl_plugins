@@ -1,0 +1,44 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip/tcpip/src/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2006-08-10T20:10:10.016218Z
+1347
+Herben
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+lwipopts.h
+file
+
+
+
+
+2009-08-10T17:50:20.453125Z
+e32e93741122d6d09ad0c8ee75355719
+2006-08-10T20:10:10.016218Z
+1347
+Herben
+has-props
+
+arch
+dir
+

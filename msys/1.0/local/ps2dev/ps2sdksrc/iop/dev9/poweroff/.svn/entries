@@ -1,0 +1,47 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/dev9/poweroff
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-07T01:56:53.526806Z
+1421
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+include
+dir
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:50:48.187500Z
+5157a5ad00ce7828fc326f54da1d81e1
+2007-07-07T01:56:53.526806Z
+1421
+radad
+has-props
+

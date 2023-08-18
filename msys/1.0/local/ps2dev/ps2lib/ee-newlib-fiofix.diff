@@ -1,0 +1,50 @@
+diff -Naur newlib-1.10.0/newlib/libc/sys/ps2/close.c ee-newlib-1.81/newlib/libc/sys/ps2/close.c
+--- newlib-1.10.0/newlib/libc/sys/ps2/close.c	2003-04-09 23:45:59.000000000 -0700
++++ ee-newlib-1.81/newlib/libc/sys/ps2/close.c	2003-04-08 21:00:11.000000000 -0700
+@@ -3,5 +3,5 @@
+ 
+ int close(int fd)
+ {
+-	return fio_close( fd );
++	return fioClose( fd );
+ }
+diff -Naur newlib-1.10.0/newlib/libc/sys/ps2/lseek.c ee-newlib-1.81/newlib/libc/sys/ps2/lseek.c
+--- newlib-1.10.0/newlib/libc/sys/ps2/lseek.c	2003-04-09 23:45:59.000000000 -0700
++++ ee-newlib-1.81/newlib/libc/sys/ps2/lseek.c	2003-04-08 21:00:11.000000000 -0700
+@@ -5,5 +5,5 @@
+ 
+ off_t lseek(int fd, off_t offset, int whence)
+ {
+-	return fio_lseek( fd, offset, whence );
++	return fioLseek( fd, offset, whence );
+ }
+diff -Naur newlib-1.10.0/newlib/libc/sys/ps2/open.c ee-newlib-1.81/newlib/libc/sys/ps2/open.c
+--- newlib-1.10.0/newlib/libc/sys/ps2/open.c	2003-04-09 23:45:59.000000000 -0700
++++ ee-newlib-1.81/newlib/libc/sys/ps2/open.c	2003-04-08 21:00:11.000000000 -0700
+@@ -3,5 +3,5 @@
+ 
+ int open(const char *buf, int flags, int mode)
+ {
+-	return fio_open( buf, flags );	
++	return fioOpen( buf, flags );	
+ }
+diff -Naur newlib-1.10.0/newlib/libc/sys/ps2/read.c ee-newlib-1.81/newlib/libc/sys/ps2/read.c
+--- newlib-1.10.0/newlib/libc/sys/ps2/read.c	2003-04-09 23:45:59.000000000 -0700
++++ ee-newlib-1.81/newlib/libc/sys/ps2/read.c	2003-04-08 21:00:11.000000000 -0700
+@@ -3,5 +3,5 @@
+ 
+ int read(int fd, void *buf, int nbytes)
+ {
+-	return fio_read( fd, buf, nbytes );
++	return fioRead( fd, buf, nbytes );
+ }
+diff -Naur newlib-1.10.0/newlib/libc/sys/ps2/write.c ee-newlib-1.81/newlib/libc/sys/ps2/write.c
+--- newlib-1.10.0/newlib/libc/sys/ps2/write.c	2003-04-09 23:45:59.000000000 -0700
++++ ee-newlib-1.81/newlib/libc/sys/ps2/write.c	2003-04-08 21:00:11.000000000 -0700
+@@ -3,5 +3,5 @@
+ 
+ int write(int fd, void *buf, int nbytes)
+ {
+-	return fio_write( fd, buf, nbytes);
++	return fioWrite( fd, buf, nbytes);
+ }

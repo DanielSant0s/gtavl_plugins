@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/usb/usbd/include
+svn://svn.ps2dev.org/ps2
+
+
+
+2009-08-11T02:42:17.365703Z
+1600
+jim
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+usbd.h
+file
+
+
+
+
+2009-08-10T17:50:57.390625Z
+7c4d71434b1978db8f9a1b18d074eab8
+2006-01-27T19:05:47.077946Z
+1262
+tyranid
+has-props
+
+usbd_macro.h
+file
+
+
+
+
+2009-09-18T17:05:26.768250Z
+cb073f573d014a4e6172a545b8d3e0a5
+2009-08-11T02:42:17.365703Z
+1600
+jim
+has-props
+

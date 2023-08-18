@@ -1,0 +1,85 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/iop/tcpip/lwip-1.1.1
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-07T12:21:26.859189Z
+1423
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+FILES
+file
+
+
+
+
+2009-08-10T17:50:34.812500Z
+ccc1f1b9d869c606359cf7c8747447fc
+2006-08-10T20:05:55.889551Z
+1346
+Herben
+
+doc
+dir
+
+src
+dir
+
+CHANGELOG
+file
+
+
+
+
+2009-08-10T17:50:34.812500Z
+1244b03bb4f185f4bc6ff61373731fc3
+2006-08-10T20:05:55.889551Z
+1346
+Herben
+
+COPYING
+file
+
+
+
+
+2009-08-10T17:50:34.812500Z
+59a383b05013356e0c9899b06dc5da3f
+2006-08-10T20:05:55.889551Z
+1346
+Herben
+
+CVS
+dir
+
+README
+file
+
+
+
+
+2009-08-10T17:50:34.828125Z
+d8f5db8a65959e5394ba5be619f3d36b
+2006-08-10T20:05:55.889551Z
+1346
+Herben
+

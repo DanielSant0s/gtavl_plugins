@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Revision: 1.31 $ -->
+
+  <sect1 id="usage-subtitles">
+  <title>
+    <phrase lang="en">
+      Subtitles
+    </phrase>
+    <phrase lang="pt">
+      Legendas
+    </phrase>
+    <phrase lang="ru">
+      Субтитры
+    </phrase>
+  </title>
+
+  <para lang="en">
+    Subtitle support was added in SMS v1.5. Support is included for
+    <filename>.srt</filename> (<application>SubRip</application>) and
+    <filename>.sub</filename> (<application>MicroDVD</application>) formats.
+  </para>
+  <para lang="pt">
+    Suporte para legendas foi adicionado no SMS v1.5. Os formatos suportados 
+    são <filename>.srt</filename> (<application>SubRip</application>) e
+    <filename>.sub</filename> (<application>MicroDVD</application>).
+  </para>
+  <para lang="ru">
+    Поддержка субтитров была добавлена, начиная с версии SMS v1.5. 
+    Поддерживаются следующие форматы: 
+    <filename>.srt</filename> (<application>SubRip</application>) и
+    <filename>.sub</filename> (<application>MicroDVD</application>).
+  </para>
+
+  <sect2 id="usage-subtitles-playback">
+    <title>
+      <phrase lang="en">Playing Videos With Subtitles</phrase>
+      <phrase lang="pt">Vizualizando videos com Legendas</phrase>
+      <phrase lang="ru">Воспроизведение видео с субтитрами </phrase>      
+    </title>
+
+  <para lang="en">
+    To play back a movie with subtitles, you'll need the movie
+    <filename>.avi</filename> file and a corresponding subtitle file in
+    the desired language.  Subtitle files are available from several
+    download sites, or you can rip your own from the DVD.  Where or how to
+    get subtitles is beyond the scope of this manual, but either way you'll
+    end up with a subtitle file.  A subtitle file is a human readable text
+    file (you can open it in notepad if you want), which defines the text
+    and the timing of the words which appear on the screen.
+  </para>
+  <para lang="pt">
+    Para ver um filme com legendas, necessitará de um filme 
+    <filename>.avi</filename> com o ficheiro de legendas correspondente na
+    linguagem desejada.  Ficheiros de legendas estão disponíveis para
+    download em vários sites, ou pode 'ripar' as suas próprias legendas do
+    DVD. Como e onde arranjar legendas não faz parte do objectivo deste
+    manual, mas de qualquer maneira ficará com um ficheiro de legendas. Um
+    ficheiro de legendas é um ficheiro de texto (pode abri-lo no notepad se 
+    lhe apetecer), onde estão definidos o texto e o tempo das palavras que 
+    aparecem no ecrã.
+   </para>
+  <para lang="ru">
+    Для воспроизведения фильма с субтитрами вам нужен файл с фильмом 
+    <filename>.avi</filename> и соответствующий файл субтитров на понятном вам 
+    языке.  Файлы субтитров можно найти на просторах Интернета, а можно 
+    сделать самому с диска DVD. Где и как получить субтитры в данном 
+    руководстве не рассматривается. Файл с субтитрами представляет собой
+    текстовый файл (который вы можете прочесть с помощью Блокнота, например).
+    В этом файле находится текст и время появления текста на экране.
+  </para>
+
+  <para lang="en">
+    The <emphasis role="bold">Player Settings</emphasis> menu
+    (press <emphasis role="bold">Start</emphasis> in the SMS browser then
+    select <emphasis role="bold">Player Settings</emphasis>, and press
+    <emphasis role="bold">X</emphasis>) is used to control the subtitle
+    settings. The main option you'll want to turn on is
+    '<emphasis role="bold">Autoload subtitles</emphasis>'.
+    The subtitle position and colour can be adjusted here too.
+  </para>
+  <para lang="pt">
+    O menu <emphasis role="bold">Player Settings</emphasis> menu
+    (pressione <emphasis role="bold">Start</emphasis> no navegador do SMS e 
+    seleccione <emphasis role="bold">Player Settings</emphasis>, e pressione
+    <emphasis role="bold">X</emphasis>) é usado para controlar as opções das
+    legendas. A principal opção que quererá ligar é
+    '<emphasis role="bold">Autoload subtitles</emphasis>'.
+    As cores e posição das legendas podem ser ajustadas aqui também.
+  </para>
+  <para lang="ru">
+    Меню <emphasis role="bold">Player Settings (настройки 
+    воспроизведения)</emphasis> используется для управлениями субтитрами. Для
+    того, чтобы попасть в это меню, нажмите кнопку 
+    <emphasis role="bold">START</emphasis> в проводнике, затем выберите 
+    select <emphasis role="bold">Player Settings</emphasis> и нажмите кнопку
+    <emphasis role="bold">X</emphasis>). Прежде всего, вы должны включить
+    опцию <emphasis role="bold">Autoload subtitles</emphasis> (автозагрузка 
+    субтитров). Также, вы можете настроить цвет и позицию субтитров на экране.
+  </para>
+
+  <figure id="usage-subtitles-settingsfig">
+    <title>
+       <phrase lang="en">
+         Screenshot showing subtitle settings.
+      </phrase>
+      <phrase lang="pt">
+         Screenshot mostrando as opções de legendas.
+      </phrase>
+       <phrase lang="ru">
+         Настройки субтитров
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/usage-sms-subtitlessettings.png"
+        format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>SMS screenshot showing Player settings screen.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+
+  <para lang="en">
+    SMS currently supported subtitle formats:
+  </para>
+  <para lang="pt">
+    Formatos de Legendas suportados pelo SMS:
+  </para>
+  <para lang="ru">
+    В настоящее время SMS поддерживает следующие форматы субтитров: 
+  </para>
+  
+  <table frame='none'>
+    <title>
+      <phrase lang="en">Subtitle formats supported by SMS</phrase>
+      <phrase lang="pt">Formatos de Legendas suportados pelo SMS</phrase>
+      <phrase lang="ru">Форматы субтитров поддерживаемые SMS</phrase>      
+    </title>
+    <tgroup cols='3'>
+      <thead>
+        <row>
+          <entry>
+            <para lang="en">Format</para>
+            <para lang="pt">Formato</para>
+            <para lang="ru">Формат</para>            
+          </entry>
+          <entry>
+            <para lang="en">Extension</para>
+            <para lang="pt">Extensão</para>
+            <para lang="ru">Расширение</para>            
+          </entry>
+          <entry>
+            <para lang="en">Example</para>
+            <para lang="pt">Exemplo</para>
+            <para lang="ru">Пример</para>            
+          </entry>
+        </row>
+      </thead>
+      <tbody>
+      <row>
+        <entry>
+          <para><ulink url="http://www.lossepladsen.dk/all4you/TheLostWorld/MDVDPdocu.html#step5">MicroDVD</ulink></para>
+        </entry>
+        <entry>
+          <para><filename>.sub</filename></para>
+        </entry>
+        <entry>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="../images/usage-sub.png"
+              format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>MicroDVD sub file format.</phrase>
+            </textobject>
+          </mediaobject>
+        </entry>
+      </row>
+      <row>
+        <entry>
+          <para><ulink url="http://en.wikipedia.org/w/index.php?title=SubRip&amp;oldid=34934126">SubRip</ulink></para>
+        </entry>
+        <entry>
+          <para><filename>.srt</filename></para>
+        </entry>
+        <entry>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="../images/usage-srt.png"
+              format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>SubRip srt file format.</phrase>
+            </textobject>
+          </mediaobject>
+        </entry>
+      </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <tip>
+    <para lang="en">
+      If you aren't sure about subtitle files, then I recommend that you get
+      them working on your PC first, using a PC player that supports
+      subtitles (such as
+      <ulink url="http://www.mplayerhq.hu"><application>MPlayer</application></ulink>).
+      <application>Mplayer</application> follows the same rules as SMS when
+      searching for subtitle files, and plays them by default if it finds
+      them.  It's quite handy for quickly verifying files before trying them
+      on SMS.
+    </para>
+    <para lang="pt">
+      Se não tiver a certeza acerca dos ficheiros de legendas, recomendo que 
+      os meta a funcionar no seu PC primeiro, usando um leitor de PC que 
+      suporte legendas (tal como o 
+      <ulink url="http://www.mplayerhq.hu"><application>MPlayer</application></ulink>).
+      O <application>Mplayer</application> segue as mesmas regras que o SMS 
+      quando procura ficheiros de legendas, e liga-os por defeito se os
+      encontrar.  É bastante útil para verificar ficheiros rapidamente antes
+      de os testar no SMS.
+    </para>
+    <para lang="ru">
+      Если вы не уверены в работоспособности файла субтитров, то я рекомендую
+      вам сначала опробовать его на компьютере. Для этого можно воспользоваться
+      каким-нибудь программным плейером, который умеет работать с субтитрами.
+      Например <ulink url="http://www.mplayerhq.hu"><application>MPlayer</application></ulink>).
+      <application>Mplayer</application> Mplayer следует тем же правилам, 
+      что и SMS при поиске файлов субтитров, и если файл был успешно найдет,
+      то он автоматически включает показ субтитров. Это очень удобно для 
+      быстрой проверки файлов, перед тем, как их скормить SMS.
+    </para>
+  </tip>
+
+  <para lang="en">
+    The subtitle file itself must be copied into the same directory as the 
+    video file, with the exact same filename as the video, the only 
+    difference being the extension (<filename>.srt</filename> or
+    <filename>.sub</filename>). The extension must be in lower-case.
+  </para>
+  <para lang="pt">
+    O ficheiro de legendas em si deve ser copiado para o mesmo directório que
+    o ficheiro de video, exactamente com o mesmo nome que o ficheiro de video,
+    residindo a única diferença na extensão (<filename>.srt</filename> ou
+    <filename>.sub</filename>). A extensão tem de ser em letras minúsculas.
+  </para>
+  <para lang="ru">
+    Файл субтитров должен находиться в той же папке, что и файл с фильмом
+    и иметь такое же имя (расширение, разумеется, будет другим: 
+    <filename>.srt</filename> или <filename>.sub</filename>). Также, расширение
+    файла субтитров должно быть написано строчными буквами.
+  </para>
+
+  <para lang="en">
+    Once you have the file in the right location, start SMS and navigate to
+    the <filename>.avi</filename> video file as usual, then press
+    <emphasis role="bold">X</emphasis>.
+  </para>
+  <para lang="pt">
+    Assim que tiver o ficheiro na localização correcta, ligue o SMS e navegue
+    até aoficheiro <filename>.avi</filename> como de costume, e pressione
+    <emphasis role="bold">X</emphasis>.
+  </para>
+  <para lang="ru">
+    После того, как файл был скопирован в правильную папку, запустите SMS
+    и выберите нужный файл <filename>.avi</filename> как обычно. Затем,
+    нажмите кнопку <emphasis role="bold">X</emphasis>.
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         Screenshot showing SMS while browsing for video (note 
+         subtitle file in same directory).
+      </phrase>
+      <phrase lang="pt">
+         Screenshot mostrando o SMS navegando até ao video (repare no ficheiro
+         de legendas no mesmo directório).
+      </phrase>
+       <phrase lang="ru">
+         Список файлов на экране SMS. Обратите внимание на файл субтитров,
+         находящийся в той же директории, что и видеофайл.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/usage-sms-subtitlesbrowsing.png"
+        format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>Screenshot showing SMS while browsing.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    SMS will automatically look for a subtitle file, and if it finds one,
+    the following 'loading subtitles' message will be displayed:
+  </para>
+  <para lang="pt">
+    O SMS irá procurar automaticamente por um ficheiro de legendas, e se 
+    encontrar um, a mensagem 'loading subtitles' aparecerá:
+  </para>
+  <para lang="ru">
+    SMS автоматически ищет файл субтитров и, если находит его, высвечивает 
+    на экране loading subtitles... 
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         Screenshot showing SMS while lauching video with subtitles.
+      </phrase>
+      <phrase lang="pt">
+         Screenshot mostrando o SMS carregando um video com legendas.
+      </phrase>
+       <phrase lang="ru">
+         SMS при загрузке видео с субтитрами.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/usage-sms-subtitlesloading.png"
+        format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>Screenshot showing SMS while lauching video with
+        subtitles.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    During playback, the subtitles will appear on the screen
+    (colour/position are adjustable in the
+    <link linkend="usage-subtitles-settingsfig">player settings menu</link>).
+  </para>
+  <para lang="pt">
+    Durante a vizualização, as legendas aparecerão no ecrã (cor e posição são
+    ajustáveis no menu 
+    <link linkend="usage-subtitles-settingsfig">player settings</link>).
+  </para>
+  <para lang="ru">
+    Субтитры будут показываться на экране во время воспроизведения видеофайла.
+    Если требуется, вы можете настроить цвет и позицию субтитров в меню
+    <link linkend="usage-subtitles-settingsfig">настроек плейера</link>).
+  </para>
+
+  <figure>
+    <title>
+       <phrase lang="en">
+         Screenshot showing SMS playback with subtitles.
+      </phrase>
+      <phrase lang="pt">
+         Screenshot mostrando as legendas no SMS.
+      </phrase>
+       <phrase lang="ru">
+         Воспроизведение видеофайла с субтитрами.
+      </phrase>
+    </title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/usage-sms-subtitlesplayback.png"
+        format="PNG"/>
+      </imageobject>
+      <textobject>
+        <phrase>Screenshot showing SMS while lauching video with
+        subtitles.</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+  <para lang="en">
+    The synchronisation between the subtitles and the audio can sometimes go 
+    out.  You can fine tune the timing during playback (see
+    <link linkend="usage-controls-playback">controls</link>) section.  I've 
+    found less synchronisation problems with <filename>.sub</filename> files 
+    than <filename>.srt</filename>, but your results may vary.
+  </para>
+  <para lang="pt">
+    Por vezes, a sincronização entre as legendas e o som pode ser alterada.
+    Pode ajustar a sincronização durante a vizualização (veja a secção
+    <link linkend="usage-controls-playback">controlos</link>).  Eu encontrei
+    menos problemas de sincronização com ficheiros <filename>.sub</filename>
+    do que com ficheiros <filename>.srt</filename>, mas os resultados podem
+    variar.
+  </para>
+  <para lang="ru">
+    Иногда возникает рассинхронизация между субтитрами и аудиодорожкой. В этом
+    случае, вы можете настроить синхронизацию во время воспризведения (см 
+    раздел 
+    <link linkend="usage-controls-playback">Управление программой</link>).
+    Кстати, я заметил, что рассинхронизация случается чаще с файлами типа
+    <filename>.srt</filename> по сравнению с <filename>.sub</filename>, но
+    у вас может быть другое мнение на этот счет.
+  </para>
+  </sect2>
+
+  <sect2 id="usage-subtitles-manual">
+    <title>
+      <phrase lang="en">Manually Selecting the Subtitle File</phrase>
+      <phrase lang="pt">#Manually Selecting the Subtitle File#</phrase>
+      <phrase lang="ru">Выбор файла субтитров вручную</phrase>
+    </title>
+
+    <para lang="en">
+      If you want to use a special subtitle file, that doesn't share the
+      filename of the video file, you can do so by pressing
+      '<emphasis role="bold">O</emphasis>' with the video file selected.
+      This activates a 'mini browser', in which all of the available subtitle
+      files (within the current directory) can be selected.  Select the
+      desired subtitle file, then press
+      '<emphasis role="bold">X</emphasis>' or
+      '<emphasis role="bold">O</emphasis>' to begin playback with that file.
+      Press '<emphasis role="bold">TRIANGLE</emphasis>' to cancel the
+      selection.
+    </para>
+    <para lang="pt">
+      #If you want to use a special subtitle file, that doesn't share the
+      filename of the video file, you can do so by pressing
+      '<emphasis role="bold">O</emphasis>' with the video file selected.
+      This activates a 'mini browser', in which all of the available subtitle
+      files (within the current directory) can be selected.  Select the
+      desired subtitle file, then press
+      '<emphasis role="bold">X</emphasis>' or
+      '<emphasis role="bold">O</emphasis>' to begin playback with that file.
+      Press <emphasis role="bold">TRIANGLE</emphasis> to cancel the
+      selection.#
+    </para>
+    <para lang="ru">
+      Если вы хотите воспользоваться каким-то специальным файлом субтитров,
+      который по какой-то причине не может быть переименован так, чтобы 
+      иметь одинаковое имя с видеофайлом, вы можете загрузить этот файл во 
+      время выбора видеофайла. Для этого, нажмите кнопку <emphasis role="bold">O</emphasis> 
+      на видеофайле. Откроется окно "мини-проводника", в котором будет список 
+      всех доступных файлов с субтитрами. Выберите нужный файл и нажмите на 
+      <emphasis role="bold">X</emphasis> или <emphasis role="bold">O</emphasis> 
+      чтобы начать воспроизведение этого файла. Для отмены выбора, нажмите
+      кнопку <emphasis role="bold">ТРЕУГОЛЬНИК</emphasis>
+    </para>
+  </sect2>
+
+  <sect2 id="usage-subtitles-non-ascii">
+    <title>
+      <phrase lang="en">Non-ASCII Character Sets</phrase>
+      <phrase lang="pt">Caracteres não-ASCII</phrase>
+      <phrase lang="ru">Наборы символов, отличные от ASCII </phrase>      
+   </title>
+
+    <para lang="en">
+      If your subtitles have non-ASCII character sets, then you'll need to
+      add support for the fonts separately.
+    </para>
+    <para lang="pt">
+      Se as suas legendas têm caracteres não-ASCII, então terá de adicionar
+      suporte para esses caracteres separadamente.
+    </para>
+    <para lang="ru">
+      Если ваши субтитры имеют набор символов, отличный от ASCII, вы должны 
+      добавить поддержку для этого шрифта самостоятельно.
+    </para>
+
+    <para lang="en">
+      Details of how to do this may follow in a later version of the SMS
+      manual. For now, please refer to the official SMS forums
+      (<ulink url="http://www.ps2-scene.org/forums/forumdisplay.php?f=111"/>),
+      and the README for SMS.
+    </para>
+    <para lang="pt">
+      Detalhes de como fazer isto podem ser implementados nas próximas versões
+      deste manual. Por agora, por favor visite o forum oficial do SMS
+      (<ulink url="http://www.ps2-scene.org/forums/forumdisplay.php?f=111"/>),
+      ou ao README do SMS.
+    </para>
+    <para lang="ru">
+      Подробное руководство на эту тему, возможно, будет добавлено в новую
+      версию руководства по SMS. А пока что, посетите официальный форум 
+      поддержки SMS  <ulink url="http://www.ps2-scene.org/forums/forumdisplay.php?f=111"/>,
+      а также прочтите файл README для SMS.
+    </para>
+
+    <para lang="en">
+      This extract from the README may help you:
+    </para>
+    <para lang="pt">
+      Este extracto do README pode ajudá-lo:
+    </para>
+    <para lang="ru">
+      Эта выдержка из README может вам помочь:
+    </para>
+
+    <screen lang="en;pt">
+    <![CDATA[Following fonts can be loaded:
+    - mc0:SMS/ascii.mtf - contains 96 ascii characters ( 32-127)
+    - mc0:SMS/latin2.mtf - contains 128 latin2 characters (128-255)
+    - mc0:SMS/cyrillic.mtf - contains 128 cyrillic characters (128-255)
+    - mc0:SMS/latin1.mtf - contains 128 latin1 characters (128-255)
+    - mc0:SMS/greek.mft - contains 128 greek characters (128-255)
+    New font can be created by 'MTKFontCreator' utility (google) (I've used version 0.6.2).
+    During font save select "Save Mediatek Font -> 4 color comp., variable width (NEW mode)".
+    Min height must be set to 32. During font generation Max Width and Height parameters
+    (displayed on the status line) must not exceed 32. No error checks etc. are performed
+    by SMS here, so use it very carefully and on your own risk :). Probably .ini file
+    for that utility has to be adjusted on site in order to generate reduced character sets
+    (96 and 128 characters instead of 256). By changing that .ini file it's possible to
+    create virtually any character sets (ISO-8859-7, for instance);]]>
+    </screen>
+    <screen lang="ru">
+    <![CDATA[Могут быть загружены следующие шрифты :
+    - mc0:SMS/ascii.mtf - содержит 96 ascii символов ( 32-127)
+    - mc0:SMS/latin2.mtf - 128 latin2 символов (128-255)
+    - mc0:SMS/cyrillic.mtf - содержит 128 cyrillic (кириллических) символов (128-255)
+    - mc0:SMS/latin1.mtf - содержит 128 latin1 символов (128-255)
+    - mc0:SMS/greek.mft - содержит 128 greek (греческих) символов (128-255)
+    Новый шрифт может быть создан при помощи программы MTKFontCreator
+    (поищите ее в Google). Я пользуюсь версией 0.6.2.
+    При сохранении шрифта, выберите Save Mediatek Font -> 4 color comp.,
+    variable width (NEW mode).
+    Минимальная ширина должна быть 32. При создании шрифта, параметры Max
+    Width (максимальная ширина) и Height (высота) не должны превышать значения,
+    равного 32.
+    SMS не проверяет ошибки с файлами шрифтов, так что все действия - только
+    на ваш страх и риск.
+    Возможно, вам придется отредактировать файл .ini этой программы для того,
+    чтобы сгенерировать уменьшенный набор символов для шрифта (96 и 128
+    символов вместо 256). Внося изменения в файл .ini, вы можете создать
+    практически любой набор символов, даже ISO-8859-7.;]]>
+    </screen>
+
+  </sect2>
+
+</sect1>

@@ -1,0 +1,50 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/draw/samples
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-06-28T03:05:46.000000Z
+1189
+oopo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+texture
+dir
+
+teapot
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:24.296875Z
+d2ca1d6764c47b944201684d9a967025
+2005-06-28T03:05:46.000000Z
+1189
+oopo
+has-props
+
+cube
+dir
+

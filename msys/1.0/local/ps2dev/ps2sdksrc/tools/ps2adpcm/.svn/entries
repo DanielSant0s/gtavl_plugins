@@ -1,0 +1,55 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/tools/ps2adpcm
+svn://svn.ps2dev.org/ps2
+
+
+
+2005-09-30T18:56:09.080703Z
+1216
+jbit
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+src
+dir
+
+Makefile
+file
+
+
+
+
+2009-08-10T17:51:30.906250Z
+c131d1725140786bd6a13830904771c1
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+
+README
+file
+
+
+
+
+2009-08-10T17:51:30.906250Z
+12103a681b62fe1041d29efb42323721
+2005-09-27T20:19:29.241866Z
+1215
+jbit
+

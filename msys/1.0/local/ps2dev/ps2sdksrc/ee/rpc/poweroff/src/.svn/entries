@@ -1,0 +1,54 @@
+8
+
+dir
+1610
+svn://svn.ps2dev.org/ps2/trunk/ps2sdk/ee/rpc/poweroff/src
+svn://svn.ps2dev.org/ps2
+
+
+
+2007-07-07T01:56:53.526806Z
+1421
+radad
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bf8e388e-adfb-0310-9433-acdc3088d20d
+
+poweroff.c
+file
+
+
+
+
+2009-08-10T17:51:03.546875Z
+50189232ec23486f37053fac9e2c2e5e
+2007-07-07T01:56:53.526806Z
+1421
+radad
+has-props
+
+erl-support.c
+file
+
+
+
+
+2009-08-10T17:51:03.546875Z
+27579cd875e9a51d929415b87e765ba0
+2005-06-12T11:42:08.000000Z
+1150
+pixel
+has-props
+
