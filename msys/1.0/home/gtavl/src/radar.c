@@ -72,7 +72,7 @@ void DrawRadarCop(void* radar) {
                 if (ent_coords->x != 0.0f && ent_coords->y != 0.0f ) {
                     CRadar_TransformRealWorldPointToRadarSpace(&radar_coords, ent_coords);
 
-                    CRadar_LimitRadarPoint(&radar_coords);
+                    rectLimitRadarPoint(&radar_coords);
                     CRadar_TransformRadarPointToScreenSpace(&screen_coords, &radar_coords);
 
                     CRadar_DrawRotatingRadarSprite(&hud_textures[0], screen_coords.x, screen_coords.y, 0.0f, 5, 6, paused_timer % 800 < 400 ? CRGBA_CRGBA(&blip_colour, 112, 25, 25, 255) : CRGBA_CRGBA(&blip_colour, 47, 92, 115, 255));

@@ -178,7 +178,7 @@ void processGPS(int b) {
                 if (!*(unsigned char*)(FrontEndMenuManager + 101))
                     CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
                 else {
-                    CRadar_LimitRadarPoint(&tmpPoint);
+                    rectLimitRadarPoint(&tmpPoint);
                     CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
                     CRadar_LimitToMap(&nodePoints[i].x, &nodePoints[i].y);
                 }

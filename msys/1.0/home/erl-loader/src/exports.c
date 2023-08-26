@@ -1,9 +1,9 @@
 void FlushCache();
+void __muldi3();
 void _edata();
 void _fini();
 void _gp();
 void _init();
-void _init_erl_prefix();
 void _init_load_erl();
 void chdir();
 void checksum();
@@ -22,11 +22,10 @@ void hdestroy();
 void hfind();
 void hfirst();
 void hnbucket();
-void load_erl_from_mem();
+void loadLine();
 void load_plugin();
 void lookup();
 void lseek();
-void main();
 void malloc();
 void memcmp();
 void memcpy();
@@ -39,12 +38,17 @@ void refree();
 void remalloc();
 void remkroot();
 void renewx();
+void rw_close();
+void rw_open();
+void rw_read();
+void rw_seek();
 void sceDclose();
 void sceDopen();
 void sceDread();
 void sceMkdir();
 void sceRemove();
 void sceRmdir();
+void setDirectory();
 void strcat();
 void strcmp();
 void strcpy();
@@ -56,11 +60,11 @@ struct export_list_t {
     void * pointer;
 } export_list[] = {
     { "FlushCache", FlushCache }, 
+    { "__muldi3", __muldi3 }, 
     { "_edata", _edata }, 
     { "_fini", _fini }, 
     { "_gp", _gp }, 
     { "_init", _init }, 
-    { "_init_erl_prefix", _init_erl_prefix }, 
     { "_init_load_erl", _init_load_erl }, 
     { "chdir", chdir }, 
     { "checksum", checksum }, 
@@ -79,11 +83,10 @@ struct export_list_t {
     { "hfind", hfind }, 
     { "hfirst", hfirst }, 
     { "hnbucket", hnbucket }, 
-    { "load_erl_from_mem", load_erl_from_mem }, 
+    { "loadLine", loadLine }, 
     { "load_plugin", load_plugin }, 
     { "lookup", lookup }, 
     { "lseek", lseek }, 
-    { "main", main }, 
     { "malloc", malloc }, 
     { "memcmp", memcmp }, 
     { "memcpy", memcpy }, 
@@ -96,12 +99,17 @@ struct export_list_t {
     { "remalloc", remalloc }, 
     { "remkroot", remkroot }, 
     { "renewx", renewx }, 
+    { "rw_close", rw_close }, 
+    { "rw_open", rw_open }, 
+    { "rw_read", rw_read }, 
+    { "rw_seek", rw_seek }, 
     { "sceDclose", sceDclose }, 
     { "sceDopen", sceDopen }, 
     { "sceDread", sceDread }, 
     { "sceMkdir", sceMkdir }, 
     { "sceRemove", sceRemove }, 
     { "sceRmdir", sceRmdir }, 
+    { "setDirectory", setDirectory }, 
     { "strcat", strcat }, 
     { "strcmp", strcmp }, 
     { "strcpy", strcpy }, 

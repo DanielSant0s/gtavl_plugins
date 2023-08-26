@@ -7,22 +7,59 @@ typedef u32 uint32_t;
 typedef u32 size_t;
 typedef u32 FILE;
 
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-
 void (*load_code_overlay)(const char*, u32) = (void (*)(const char*, u32))0x3C6990;
 void (*unload_code_overlay)(void) = (void (*)(void))0x3C6AA0;
 void (*load_dynamic_plugin)(const char*, int) = (void (*)(const char*, int))0x88FB68;
 
-FILE* (*rw_open)(const char*, const char*) __attribute__((section(".data"))) = (FILE* (*)(const char*, const char*))0x00233210;
-size_t (*rw_read)(FILE *, void *, size_t) __attribute__((section(".data"))) = (size_t (*)(FILE *, void *, size_t))0x00233250;
-int (*rw_seek)(FILE *, long int, int) __attribute__((section(".data"))) = (int (*)(FILE *, long int, int))0x002332B0;
-int (*rw_close)(FILE *) __attribute__((section(".data"))) = (int (*)(FILE *))0x00233370;
-char* (*loadLine)(FILE *) __attribute__((section(".data"))) = (char* (*)(FILE *))0x003C70A0;
-int (*setDirectory)(const char *) __attribute__((section(".data"))) = (int (*)(const char *))0x002330B0;
+int (*strncmp)(const char *str1, const char *str2, size_t n) = (int (*)(const char *str1, const char *str2, size_t n))0x551BC8;
+uint32_t (*strlen)(const char *)  = (uint32_t (*)(const char *))0x005517B8;
+void* (*memset)(void *, int, uint32_t)  = (void* (*)(void *, int, uint32_t))0x0054E568;
+char* (*strncpy)(char *, const char *, uint32_t) = (char* (*)(char *, const char *, uint32_t))0x00551D80;
 
-int (*printf)(const char *, ...) __attribute__((section(".data"))) = (int (*)(const char *, ...))0x0054F7D0;
+struct sce_stat {
+        unsigned int    st_mode;       
+                                    
+        unsigned int    st_attr;       
+        unsigned int    st_size;       
+        unsigned char   st_ctime[8];   
+        unsigned char   st_atime[8];   
+        unsigned char   st_mtime[8];   
+        unsigned int    st_hisize;     
+        unsigned int    st_private[6]; 
+};
+
+struct sce_dirent {
+        struct sce_stat d_stat; 
+        char d_name[256];       
+        void    *d_private;     
+};
+
+int (*sceDopen)(const char *dirname) = (int (*)(const char *))0x00542388;
+int (*sceDclose)(int fd) = (int (*)(int))0x00542450;
+int (*sceDread)(int fd, struct sce_dirent *buf) = (int (*)(int, struct sce_dirent *))0x005425B8;
+
+uint32_t erl_record_root = 0;
+uint32_t global_symbols = 0;
+uint32_t loosy_relocs = 0;
+uint32_t dependancy_root = 0;
+uint32_t symbol_recycle = 0;
+
+void (*load_plugin)(const char*, int) = (void (*)(const char*, int))0;
+uint32_t unload_erl = 0;
+uint32_t find_erl = 0;
+uint32_t erl_find_symbol = 0;
+uint32_t erl_find_local_symbol = 0;
+
+int EndsWith(const char *str, const char *suffix)
+{
+    if (!str || !suffix)
+        return 0;
+    size_t lenstr = strlen(str);
+    size_t lensuffix = strlen(suffix);
+    if (lensuffix >  lenstr)
+        return 0;
+    return strncmp(str + lenstr - lensuffix, suffix, lensuffix) == 0;
+}
 
 typedef struct
 {
@@ -57,39 +94,34 @@ typedef struct
 } section_header_t;
 
 int load_default_plugins(){
-    elf_header_t elf_header;
-    section_header_t section_header;
-
-    setDirectory("plugins");
-
-    FILE* plugins = rw_open("plugins.ini", "r");
-
-    char* i = NULL;
-    for(i = loadLine(plugins); i ; i = loadLine(plugins)){
-        if ( *i != '#' && *i )
-        {
-            printf("Plugin loader: Loading %s\n", i);
-
-            FILE* elf = rw_open(i, "rb");
-
-            rw_read(elf, &elf_header, sizeof(elf_header_t));
-            rw_seek(elf, elf_header.shoff+40, SEEK_SET);
-            rw_read(elf, &section_header, sizeof(section_header_t));
-
-            printf("text section - address: 0x%x | offset: 0x%x | size: %d\n", section_header.sh_addr, section_header.sh_offset, section_header.sh_size);
-
-            rw_seek(elf, section_header.sh_offset, SEEK_SET);
-            rw_read(elf, (void*)section_header.sh_addr, section_header.sh_size);
-            rw_close(elf);
-        }
-    }
-
-    setDirectory("");
+    struct sce_dirent dirbuf;
+    char* section_names = NULL;
+    const char* plugin_dir = "cdrom0:\\";
+    char fname[32];
 
     unload_code_overlay();
 
     load_code_overlay("relocator.nm", 0x88d880);
-    load_dynamic_plugin("gtavl.erl", 0);
+
+    int dirfd = sceDopen(plugin_dir);
+
+    sceDread(dirfd, &dirbuf);
+    sceDread(dirfd, &dirbuf);
+
+    load_dynamic_plugin("BASE.ERL", 0);
+
+    while (sceDread(dirfd, &dirbuf) > 0){
+        if(EndsWith(dirbuf.d_name, ".ERL;1")) {
+            memset(fname, 0, 32);
+            strncpy(fname, dirbuf.d_name, strlen(dirbuf.d_name)-2);
+            if (strncmp(fname, "BASE.ERL", strlen(fname)) != 0) {
+                load_plugin(fname, 0);
+            }
+        }
+    }
+
+    sceDclose(dirfd);
+
     unload_code_overlay();
 
     load_code_overlay("init.nm", 0x88d880);
