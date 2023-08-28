@@ -241,7 +241,7 @@ void CRadar_DrawRadarMask()
         { -1.0f, 1.0f  },
         { -1.0,  -1.0f }};
 
-    RwRenderStateSet(rwRENDERSTATETEXTURERASTER, 0);
+    RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
     RwRenderStateSet(rwRENDERSTATESRCBLEND, 5u);
     RwRenderStateSet(rwRENDERSTATEDESTBLEND, 6u);
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, 0);
@@ -318,7 +318,9 @@ int _start()
     DrawHud = (void (*)())ReadCall(0x2471E4);
     RedirectCall(0x2471E4, drawGPSDistance);
 
-    RedirectCall(0x26F0AC, CRadar_DrawRadarMask);
+    if(*(uint32_t*)0x26F0AC != 0) {
+        RedirectCall(0x26F0AC, CRadar_DrawRadarMask);
+    }
 
     return 0;
 }
