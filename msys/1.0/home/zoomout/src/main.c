@@ -10,8 +10,6 @@
 #include <math.h>
 #include <bit.h>
 
-#include "hooks.h"
-
 static void (*DrawHud)();
 
 static float zoom;

@@ -1,17 +1,16 @@
 #include <stdint.h>
+#include <common.h>
 #include <injector.h>
 #include <CRGBA.h>
+#include <CTexture.h>
 #include <CFont.h>
 #include "hooks.h"
-
-void (*CSprite2d_Draw2DPolygon)(float, float, float, float, float, float, float, float, RwRGBA*) = (void (*)(float, float, float, float, float, float, float, float, RwRGBA*))0x2B0A40;
 
 float* dword_7C3298 = (float*)0x7C3298;
 
 unsigned int* CHud_m_VehicleState = (unsigned int*)0x66BC58;
 unsigned int* CHud_m_ZoneState = (unsigned int*)0x66BC14;
 const char* _StyledText_3 = (const char*)0x7C2990;
-float* CTimer_ms_fTimeStep = (float*)0x66BA30;
 
 static float death_timestep = 0.0f;
 

@@ -29,7 +29,7 @@ void setupLoadingText() {
 
 static CTexture loading_icon;
 
-void (*CLoadingScreen_LoadSplashes)() = (void (*)())0x592B20;
+void (*CLoadingScreen_LoadSplashes)();
 
 void load_loading_img() {
     CLoadingScreen_LoadSplashes();
@@ -155,7 +155,6 @@ void drawImageRotate(float x, float y, float width, float height, float angle){
 
 static float icon_angle = 0.0f;
 
-void (*CSprite2d_Delete)(CTexture *this) = (void (*)(CTexture *this))0x2B0750;
 void (*CLoadingScreen_Shutdown)(int a1) = (void (*)(int a1))0x5925D0;
 
 void deleteLoadingAnim(int a1) {
@@ -163,24 +162,14 @@ void deleteLoadingAnim(int a1) {
     CSprite2d_Delete(&loading_icon);
 }
 
-static bool debugmsg_enable = false;
-const char* debugmsg = "Loading debug enabled";
-
 void renderLoadingAnim() { 
-    CPad_UpdatePads();
-    CPad* pad = CPad_GetPad(0);
-
-    if(pad->NewState.DPadRight && !pad->OldState.DPadRight) {
-        debugmsg_enable ^= 1;
-    }
-
     if (*fPercentage < 100.0f) {
         ((void(*)(void))0x2A58E0)(); // InitPerFrame
 
         ((void(*)(void))0x2A8620)(); // Render Font Buffer
 
         setupLoadingText();
-        CFont_PrintString(606, 420, (debugmsg_enable && debugmsg)? debugmsg : "Entering Story Mode");
+        CFont_PrintString(606, 420, "Entering Story Mode");
 
         ((void(*)(void))0x2A8620)(); // Render Font Buffer
 
@@ -200,13 +189,14 @@ void CLoadingScreen_RenderLoadingTextAnim()
 
 void CLoadingScreen_DebugPrint(const char* str1, const char* str2)
 {
-    debugmsg = str2;
     printf("%s: %s\n", str1, str2);
 }
 
 
 void setupLoadingScreenPatches() {
     WriteDword(0x592598, 0); // Skip splash screen mode
+
+    CLoadingScreen_LoadSplashes = (void (*)())ReadCall(0x592548);
 
     CRGBA_CRGBA(&font_color, 255, 255, 255, 255);
 

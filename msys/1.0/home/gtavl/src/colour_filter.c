@@ -1,4 +1,5 @@
 #include <CRGBA.h>
+#include <injector.h>
 #include "colour_filter.h"
 
 RwRGBA rep_weights = { .r=140, .g=170, .b=255, .a=255 };
@@ -6,7 +7,7 @@ RwRGBA add_weights = { .r=150, .g=180, .b=255, .a=255 };
 
 int colour_filter_status = 1;
 
-static int enable_blur = 0;
+int enable_blur = 0;
 
 void (*CPostEffects_ColourFilter)(RwRGBA, RwRGBA) = (void (*)(RwRGBA, RwRGBA))0x519F70;
 void (*CPostEffects_InfraredVision)(RwRGBA, RwRGBA) = (void (*)(RwRGBA, RwRGBA))0x5162B0;

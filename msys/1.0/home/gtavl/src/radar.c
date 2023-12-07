@@ -4,6 +4,7 @@
 #include <common.h>
 #include <CVehicle.h>
 #include <CTxdStore.h>
+#include <injector.h>
 #include <CRGBA.h>
 #include <math.h>
 #include "hooks.h"
@@ -48,7 +49,7 @@ void DrawRadarCop(void* radar) {
 
     int i = 0;
 
-    if (*(int*)(FindPlayerWanted(0) + 0x2C) > 0) {
+    if (FindPlayerWanted(0)->m_nWantedLevel > 0) {
 
         for (i = pedPool->size; i; i--) {
             uint32_t* ped = (uint8_t*)pedPool->objects + (i - 1)*sizeof_CPed;
@@ -111,15 +112,7 @@ void DrawRadarCop(void* radar) {
     drawBlips(radar);
 }
 
-void hookedRadarCentre() {
-    float radarShift = 25.0f;
-    radarShift *= (*(float*)0x66B958 / 50.0f);
-    float orientation = *(float*)0x66B95C;
-
-    float a = orientation - 1.57079632679489661923f;
-
-    RadarOrigin->x -= cosf(a) * radarShift;
-    RadarOrigin->y -= sinf(a) * radarShift;
-
-    drawRadarMap();
+void injectRadarPatches() {
+    loadHUDTexDict();
+    RedirectCall(0x2ACD64, DrawRadarCop);
 }

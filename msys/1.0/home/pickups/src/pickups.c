@@ -2,14 +2,12 @@
 #include <injector.h>
 #include <CVector.h>
 #include <common.h>
-#include "hooks.h"
 
 void (*updatePickups)(void) = (void (*)(void))0x2D9390;
 
 uint32_t** ms_modelInfoPtrs = (uint32_t**)0x7A8780;
 
 void (*GetBoundCentre)(uint32_t, CVector*) = (void (*)(uint32_t, CVector*))0x22F3B0;
-float (*FindGroundZFor3DCoord)(float x, float y, float z, int *b, uint32_t **ent) = (float (*)(float, float, float, int *, uint32_t **))0x2869C0;
 void (*ClearSpaceForMissionEntity)(CVector* a1, uint32_t object) = (void (*)(CVector*, uint32_t))0x30AA10;
 
 void (*CWorld_Remove)(uint32_t) = (void (*)(uint32_t))0x27DF60;
@@ -98,7 +96,7 @@ void pickups_on_ground() {
                 tmp.z = player_coords.z - coords->z;
 
                 if ((VectorSqrMagnitude(&tmp) <= min_radius * min_radius)) {
-                    ground_z = FindGroundZFor3DCoord(coords->x, coords->y, coords->z, &b, 0);
+                    ground_z = CWorld_FindGroundZFor3DCoord(coords->x, coords->y, coords->z, &b, 0);
                     ground_z += 0.05f;
                     
                     coords->z = ground_z;

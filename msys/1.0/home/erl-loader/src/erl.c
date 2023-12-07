@@ -869,6 +869,7 @@ return code
 
     *p_erl_record = erl_record;
 
+
     free_and_return(0);
 }
 

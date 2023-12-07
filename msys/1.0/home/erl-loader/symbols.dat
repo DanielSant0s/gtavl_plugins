@@ -1,0 +1,220 @@
+# math
+sinf 0x53B178
+cosf 0x53AE48
+atan2f 0x53B338
+floorf 0x53AF48
+powf 0x00537468
+rand 0x550248
+
+# sifdev
+sceSifLoadModule 0x5449A0
+
+open 0x540B28
+close 0x540DB8
+lseek 0x00540F30
+read 0x00541170
+write 0x005413E0
+chdir 0x00542D20
+
+# stdio
+printf 0x54F7D0
+sprintf 0x00550F10
+sscanf 0x550FA8
+
+fopen 0x54C218
+fread 0x54C2E8
+fwrite 0x54D300
+fgets 0x54BCA8
+fseek 0x54C870
+fputs 0x54C298
+fflush 0x54BB90
+ftell 0x54CD80
+feof 0x54BB80
+fexist 0x3332C8
+fclose 0x54BA80
+
+# stdlib
+malloc 0x001005E0
+free 0x00100780
+
+atof 0x54A340
+atoi 0x54A358
+dptofp 0x531D78
+
+# string
+memset 0x0054E568
+memcpy 0x0054E3B0
+memcmp 0x0054E318
+strlen 0x005517B8
+strcmp 0x00551558
+strcpy 0x005516A0
+strcat 0x00551298
+strncpy 0x00551D80
+strncmp 0x551BC8
+strcasecmp 0x5511C0
+strtok 0x552F80
+strchr 0x5513C8
+
+# CCam
+CCam_Process_AimWeapon 0x204CE0
+CCam_Process_FollowPed_SA 0x207ED0
+
+TheCamera 0x6FE530
+
+# CFont
+CFont_SetOrientation 0x2A8C50
+CFont_SetColor 0x2A8900
+CFont_SetBackground 0x002A8BE0
+CFont_SetWrapx 0x002A8A60
+CFont_SetScale 0x002A8800
+CFont_SetFontStyle 0x002A89F0
+CFont_SetProportional 0x002A8BD0
+CFont_SetDropShadowPosition 0x002A8B90
+CFont_SetDropColor 0x002A8AA0
+CFont_PrintString 0x2A6E20
+CFont_SetJustify 0x002A8C40
+CFont_SetEdge 0x002A8BB0
+
+CFont_GetStringWidth 0x2A78A0
+
+CFont_GetTextRect 0x2A7720
+
+# CPad 
+CPad_GetPad 0x248E70
+CPad_UpdatePads 0x247940
+
+# CRadar
+CRadar_ms_RadarTrace 0x701F00
+
+CRadar_SetEntityBlip 0x26B510
+CRadar_ChangeBlipScale 0x26BD30
+CRadar_ChangeBlipDisplay 0x26BDE0
+CRadar_DrawRotatingRadarSprite 0x26D000
+CRadar_TransformRealWorldPointToRadarSpace 0x26AEC0
+CRadar_TransformRadarPointToScreenSpace 0x0026AE00
+CRadar_LimitRadarPoint 0x0026ABA0
+CRadar_LimitToMap 0x0026AC30
+drawRadarMap 0x26F090
+changeBlipColour 0x26BA30
+CRadar_ClearBlip 0x26B9A0
+RadarOrigin 0x66B950
+
+# CRGBA
+CRGBA_CRGBA 0x02A53C0
+
+# CTexture
+CSprite2D_SetTexture 0x2B07A0
+CSprite2d_Delete 0x2B0750
+CSprite2d_Draw 0x2B09D0
+CSprite2d_DrawSprite 0x2B08D0
+CSprite2d_Draw2DPolygon 0x2B0A40
+
+# CTxdStore
+CTxdStore_PushCurrentTxd 0x3014B0
+CTxdStore_PopCurrentTxd 0x3014D0
+CTxdStore_FindTxdSlot 0x300E60
+CTxdStore_AddTxdSlot 0x300D50
+CTxdStore_LoadTxd 0x300F90
+CTxdStore_AddRef 0x3014F0
+CTxdStore_SetCurrentTxd 0x301460
+CTxdStore_RemoveTxd 0x3013C0
+CTxdStore_RemoveTxdSlot 0x300DB0
+
+# CVector
+CVector_Normalise 0x110390
+CrossProduct 0x110060
+
+# CVehicle
+CVehicle_Render 0x167F50
+getVehicleAppearance 0x168BA0
+
+# rwcore
+RecipNearClip 0x66BCEC
+NearScreenZ 0x66BCF0
+psCameraShowRaster 0x33D8D8
+RwIm2DRenderPrimitive 0x3669E8
+RwRenderStateSet 0x34FD68
+RwIm3DRenderIndexedPrimitive 0x369B98
+RwIm3DTransform 0x36A280
+RwIm3DEnd 0x36A328
+RwIm2DRenderIndexedPrimitive 0x366A58
+RwRasterCreate 0x342DA0
+RwRasterDestroy 0x342EA0
+RwRasterSubRaster 0x342F78
+RwRasterLock 0x3432F0
+RwRasterUnlock 0x343330
+RwTextureCreate 0x346418
+RwTextureDestroy 0x3464A0
+
+RpSkyTexCacheRasterLock 0x368EE8
+
+RwOsGetFileInterface 0x3332B8
+
+RwRasterPushContext 0x3430D0
+RwRasterPopContext 0x343148
+
+RwRasterRenderFast 0x343018
+RwRasterRender 0x343058
+RwRasterRenderScaled 0x343098
+
+RwCameraBeginUpdate 0x33D860
+RwCameraEndUpdate 0x33D880
+
+RpSkyTexSetTex0 0x3696D8
+
+RpSkyTexGetTex0 0x3696F0
+
+_rwDMAOpenGIFPkt 0x34E378
+_rwDMAOpenVIFPkt 0x34E878
+RpSkyGetDisplayBufferRaster 0x35AF28
+RpSkyGetDrawBufferRaster 0x35AF30
+skyFrameBit 0x66797C
+sceGsSyncV 0x548918
+sceGsResetGraph 0x547A90
+sceGsSwapDBuffDc 0x549A68
+sceGsSyncPath 0x5489B0
+sceDmaGetChan 0x549C20
+sceDmaSendN 0x549FB8
+setInitialRenderState 0x357BA0
+RpSkyTexCacheFlush 0x3691C0
+_rwDMAHook 0x34F2F0
+skySuspended 0x66791C
+_rwDMAFlipData 0x8298A0
+skyInitialClear 0x82A200
+RwEngineGetNumVideoModes 0x33E268
+RwEngineGetVideoModeInfo 0x33EBF8
+RwEngineGetCurrentVideoMode 0x33E2D8
+RwEngineSetVideoMode 0x33E348
+RsRwInitialize 0x39B510
+RsRwTerminate 0x39B4E0
+SkyStart 0x358B70
+currentMode 0x66C228
+RpSkySuspend 0x35AB38
+sceGsSetDefDBuffDc 0x548620
+
+# common
+FindPlayerWanted 0x264080
+IsPlayer 0x19CC40
+FindPlayerVehicle 0x263DE0
+FindPlayerPed 0x264040
+FindPlayerCoors 0x263C90
+
+CMatrix_Attach 0x110310
+sub_25F980 0x25F980
+
+CWorld_FindGroundZFor3DCoord 0x286BB0
+
+FrontEndMenuManager 0x6FF940
+
+CEntity_GetColModel 0x232B50
+
+CTimer_m_snTimeInMilliseconds 0x0066BA14
+CTimer_m_FrameCounter 0x66BA38
+CTimer_ms_fTimeStep 0x66BA30
+CTimer_ms_fTimeScale 0x66BA28
+
+CGame_currArea 0x66B868
+
+CWeather_Wind 0x66BD64
+CBulletTrace_aTraces 0x8171F0
+CCoronas_RegisterCorona 0x299380

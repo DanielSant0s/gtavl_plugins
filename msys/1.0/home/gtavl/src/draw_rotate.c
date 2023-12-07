@@ -16,7 +16,6 @@ void hooked_draw_rotated(uint32_t texture, float x1, float y1, float x2, float y
     x3 += 48.0f;
     x4 += 48.0f;
 
-    // desenhar o ret�ngulo com as coordenadas corrigidas
     CSprite2d_Draw(texture, x1, y1, x2, y2, x3, y3, x4, y4, color);
 }
 
