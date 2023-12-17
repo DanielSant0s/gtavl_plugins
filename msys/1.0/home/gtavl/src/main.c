@@ -13,7 +13,11 @@
 
 #include "hooks.h"
 
+void (*CCustomRadar_LimitRadarPoint)(CVector*);
+
 void injectPatches() {
+    CCustomRadar_LimitRadarPoint = (void (*)(CVector*))ReadCall(0x268164);
+
     RedirectCall(0x564870, RadioHud_process);
     RedirectJump(0x580FE4, RadioHud_render);
 

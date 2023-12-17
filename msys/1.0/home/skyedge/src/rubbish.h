@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 enum {
-	NUM_RUBBISH_SHEETS = 64
+	NUM_RUBBISH_SHEETS = 16
 };
 
 typedef struct COneSheet COneSheet;

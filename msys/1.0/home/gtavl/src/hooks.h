@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <CVector.h>
 
+extern void (*CCustomRadar_LimitRadarPoint)(CVector*);
+
 void DrawRadarCop(void* radar);
 
 void loadHUDTexDict();

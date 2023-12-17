@@ -23,15 +23,14 @@ static float angle = 0.0f;
 
 static CTexture hud_textures[10];
 
-void loadHUDTexDict() {
+void load_vhud_texture(const char* name, int slot) {
     int v7 = CTxdStore_AddTxdSlot("v_hud");
     CTxdStore_LoadTxd(v7, "MODELS\\V_HUD.TXD");
     CTxdStore_AddRef(v7);
     CTxdStore_PushCurrentTxd();
     CTxdStore_SetCurrentTxd(v7);
 
-    CSprite2D_SetTexture(&hud_textures[0], "radar_cop");
-    CSprite2D_SetTexture(&hud_textures[1], "radar_cop_heli");
+    CSprite2D_SetTexture(&hud_textures[slot], name);
 
     CTxdStore_PopCurrentTxd();
     CTxdStore_RemoveTxd(v7);
@@ -71,9 +70,12 @@ void DrawRadarCop(void* radar) {
                 ent_coords = getCharCoordinates(ped);
 
                 if (ent_coords->x != 0.0f && ent_coords->y != 0.0f ) {
+                    if (!hud_textures[0].texture)
+                        load_vhud_texture("radar_cop", 0);
+
                     CRadar_TransformRealWorldPointToRadarSpace(&radar_coords, ent_coords);
 
-                    rectLimitRadarPoint(&radar_coords);
+                    CCustomRadar_LimitRadarPoint(&radar_coords);
                     CRadar_TransformRadarPointToScreenSpace(&screen_coords, &radar_coords);
 
                     CRadar_DrawRotatingRadarSprite(&hud_textures[0], screen_coords.x, screen_coords.y, 0.0f, 5, 6, paused_timer % 800 < 400 ? CRGBA_CRGBA(&blip_colour, 112, 25, 25, 255) : CRGBA_CRGBA(&blip_colour, 47, 92, 115, 255));
@@ -96,9 +98,13 @@ void DrawRadarCop(void* radar) {
                 ent_coords = getVehCoordinates(veh);
 
                 if (ent_coords->x != 0.0f && ent_coords->y != 0.0f ) {
+
+                    if (!hud_textures[1].texture)
+                        load_vhud_texture("radar_cop_heli", 1);
+
                     CRadar_TransformRealWorldPointToRadarSpace(&radar_coords, ent_coords);
 
-                    CRadar_LimitRadarPoint(&radar_coords);
+                    CCustomRadar_LimitRadarPoint(&radar_coords);
                     CRadar_TransformRadarPointToScreenSpace(&screen_coords, &radar_coords);
 
                     CRadar_DrawRotatingRadarSprite(&hud_textures[1], screen_coords.x, screen_coords.y, angle, 5, 6, paused_timer % 800 < 400 ? CRGBA_CRGBA(&blip_colour, 112, 25, 25, 255) : CRGBA_CRGBA(&blip_colour, 47, 92, 115, 255));
@@ -106,6 +112,17 @@ void DrawRadarCop(void* radar) {
             }
         }
 
+    } else {
+        if (hud_textures[0].texture) {
+            CSprite2d_Delete(&hud_textures[0]);
+            hud_textures[0].texture = NULL;
+        }
+
+        if (hud_textures[1].texture) {
+            CSprite2d_Delete(&hud_textures[1]);
+            hud_textures[1].texture = NULL;
+        }
+            
     }
 
 
@@ -113,6 +130,8 @@ void DrawRadarCop(void* radar) {
 }
 
 void injectRadarPatches() {
-    loadHUDTexDict();
+    hud_textures[0].texture = NULL;
+    hud_textures[1].texture = NULL;
+
     RedirectCall(0x2ACD64, DrawRadarCop);
 }
