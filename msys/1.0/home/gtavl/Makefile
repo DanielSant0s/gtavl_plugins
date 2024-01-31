@@ -10,8 +10,13 @@
 
 EE_ERL = gtavl.erl
 
-EE_OBJS += src/loading.o \
+#EE_CFLAGS += -std=c99
+
+EE_INCS += -Iplugin_sa/include/ -Iplugin_ps2/include/ -Irw_se/include/ 
+
+GTAVL_OBJS += src/loading.o \
 		   src/colour_filter.o \
+		   src/pickups.o \
            src/wasted_busted.o \
 		   src/draw_rotate.o \
 		   src/v_aim.o \
@@ -20,9 +25,32 @@ EE_OBJS += src/loading.o \
 		   src/radio_wheel.o \
 		   src/radar.o \
 		   src/menu_ui.o \
-		   src/hud.o \
+		   src/pause_menu.o \
 		   src/misc.o \
+		   src/limits.o \
+		   src/gps.o \
+		   src/veh_funcs.o \
+		   src/render_ped.o \
+		   src/weapon.o \
+		   src/sunglare.o \
+		   src/renderbuffer.o \
+		   src/skyedge.o \
+		   src/rubbish.o \
+		   src/oil_system.o \
+		   src/hud.o \
 		   src/main.o
+
+EE_STDLIB = plugin_ps2/src/math.o \
+		    plugin_ps2/src/string.o \
+		    plugin_ps2/src/injector.o 
+
+EE_SALIB = plugin_sa/src/common.o \
+		   plugin_sa/src/CVector.o \
+		   plugin_sa/src/CVehicle.o 
+
+EE_RWSE  = rw_se/src/secore.o 
+
+EE_OBJS = $(EE_STDLIB) $(EE_SALIB) $(EE_RWSE) $(GTAVL_OBJS)
 
 all: $(EE_ERL)
 
@@ -31,6 +59,6 @@ clean:
 	rm -rf plugin_sa/src/*.o
 	rm -rf plugin_ps2/src/*.o
 
-include $(HOME)/engine/Makefile.pref
-include $(HOME)/engine/Makefile.eeglobal
+include Makefile.pref
+include Makefile.eeglobal
 

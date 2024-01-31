@@ -12,29 +12,29 @@
 
 #include "modules.h"
 
-void (*CVehicle_UpdatePassengerList)(void* veh) = (void (*)(void*))0x173F40;
-void (*CGame_ShutdownRenderWare)() = (void (*)())0x242AB0;
-void (*RenderEffects)() = (void (*)())0x246E80;
-void (*CGame_Init1)(const char*) = (void (*)(const char*))0x88E430;
+static void (*CVehicle_UpdatePassengerList)(void* veh) = (void (*)(void*))0x173F40;
+static void (*CGame_ShutdownRenderWare)() = (void (*)())0x242AB0;
+static void (*RenderEffects)() = (void (*)())0x246E80;
+static void (*CGame_Init1)(const char*) = (void (*)(const char*))0x88E430;
 
 #define RUBBISH_MAX_DIST (18.0f)
 #define RUBBISH_FADE_DIST (16.5f)
 
-RwTexture* gpRubbishTexture[4];
-RwImVertexIndex RubbishIndexList[6];
-RwImVertexIndex RubbishIndexList2[6];
-RxObjSpace3dVertex RubbishVertices[4];
-bool CRubbish_bRubbishInvisible;
-int CRubbish_RubbishVisibility;
-COneSheet CRubbish_aSheets[NUM_RUBBISH_SHEETS];
-COneSheet CRubbish_StartEmptyList;
-COneSheet CRubbish_EndEmptyList;
-COneSheet CRubbish_StartStaticsList;
-COneSheet CRubbish_EndStaticsList;
-COneSheet CRubbish_StartMoversList;
-COneSheet CRubbish_EndMoversList;
+static RwTexture* gpRubbishTexture[4];
+static RwImVertexIndex RubbishIndexList[6];
+static RwImVertexIndex RubbishIndexList2[6];
+static RxObjSpace3dVertex RubbishVertices[4];
+static bool CRubbish_bRubbishInvisible;
+static int CRubbish_RubbishVisibility;
+static COneSheet CRubbish_aSheets[NUM_RUBBISH_SHEETS];
+static COneSheet CRubbish_StartEmptyList;
+static COneSheet CRubbish_EndEmptyList;
+static COneSheet CRubbish_StartStaticsList;
+static COneSheet CRubbish_EndStaticsList;
+static COneSheet CRubbish_StartMoversList;
+static COneSheet CRubbish_EndMoversList;
 
-const float aAnimations[3][34] = {
+static const float aAnimations[3][34] = {
 	{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 	  0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f },
 
@@ -46,11 +46,11 @@ const float aAnimations[3][34] = {
 };
 
 CVector* getCameraPosition() {
-    if ( TheCamera->placeable.m_matrix ) {
-        return &TheCamera->placeable.m_matrix->pos;
+    if ( TheCamera.placeable.m_matrix ) {
+        return &TheCamera.placeable.m_matrix->pos;
     }
 
-    return &TheCamera->placeable.placement.m_vPosn;
+    return &TheCamera.placeable.placement.m_vPosn;
 }
 
 float MagnitudeSqr2D(CVector* v) { return v->x * v->x + v->y * v->y; }
@@ -61,9 +61,9 @@ float DistanceBetweenPointsSqr(CVector* v1, CVector* v2) {
     return (v2->x - v1->x) * (v2->x - v1->x) + (v2->y - v1->y) * (v2->y - v1->y);
 }
 
-CMatrix * (*CPlaceable_AllocateMatrix)(CPlaceable *this) = (CMatrix * (*)(CPlaceable *this))0x260090;
+static CMatrix * (*CPlaceable_AllocateMatrix)(CPlaceable *this) = (CMatrix * (*)(CPlaceable *this))0x260090;
 
-void (*CSimpleTransform_UpdateMatrix)(CSimpleTransform *this, CMatrix *matrix) = (void (*)(CSimpleTransform *this, CMatrix *matrix))0x25FAC0;
+static void (*CSimpleTransform_UpdateMatrix)(CSimpleTransform *this, CMatrix *matrix) = (void (*)(CSimpleTransform *this, CMatrix *matrix))0x25FAC0;
 
 inline CMatrix * CPlaceable_GetMatrix(CPlaceable *this)
 {
@@ -91,7 +91,7 @@ enum eZoneAttributes {
     ATTRZONE_FEWERCARS = 0x8000,
 };
 
-int (*CCullZones_FindAttributesForCoors)(CVector *a1) = (int (*)(CVector *a1))0X306AC0;
+static int (*CCullZones_FindAttributesForCoors)(CVector *a1) = (int (*)(CVector *a1))0X306AC0;
 
 void CRubbish_Init(const char* a1) {
     CGame_Init1(a1);
@@ -177,7 +177,7 @@ void CRubbish_Shutdown() {
 }
 
 void CRubbish_Render() {
-	if (*CGame_currArea > 0)
+	if (CGame_currArea > 0)
 		return;
 
 	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)false);
@@ -209,7 +209,7 @@ void CRubbish_Render() {
 			else {
 				pos = sheet->m_animatedPos;
 				if (!sheet->m_isVisible || !sheet->m_targetIsVisible) {
-					float t = (float)(*CTimer_m_snTimeInMilliseconds - sheet->m_moveStart) / sheet->m_moveDuration;
+					float t = (float)(CTimer_m_snTimeInMilliseconds - sheet->m_moveStart) / sheet->m_moveDuration;
 					float f1 = sheet->m_isVisible ? 1.0f - t : 0.0f;
 					float f2 = sheet->m_targetIsVisible ? t : 0.0f;
 					alpha = 128 * (f1 + f2);
@@ -294,7 +294,7 @@ void CRubbish_Render() {
 }
 
 void CRubbish_StirUp(CPhysical* veh) {
-	if ((*CTimer_m_FrameCounter ^ (veh->entity.m_nRandomSeed & 3)) == 0)
+	if ((CTimer_m_FrameCounter ^ (veh->entity.m_nRandomSeed & 3)) == 0)
 		return;
 
 	if (fabsf(getVehCoordinates((uint32_t*)veh)->x - getCameraPosition()->x) < 20.0f &&
@@ -332,7 +332,7 @@ void CRubbish_StirUp(CPhysical* veh) {
 								sheet->m_xDist *= 25.0f * speed / dist;
 								sheet->m_yDist *= 25.0f * speed / dist;
 								sheet->m_animHeight = 3.0f * speed;
-								sheet->m_moveStart = *CTimer_m_snTimeInMilliseconds;
+								sheet->m_moveStart = CTimer_m_snTimeInMilliseconds;
 								float tx = sheet->m_basePos.x + sheet->m_xDist;
 								float ty = sheet->m_basePos.y + sheet->m_yDist;
 								float tz = sheet->m_basePos.z + 3.0f;
@@ -369,7 +369,7 @@ void CRubbish_Update() {
 		if (r & 1)
 			spawnAngle = (GetRandomNumber() & 0xFF) / 256.0f * 6.28f;
 		else
-			spawnAngle = (r - 128) / 160.0f + TheCamera->m_fOrientation;
+			spawnAngle = (r - 128) / 160.0f + TheCamera.m_fOrientation;
 		sheet->m_basePos.x = getCameraPosition()->x + spawnDist * sinf(spawnAngle);
 		sheet->m_basePos.y = getCameraPosition()->y + spawnDist * cosf(spawnAngle);
 		sheet->m_basePos.z = CWorld_FindGroundZFor3DCoord(sheet->m_basePos.x, sheet->m_basePos.y, getCameraPosition()->z, &foundGround, NULL) + 0.1f;
@@ -388,7 +388,7 @@ void CRubbish_Update() {
 	bool hit = false;
 	sheet = CRubbish_StartMoversList.m_next;
 	while (sheet != &CRubbish_EndMoversList) {
-		uint32_t currentTime = *CTimer_m_snTimeInMilliseconds - sheet->m_moveStart;
+		uint32_t currentTime = CTimer_m_snTimeInMilliseconds - sheet->m_moveStart;
 		if (currentTime < sheet->m_moveDuration) {
 			int step = 16 * currentTime / sheet->m_moveDuration;
 			int stepTime = sheet->m_moveDuration / 16;
@@ -399,7 +399,7 @@ void CRubbish_Update() {
 			sheet->m_animatedPos.x = sheet->m_basePos.x + fxy * sheet->m_xDist;
 			sheet->m_animatedPos.y = sheet->m_basePos.y + fxy * sheet->m_yDist;
 			sheet->m_animatedPos.z = (1.0f - t) * sheet->m_basePos.z + t * sheet->m_targetZ + fz * sheet->m_animHeight;
-			sheet->m_angle += *CTimer_ms_fTimeStep * 0.04f;
+			sheet->m_angle += CTimer_ms_fTimeStep * 0.04f;
 			if (sheet->m_angle > 6.28f)
 				sheet->m_angle -= 6.28f;
 			sheet = sheet->m_next;
@@ -419,21 +419,21 @@ void CRubbish_Update() {
 	}
 
 	int freq = 0;
-	if (*CWeather_Wind < 0.1f)
+	if (CWeather_Wind < 0.1f)
 		freq = 31;
-	else if (*CWeather_Wind < 0.4f)
+	else if (CWeather_Wind < 0.4f)
 		freq = 7;
-	else if (*CWeather_Wind < 0.7f)
+	else if (CWeather_Wind < 0.7f)
 		freq = 1;
 
-	if ((*CTimer_m_FrameCounter & freq) == 0) {
+	if ((CTimer_m_FrameCounter & freq) == 0) {
 		int i = GetRandomNumber() % NUM_RUBBISH_SHEETS;
 		if (CRubbish_aSheets[i].m_state == 1) {
-			CRubbish_aSheets[i].m_moveStart = *CTimer_m_snTimeInMilliseconds;
-			CRubbish_aSheets[i].m_moveDuration = *CWeather_Wind * 1500.0f + 1000.0f;
+			CRubbish_aSheets[i].m_moveStart = CTimer_m_snTimeInMilliseconds;
+			CRubbish_aSheets[i].m_moveDuration = CWeather_Wind * 1500.0f + 1000.0f;
 			CRubbish_aSheets[i].m_animHeight = 0.2f;
-			CRubbish_aSheets[i].m_xDist = 3.0f * *CWeather_Wind;
-			CRubbish_aSheets[i].m_yDist = 3.0f * *CWeather_Wind;
+			CRubbish_aSheets[i].m_xDist = 3.0f * CWeather_Wind;
+			CRubbish_aSheets[i].m_yDist = 3.0f * CWeather_Wind;
 
 			float tx = CRubbish_aSheets[i].m_basePos.x + CRubbish_aSheets[i].m_xDist;
 			float ty = CRubbish_aSheets[i].m_basePos.y + CRubbish_aSheets[i].m_yDist;
@@ -469,7 +469,7 @@ void CRubbish_Update() {
 		}
 	}
 
-	for (i = (*CTimer_m_FrameCounter % (NUM_RUBBISH_SHEETS / 4)) * 4; i < ((*CTimer_m_FrameCounter % (NUM_RUBBISH_SHEETS / 4)) + 1) * 4; i++) {
+	for (i = (CTimer_m_FrameCounter % (NUM_RUBBISH_SHEETS / 4)) * 4; i < ((CTimer_m_FrameCounter % (NUM_RUBBISH_SHEETS / 4)) + 1) * 4; i++) {
 		if (CRubbish_aSheets[i].m_state == 1 &&
 			DistanceBetweenPointsSqr(&CRubbish_aSheets[i].m_basePos, getCameraPosition()) > SQR(RUBBISH_MAX_DIST + 1.0f)) {
 			CRubbish_aSheets[i].m_state = 0;
@@ -480,7 +480,7 @@ void CRubbish_Update() {
 }
 
 void CRubbish_SetVisibility(bool visible) {
-	CRubbish_bRubbishInvisible = (*CGame_currArea > 0);
+	CRubbish_bRubbishInvisible = (CGame_currArea > 0);
 }
 
 void COneSheet_AddToList(COneSheet* this, COneSheet* list) {
@@ -500,7 +500,7 @@ void InjectRubbishPatches() {
 
     RedirectCall(0x24368C, CRubbish_Update);
 
-    RedirectCall(0x246988, CRubbish_Render);
+    RedirectCall(0x246EA8, CRubbish_Render);
 
     RedirectCall(0x247388, CRubbish_Shutdown);
 

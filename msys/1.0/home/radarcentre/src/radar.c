@@ -8,10 +8,10 @@
 #include <CRGBA.h>
 #include <math.h>
 
-void (*drawBlips)(void*) = (void (*)(void*))0x268080;
-char (*CWanted_SetPursuitCop)(void *, void *) = (char (*)(void *, void *))0x27D7E0;
-int (*GetPedHandle)(CPool*, int) = (int (*)(CPool*, int))0x0019FA20;
-float (*CGeneral_LimitRadianAngle)(float) = (float (*)(float))0x245130;
+static void (*drawBlips)(void*) = (void (*)(void*))0x268080;
+static char (*CWanted_SetPursuitCop)(void *, void *) = (char (*)(void *, void *))0x27D7E0;
+static int (*GetPedHandle)(CPool*, int) = (int (*)(CPool*, int))0x0019FA20;
+static float (*CGeneral_LimitRadianAngle)(float) = (float (*)(float))0x245130;
 
 #define get_entity_model(entity) *(short *)((char*)entity + 34)
 
@@ -22,8 +22,8 @@ void hookedRadarCentre() {
 
     float a = orientation - 1.570796f;
 
-    RadarOrigin->x -= cosf(a) * radarShift;
-    RadarOrigin->y -= sinf(a) * radarShift;
+    RadarOrigin.x -= cosf(a) * radarShift;
+    RadarOrigin.y -= sinf(a) * radarShift;
 
     drawRadarMap();
 }

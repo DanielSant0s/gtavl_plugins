@@ -4,6 +4,8 @@
         "linkfile": "c",
         "wrappers.h": "c",
         "hashtab.h": "c",
-        "recycle.h": "c"
+        "recycle.h": "c",
+        "stdio.h": "c",
+        "debug.h": "c"
     }
 }

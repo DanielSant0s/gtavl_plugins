@@ -18,19 +18,18 @@ static RwRGBA textureColor, emptyColor;
 static CTexture menuBoughtSprite, menuSelectorSprite;
 static CTexture pLogo, pPattern;
 
-char* (*CText_Get)(void* textData, const char *key) = (char* (*)(void* textData, const char *key))0x18ED90;
-static void* TheText = (void*)0x69F290;
+char* CText_Get(uint32_t *textData, const char *key);
+extern uint32_t TheText;
 
-void (*CSprite2d_DrawRect)(CRect*, RwRGBA*) = (void (*)(CRect*, RwRGBA*))0x2B2090;
-void (*CSprite2d_DrawTextureRect)(CTexture*, CRect*, RwRGBA*) = (void (*)(CTexture*, CRect*, RwRGBA*))0x2B0960;
-tMenuPanel** MenuInUse = (tMenuPanel**)0x66C848;
+void CSprite2d_DrawRect(CRect*, RwRGBA*);
+void CSprite2d_DrawTextureRect(CTexture*, CRect*, RwRGBA*);
+extern tMenuPanel *MenuInUse[2];
 
-void (*CMessages_InsertNumberInString)(char *, int, int, int, int, int, int, char *) = (void (*)(char *, int, int, int, int, int, int, char *))0x18C470;
+void CMessages_InsertNumberInString(char *, int, int, int, int, int, int, char *);
 
-unsigned char (*CMenuSystem_CreateNewMenu)(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment) = 
-    (unsigned char (*)(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment))0x52BF80;
+unsigned char CMenuSystem_CreateNewMenu(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment);
 
-void (*CMenuSystem_SwitchOffMenu)(unsigned char) = (void (*)(unsigned char))0x52C340;
+void CMenuSystem_SwitchOffMenu(uint8_t);
 
 typedef struct
 {
@@ -79,8 +78,6 @@ static void MenuUi_ReadHeaderInfo()
             vecHeadersSize++;
         } 
     }
-
-    printf("%s\n", vecHeaders[vecHeadersSize-1].m_nName);
 }
 
 /* 
@@ -88,7 +85,7 @@ static void MenuUi_ReadHeaderInfo()
 */
 static void MenuUi_WrapXCenteredPrint(char* pGXT, CRect windowRect)
 {
-    char* pText = CText_Get(TheText, pGXT);
+    char* pText = CText_Get(&TheText, pGXT);
     float textPosX = windowRect.left + (windowRect.right - windowRect.left) / 2;
     float textPosY = windowRect.top + (windowRect.bottom - windowRect.top) / 2 - 20.0f;
     float windowWidth = windowRect.right - windowRect.left;
@@ -140,16 +137,20 @@ static void MenuUi_WrapXCenteredPrint(char* pGXT, CRect windowRect)
 }
 
 static unsigned char MenuUi_CreateNewMenu(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment) {
+    //CStreaming_MakeSpaceFor(306464);
+    //CStreaming_ImGonnaUseStreamingMemory();
+    //CGame_TidyUpMemory(false, true);
+
     CTxdStore_PushCurrentTxd();
-    int v7 = CTxdStore_FindTxdSlot("v_hud");
+    int v7 = CTxdStore_FindTxdSlot("vlhud");
     if ( v7 == -1 )
-        v7 = CTxdStore_AddTxdSlot("v_hud");
-    CTxdStore_LoadTxd(v7, "MODELS\\V_HUD.TXD");
+        v7 = CTxdStore_AddTxdSlot("VLHUD");
+    CTxdStore_LoadTxd(v7, "MODELS\\VLHUD.TXD");
     CTxdStore_AddRef(v7);
     CTxdStore_SetCurrentTxd(v7);
 
-    CSprite2D_SetTexture(&menuBoughtSprite, "menu_bought");
-    CSprite2D_SetTexture(&menuSelectorSprite, "menu_selector");
+    CSprite2d_SetTexture(&menuBoughtSprite, "menu_bought", NULL);
+    CSprite2d_SetTexture(&menuSelectorSprite, "menu_selector", NULL);
 
     int i;
     for (i = 0; i < vecHeadersSize; i++)
@@ -157,15 +158,17 @@ static unsigned char MenuUi_CreateNewMenu(int type, char *pTitle, float posX, fl
         if (!strcmp(vecHeaders[i].m_nName, pTitle)/*
         && (*CGame_currArea == vecHeaders[i].m_nInteriorID || vecHeaders[i].m_nInteriorID == -1)*/ )
         {
-            CSprite2D_SetTexture(&pLogo, vecHeaders[i].m_nLogo);
-            CSprite2D_SetTexture(&pPattern, vecHeaders[i].m_nPattern);
+            CSprite2d_SetTexture(&pLogo, vecHeaders[i].m_nLogo, 0);
+            CSprite2d_SetTexture(&pPattern, vecHeaders[i].m_nPattern, 0);
             break; 
         }
     }
 
     CTxdStore_PopCurrentTxd();
     CTxdStore_RemoveTxd(v7);
-    CTxdStore_RemoveTxdSlot(v7);
+    //CTxdStore_RemoveTxdSlot(v7);
+    
+    //CStreaming_IHaveUsedStreamingMemory();
 
     return CMenuSystem_CreateNewMenu(type, pTitle, posX, posY, width, columns, interactive, background, alignment);
 }
@@ -184,7 +187,6 @@ static void MenuUi_SwitchOffMenu(unsigned char handle) {
         CSprite2d_Delete(&pPattern);
         pPattern.texture = NULL;
     }
-        
 
     CMenuSystem_SwitchOffMenu(handle);
 }
@@ -245,7 +247,7 @@ static void MenuUi_DisplayStandardMenu(unsigned char panelId, bool bBrightFont)
             uint8_t column;
             for (column = 0; column < pMenuPanel->m_nNumColumns; ++column)
             {
-                char* pText = CText_Get(TheText, pMenuPanel->m_aacColumnHeaders[column]);
+                char* pText = CText_Get(&TheText, pMenuPanel->m_aacColumnHeaders[column]);
 
                 if (pText[0] != ' ' && pText[0] != '\0')
                 {
@@ -317,7 +319,7 @@ static void MenuUi_DisplayStandardMenu(unsigned char panelId, bool bBrightFont)
         float scaleX = textScale.x;
         float fontWidth = 0.0f;
 
-        char* pHeader = CText_Get(TheText, pMenuPanel->m_aacColumnHeaders[column]);
+        char* pHeader = CText_Get(&TheText, pMenuPanel->m_aacColumnHeaders[column]);
 
         fontWidth = CFont_GetStringWidth(pHeader, true, false);
         if (fontWidth > menuWidth)
@@ -343,7 +345,7 @@ static void MenuUi_DisplayStandardMenu(unsigned char panelId, bool bBrightFont)
             char pText[400];
             int num = pMenuPanel->m_aadwNumberInRowTitle[column][row];
             int num2 = pMenuPanel->m_aadw2ndNumberInRowTitle[column][row];
-            char* row_text = CText_Get(TheText, pMenuPanel->m_aaacRowTitles[column][row]);
+            char* row_text = CText_Get(&TheText, pMenuPanel->m_aaacRowTitles[column][row]);
             CMessages_InsertNumberInString(row_text, num, num2, -1, -1, -1, -1, pText);
             //CMessages_InsertPlayerControlKeysInString(pText);
 
@@ -419,7 +421,7 @@ void setupInGameMenuPatches()
     MenuUi_ReadConfig();
     MenuUi_ReadHeaderInfo();
 
-    RedirectCall(0x52CDD0, MenuUi_DisplayStandardMenu);
-    RedirectCall(0x5247F0, MenuUi_CreateNewMenu);
-    RedirectCall(0x5248FC, MenuUi_SwitchOffMenu);
+    RedirectCall(0x52CDD0, &MenuUi_DisplayStandardMenu);
+    RedirectCall(0x5247F0, &MenuUi_CreateNewMenu);
+    RedirectCall(0x5248FC, &MenuUi_SwitchOffMenu);
 }

@@ -9,14 +9,16 @@
 #include <injector.h>
 #include <CVehicle.h>
 #include <CRGBA.h>
+#include <stdlib.h>
 #include <rwcore.h>
 #include <secore.h>
 #include <CRadar.h>
 #include <CFont.h>
 #include <common.h>
-#include <readini.h>
 
-extern char * erl_id = "gps";
+char * erl_id = "gps";
+
+float CWorld_FindGroundZForCoord(float, float);
 
 typedef struct
 {
@@ -24,62 +26,45 @@ typedef struct
     short m_nNodeId;
 } CNodeAddress;
 
+#define MAX_NODE_POINTS 1000
 
+#define gps_line_width 2.5f
+#define max_target_distance 20.0f
 
-#define MAX_NODE_POINTS 5000
+#define gps_line_color_r 180.0f
+#define gps_line_color_g 24.0f
+#define gps_line_color_b 255.0f
+#define gps_line_color_a 255.0f
 
-static bool auto_disable_target = true;
-static bool distance_text_enable = true;
-static bool gps_line_enable = true;
+#define distance_text_color_r 255
+#define distance_text_color_g 255
+#define distance_text_color_b 255
+#define distance_text_color_a 255
 
-static float gps_line_width = 2.5f;
-static float max_target_distance = 20.0f;
-
-static float gps_line_color_r  = 180.0f;
-static float gps_line_color_g  = 24.0f;
-static float gps_line_color_b  = 24.0f;
-static float gps_line_color_a  = 255.0f;
-
-static int distance_text_color_r  = 255;
-static int distance_text_color_g  = 255;
-static int distance_text_color_b  = 255;
-static int distance_text_color_a  = 255;
-
-static int distance_text_shadow_r  = 0;
-static int distance_text_shadow_g  = 0;
-static int distance_text_shadow_b  = 0;
-static int distance_text_shadow_a  = 255;
+#define distance_text_shadow_r 0
+#define distance_text_shadow_g 0
+#define distance_text_shadow_b 0
+#define distance_text_shadow_a 255
 
 RwRGBAReal line_color;
 
-float (*limitRadarPoint)(float *a1);
-
-void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
-    vertex->u.els.scrVertex.x = x;
-    vertex->u.els.scrVertex.y = y;
-    vertex->u.els.scrVertex.z = *NearScreenZ - 0.5f;
-    vertex->u.els.u = 0.0f;
-    vertex->u.els.v = 0.0f;
-    vertex->u.els.camVertex_z = *NearScreenZ - 0.5f;
-    vertex->u.els.recipZ = *RecipNearClip;
-    vertex->u.els.color = line_color;
-}
-
+static float (*limitRadarPoint)(float *a1);
 static void (*DrawHud)();
 
-void (*CHud_DrawGangOverlay)(int) = (void (*)(int))0x0026E830;
-float (*CWorld_FindGroundZForCoord)(float, float) = (float (*)(float, float))0x002869C0;
+void CHud_DrawGangOverlay(int);
 
 static bool gpsShown;
+
 static float gpsDistance;
 static CNodeAddress resultNodes[MAX_NODE_POINTS];
 static CVector nodePoints[MAX_NODE_POINTS];
 static RwIm2DVertex lineVerts[MAX_NODE_POINTS * 4];
+
 static bool missionRouteShown = false;
 
-unsigned int* FrontEndMenuManager_m_nTargetBlipIndex = (unsigned int*)0x6FF970;
+extern unsigned int FrontEndMenuManager_m_nTargetBlipIndex;
 
-void (*PreRenderWater)() = (void (*)())0x182130;
+void PreRenderWater();
 
 static void autoDisableTarget() {
     CVector player_coords;
@@ -88,31 +73,42 @@ static void autoDisableTarget() {
 
     FindPlayerCoors(&player_coords, 0);
 
-    if (*FrontEndMenuManager_m_nTargetBlipIndex
-        && CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_nCounter == HIWORD(*FrontEndMenuManager_m_nTargetBlipIndex)
-        && CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_nBlipDisplay
+    if (FrontEndMenuManager_m_nTargetBlipIndex
+        && CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_nCounter == HIWORD(FrontEndMenuManager_m_nTargetBlipIndex)
+        && CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_nBlipDisplay
         && FindPlayerPed(-1)
-        && DistanceBetweenPoints(&player_coords, &CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_vecPos) < max_target_distance)
+        && DistanceBetweenPoints(&player_coords, &CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_vecPos) < max_target_distance)
     {
-        CRadar_ClearBlip(*FrontEndMenuManager_m_nTargetBlipIndex);
-        *FrontEndMenuManager_m_nTargetBlipIndex = 0;
+        CRadar_ClearBlip(FrontEndMenuManager_m_nTargetBlipIndex);
+        FrontEndMenuManager_m_nTargetBlipIndex = 0;
     }
 }
 
-int (*CPathFind_DoPathSearch)(unsigned int*, unsigned char, CVector, CNodeAddress, CVector, CNodeAddress*, short *, int, float *, float, CNodeAddress*, float, int, CNodeAddress, int, int) = (int (*)(unsigned int, unsigned char, CVector, CNodeAddress, CVector, CNodeAddress*, short *, int, float *, float, CNodeAddress*, float, int, CNodeAddress, int, int))0x1E5930;
+int CPathFind_DoPathSearch(unsigned int*, unsigned char, CVector, CNodeAddress, CVector, CNodeAddress*, short *, int, float *, float, CNodeAddress*, float, int, CNodeAddress, int, int);
 
-unsigned int* ThePaths = (unsigned int*)0x006A6180;
+extern unsigned int ThePaths;
 
 unsigned int CPathFind_FindNodePointer(void *this, CNodeAddress a2)
 {
     return *((unsigned int *)this + a2.m_nAreaId + 513) + 28 * a2.m_nNodeId;
 }
 
-void CPathNode_GetCoors(CVector* out, unsigned int this)
+static void CPathNode_GetCoors(CVector* out, unsigned int this)
 {
     out->x = (float)(*(short *)(this + 8) * 0.125f);
     out->y = (float)(*(short *)(this + 10) * 0.125f);
     out->z = (float)(*(short *)(this + 12) * 0.125f);
+}
+
+static void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
+    vertex->u.els.scrVertex.x = x;
+    vertex->u.els.scrVertex.y = y;
+    vertex->u.els.scrVertex.z = NearScreenZ - 0.5f;
+    vertex->u.els.u = 0.0f;
+    vertex->u.els.v = 0.0f;
+    vertex->u.els.camVertex_z = NearScreenZ - 0.5f;
+    vertex->u.els.recipZ = RecipNearClip;
+    vertex->u.els.color = line_color;
 }
 
 static void processGPS(CVector* dest_coords) {
@@ -136,71 +132,142 @@ static void processGPS(CVector* dest_coords) {
     destPosn.x = dest_coords->x;
     destPosn.y = dest_coords->y;
     destPosn.z = dest_coords->z;
-    
-    CPathFind_DoPathSearch(ThePaths, 0, player_coords, dummy[0], destPosn, resultNodes, &nodesCount, MAX_NODE_POINTS, &gpsDistance,
-        999999.0f, NULL, 999999.0f, false, dummy[1], false, *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) == VEHICLE_BOAT);
-    
-    if (nodesCount > 0) {
 
-        for (i = 0; i < nodesCount; i++) {
-            CVector tmpPoint, nodePosn2D;
+        CPathFind_DoPathSearch(&ThePaths, 0, player_coords, dummy[0], destPosn, resultNodes, &nodesCount, MAX_NODE_POINTS, &gpsDistance,
+            999999.0f, NULL, 999999.0f, false, dummy[1], false, *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) == VEHICLE_BOAT);
 
-            CPathNode_GetCoors(&nodePosn2D, CPathFind_FindNodePointer(ThePaths, resultNodes[i])); // ThePaths.GetPathNode(resultNodes[i])->GetNodeCoors();
+        if (nodesCount > 0) {
 
-            CRadar_TransformRealWorldPointToRadarSpace(&tmpPoint, &nodePosn2D);
+            for (i = 0; i < nodesCount; i++) {
+                CVector tmpPoint, nodePosn2D;
 
-            if (!*(unsigned char*)(FrontEndMenuManager + 101))
-                CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
+                CPathNode_GetCoors(&nodePosn2D, CPathFind_FindNodePointer(&ThePaths, resultNodes[i])); // ThePaths.GetPathNode(resultNodes[i])->GetNodeCoors();
+
+                CRadar_TransformRealWorldPointToRadarSpace(&tmpPoint, &nodePosn2D);
+
+                if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101))
+                    CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
+                else {
+                    limitRadarPoint(&tmpPoint);
+                    CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
+                    CRadar_LimitToMap(&nodePoints[i].x, &nodePoints[i].y);
+                }
+            }
+
+            if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101))
+            {
+                CVector posn, start, end;
+                Rect rect;
+
+                start.x = -1.0f;
+                start.y = -1.0f;
+
+                end.x = 1.0f;
+                end.y = 1.0f;
+
+                CRadar_TransformRadarPointToScreenSpace(&posn, &start);
+                rect.left = posn.x;
+                rect.bottom = posn.y;
+
+                CRadar_TransformRadarPointToScreenSpace(&posn, &end);
+                rect.right = posn.x;
+                rect.top = posn.y;
+
+                GsRenderStateSet(GS_SCISSORTESTENABLE, 1);
+                SetScissorRect(&rect);
+            }
+
+            RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
+            
+            unsigned int vertIndex = 0;
+            short lasti;
+            CVector shift[2];
+            for (i = 0; i < (nodesCount - 1); i++) {
+                CVector dir;
+
+                dir.x = nodePoints[i + 1].x - nodePoints[i].x;
+                dir.y = nodePoints[i + 1].y - nodePoints[i].y;
+
+                float angle = atan2f(dir.y, dir.x);
+
+                if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101)) {
+                    shift[0].x = cosf(angle - 1.5707963f) * gps_line_width;
+                    shift[0].y = sinf(angle - 1.5707963f) * gps_line_width;
+                    shift[1].x = cosf(angle + 1.5707963f) * gps_line_width;
+                    shift[1].y = sinf(angle + 1.5707963f) * gps_line_width;
+                } else {
+                    float mp = *(float*)((uint32_t)(&FrontEndMenuManager) + 112) - 140.0f;
+                    if (mp < 140.0f)
+                        mp = 140.0f;
+                    else if (mp > 960.0f)
+                        mp = 960.0f;
+                    mp = mp / 960.0f + 0.4f;
+                    shift[0].x = cosf(angle - 1.5707963f) * gps_line_width * mp;
+                    shift[0].y = sinf(angle - 1.5707963f) * gps_line_width * mp;
+                    shift[1].x = cosf(angle + 1.5707963f) * gps_line_width * mp;
+                    shift[1].y = sinf(angle + 1.5707963f) * gps_line_width * mp;
+                }
+
+            
+
+                Setup2dVertex(                //
+                    &lineVerts[vertIndex + 0],       //
+                    nodePoints[i].x + shift[0].x,   // CurrentNode*
+                    nodePoints[i].y + shift[0].y   //
+                );
+
+                Setup2dVertex(                //
+                    &lineVerts[vertIndex + 1],       //
+                    nodePoints[i].x + shift[1].x,   // CurrentNode - CurrentNode*
+                    nodePoints[i].y + shift[1].y   //
+                );
+
+                Setup2dVertex(                    // NextNode*
+                    &lineVerts[vertIndex + 2],           //    |
+                    nodePoints[i + 1].x + shift[0].x,   // CurrentNode - CurrentNode
+                    nodePoints[i + 1].y + shift[0].y   //
+                );
+
+                Setup2dVertex(
+                    &lineVerts[vertIndex + 3],           // NextNode - NextNode*
+                    nodePoints[i + 1].x + shift[1].x,   //    |             |
+                    nodePoints[i + 1].y + shift[1].y   // CurrentNode - CurrentNode
+                );
+
+                lasti = i+1;
+                vertIndex += 4;
+            }
+
+
+            // Create end segment
+            CVector2D targetScreen;
+            CVector2D tmpPoint;
+            CRadar_TransformRealWorldPointToRadarSpace(&tmpPoint, &destPosn);
+            if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101))
+                CRadar_TransformRadarPointToScreenSpace(&targetScreen, &tmpPoint);
             else {
                 limitRadarPoint(&tmpPoint);
-                CRadar_TransformRadarPointToScreenSpace(&nodePoints[i], &tmpPoint);
-                CRadar_LimitToMap(&nodePoints[i].x, &nodePoints[i].y);
+                CRadar_TransformRadarPointToScreenSpace(&targetScreen, &tmpPoint);
+                targetScreen.x *= 1.0f;
+                targetScreen.y *= 1.0f;
+                CRadar_LimitToMap(&targetScreen.x, &targetScreen.y);
             }
-        }
 
-        if (!*(unsigned char*)(FrontEndMenuManager + 101))
-        {
-            CVector posn, start, end;
-            Rect rect;
+            CVector2D dir;
+            dir.x = targetScreen.x - nodePoints[lasti].x; // Direction between last node and the target position
+            dir.y = targetScreen.y - nodePoints[lasti].y; // Direction between last node and the target position
+            float angle = atan2f(dir.y, dir.x); // Convert direction to angle
 
-            start.x = -1.0f;
-            start.y = -1.0f;
+            if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101)) {
+                // 1.5707963 radians = 90 degrees
 
-            end.x = 1.0f;
-            end.y = 1.0f;
-
-            CRadar_TransformRadarPointToScreenSpace(&posn, &start);
-            rect.left = posn.x;
-            rect.bottom = posn.y;
-            
-            CRadar_TransformRadarPointToScreenSpace(&posn, &end);
-            rect.right = posn.x;
-            rect.top = posn.y;
-
-            GsRenderStateSet(GS_SCISSORTESTENABLE, 1);
-            SetScissorRect(&rect);
-        }
-
-        RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
-
-        unsigned int vertIndex = 0;
-        short lasti;
-        CVector shift[2];
-        for (i = 0; i < (nodesCount - 1); i++) {
-            CVector dir;
-
-            dir.x = nodePoints[i + 1].x - nodePoints[i].x;
-            dir.y = nodePoints[i + 1].y - nodePoints[i].y;
-
-            float angle = atan2f(dir.y, dir.x);
-
-            if (!*(unsigned char*)(FrontEndMenuManager + 101)) {
                 shift[0].x = cosf(angle - 1.5707963f) * gps_line_width;
                 shift[0].y = sinf(angle - 1.5707963f) * gps_line_width;
                 shift[1].x = cosf(angle + 1.5707963f) * gps_line_width;
                 shift[1].y = sinf(angle + 1.5707963f) * gps_line_width;
-            } else {
-                float mp = *(float*)(FrontEndMenuManager + 112) - 140.0f;
+            }
+            else {
+                float mp = *(float*)((uint32_t)(&FrontEndMenuManager) + 112) - 140.0f;
                 if (mp < 140.0f)
                     mp = 140.0f;
                 else if (mp > 960.0f)
@@ -208,126 +275,57 @@ static void processGPS(CVector* dest_coords) {
                 mp = mp / 960.0f + 0.4f;
                 shift[0].x = cosf(angle - 1.5707963f) * gps_line_width * mp;
                 shift[0].y = sinf(angle - 1.5707963f) * gps_line_width * mp;
-                shift[1].x = cosf(angle + 1.5707963f) * gps_line_width * mp;
                 shift[1].y = sinf(angle + 1.5707963f) * gps_line_width * mp;
+                shift[1].x = cosf(angle + 1.5707963f) * gps_line_width * mp;
             }
 
-            Setup2dVertex(                //
-                &lineVerts[vertIndex + 0],       //
-                nodePoints[i].x + shift[0].x,   // CurrentNode*
-                nodePoints[i].y + shift[0].y   //
-            );
-
-            Setup2dVertex(                //
-                &lineVerts[vertIndex + 1],       //
-                nodePoints[i].x + shift[1].x,   // CurrentNode - CurrentNode*
-                nodePoints[i].y + shift[1].y   //
-            );
-
-            Setup2dVertex(                    // NextNode*
-                &lineVerts[vertIndex + 2],           //    |
-                nodePoints[i + 1].x + shift[0].x,   // CurrentNode - CurrentNode
-                nodePoints[i + 1].y + shift[0].y   //
+            Setup2dVertex(
+                &lineVerts[vertIndex+0],
+                nodePoints[lasti].x + shift[0].x,
+                nodePoints[lasti].y + shift[0].y
             );
 
             Setup2dVertex(
-                &lineVerts[vertIndex + 3],           // NextNode - NextNode*
-                nodePoints[i + 1].x + shift[1].x,   //    |             |
-                nodePoints[i + 1].y + shift[1].y   // CurrentNode - CurrentNode
+                &lineVerts[vertIndex+1],
+                nodePoints[lasti].x + shift[1].x,
+                nodePoints[lasti].y + shift[1].y
             );
 
-            lasti = i+1;
-            vertIndex += 4;
+            Setup2dVertex(
+                &lineVerts[vertIndex + 2],
+                (nodePoints[lasti].x + (dir.x / 4.8f)) + (shift[0].x / 2),
+                (nodePoints[lasti].y + (dir.y / 4.8f)) + (shift[0].y / 2)
+            );
+
+            Setup2dVertex(
+                &lineVerts[vertIndex + 3],
+                (nodePoints[lasti].x + (dir.x / 4.8f)) + (shift[1].x / 2),
+                (nodePoints[lasti].y + (dir.y / 4.8f)) + (shift[1].y / 2)
+            );
+
+            Setup2dVertex(
+                &lineVerts[vertIndex + 4],
+                (nodePoints[lasti].x + (dir.x / 4.5f)),
+                (nodePoints[lasti].y + (dir.y / 4.5f))
+            );
+
+            RwIm2DRenderPrimitive(rwPRIMTYPETRISTRIP, lineVerts, (4 * nodesCount)+1);
+
+
+            if (!*(unsigned char*)((uint32_t)(&FrontEndMenuManager) + 101))
+            {
+                GsRenderStateSet(GS_SCISSORTESTENABLE, 0);
+            }
+
+            CVector tmp;
+            CPathNode_GetCoors(&tmp, CPathFind_FindNodePointer(&ThePaths, resultNodes[0]));
+            gpsDistance += DistanceBetweenPoints(&player_coords, &tmp);
+            gpsShown = 1;
         }
-    
-
-        // Create end segment
-        CVector2D targetScreen;
-        CVector2D tmpPoint;
-        CRadar_TransformRealWorldPointToRadarSpace(&tmpPoint, &destPosn);
-        if (!*(unsigned char*)(FrontEndMenuManager + 101))
-            CRadar_TransformRadarPointToScreenSpace(&targetScreen, &tmpPoint);
-        else {
-            limitRadarPoint(&tmpPoint);
-            CRadar_TransformRadarPointToScreenSpace(&targetScreen, &tmpPoint);
-            targetScreen.x *= 1.0f;
-            targetScreen.y *= 1.0f;
-            CRadar_LimitToMap(&targetScreen.x, &targetScreen.y);
-        }
-
-        CVector2D dir;
-        dir.x = targetScreen.x - nodePoints[lasti].x; // Direction between last node and the target position
-        dir.y = targetScreen.y - nodePoints[lasti].y; // Direction between last node and the target position
-        float angle = atan2f(dir.y, dir.x); // Convert direction to angle
-
-        if (!*(unsigned char*)(FrontEndMenuManager + 101)) {
-            // 1.5707963 radians = 90 degrees
-
-            shift[0].x = cosf(angle - 1.5707963f) * gps_line_width;
-            shift[0].y = sinf(angle - 1.5707963f) * gps_line_width;
-            shift[1].x = cosf(angle + 1.5707963f) * gps_line_width;
-            shift[1].y = sinf(angle + 1.5707963f) * gps_line_width;
-        }
-        else {
-            float mp = *(float*)(FrontEndMenuManager + 112) - 140.0f;
-            if (mp < 140.0f)
-                mp = 140.0f;
-            else if (mp > 960.0f)
-                mp = 960.0f;
-            mp = mp / 960.0f + 0.4f;
-            shift[0].x = cosf(angle - 1.5707963f) * gps_line_width * mp;
-            shift[0].y = sinf(angle - 1.5707963f) * gps_line_width * mp;
-            shift[1].y = sinf(angle + 1.5707963f) * gps_line_width * mp;
-            shift[1].x = cosf(angle + 1.5707963f) * gps_line_width * mp;
-        }
-
-        Setup2dVertex(
-            &lineVerts[vertIndex+0],
-            nodePoints[lasti].x + shift[0].x,
-            nodePoints[lasti].y + shift[0].y
-        );
-
-        Setup2dVertex(
-            &lineVerts[vertIndex+1],
-            nodePoints[lasti].x + shift[1].x,
-            nodePoints[lasti].y + shift[1].y
-        );
-
-        Setup2dVertex(
-            &lineVerts[vertIndex + 2],
-            (nodePoints[lasti].x + (dir.x / 4.8f)) + (shift[0].x / 2),
-            (nodePoints[lasti].y + (dir.y / 4.8f)) + (shift[0].y / 2)
-        );
-
-        Setup2dVertex(
-            &lineVerts[vertIndex + 3],
-            (nodePoints[lasti].x + (dir.x / 4.8f)) + (shift[1].x / 2),
-            (nodePoints[lasti].y + (dir.y / 4.8f)) + (shift[1].y / 2)
-        );
-
-        Setup2dVertex(
-            &lineVerts[vertIndex + 4],
-            (nodePoints[lasti].x + (dir.x / 4.5f)),
-            (nodePoints[lasti].y + (dir.y / 4.5f))
-        );
-
-        RwIm2DRenderPrimitive(rwPRIMTYPETRISTRIP, lineVerts, (4 * nodesCount)+1);
-
-        
-        if (!*(unsigned char*)(FrontEndMenuManager + 101))
-        {
-            GsRenderStateSet(GS_SCISSORTESTENABLE, 0);
-        }
-        
-        CVector tmp;
-        CPathNode_GetCoors(&tmp, CPathFind_FindNodePointer(ThePaths, resultNodes[0]));
-        gpsDistance += DistanceBetweenPoints(&player_coords, &tmp);
-        gpsShown = 1;
-    }
 
 }
 
-void renderMissionTrace(tRadarTrace* trace) {
+static void renderMissionTrace(tRadarTrace* trace) {
     CVector destVec;
     switch (trace->m_nBlipType) {
     case 1:
@@ -363,8 +361,7 @@ void renderMissionTrace(tRadarTrace* trace) {
     processGPS(&destVec);
 }
 
-
-bool (*CTheScripts_IsPlayerOnAMission)() = (bool (*)())0x1FA3E0;
+bool CTheScripts_IsPlayerOnAMission();
 
 static void GPSEventHandler(bool b) {
     int i;
@@ -379,17 +376,17 @@ static void GPSEventHandler(bool b) {
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_PLANE
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_HELI
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_BMX)) {
-        return;
+            return;
     }
 
     CVector player_coords;
     FindPlayerCoors(&player_coords, 0);
 
-    if ( *FrontEndMenuManager_m_nTargetBlipIndex
-    && CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_nCounter == HIWORD(*FrontEndMenuManager_m_nTargetBlipIndex)
-    && CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_nBlipDisplay)
+    if ( FrontEndMenuManager_m_nTargetBlipIndex
+    && CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_nCounter == HIWORD(FrontEndMenuManager_m_nTargetBlipIndex)
+    && CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_nBlipDisplay)
     {
-        CVector destPosn = CRadar_ms_RadarTrace[LOWORD(*FrontEndMenuManager_m_nTargetBlipIndex)].m_vecPos;
+        CVector destPosn = CRadar_ms_RadarTrace[LOWORD(FrontEndMenuManager_m_nTargetBlipIndex)].m_vecPos;
         destPosn.z = CWorld_FindGroundZForCoord(destPosn.x, destPosn.y);
 
         line_color.r = gps_line_color_r;
@@ -432,57 +429,11 @@ static void GPSEventHandler(bool b) {
     }
 }
 
-void (*CSprite2d_SetMaskVertices)(int, float *, float) = (void (*)(int, float *, float))0x2B1FD0;
+void CSprite2d_SetMaskVertices(int, float *, float);
 
-RwIm2DVertex* CSprite2d_maVertices = (RwIm2DVertex*)0x7C32F0;
+extern RwIm2DVertex CSprite2d_maVertices[];
 
 #define FRAC_PI_2 1.57079637f
-
-static void CRadar_DrawRadarMask()
-{
-    int i; 
-    CVector2D in;  
-    CVector2D out[8];
-
-    CVector2D corners[4] = {
-        { 1.0f,  -1.0f },
-        { 1.0f,  1.0f  },
-        { -1.0f, 1.0f  },
-        { -1.0,  -1.0f }};
-
-    RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
-    RwRenderStateSet(rwRENDERSTATESRCBLEND, 5u);
-    RwRenderStateSet(rwRENDERSTATEDESTBLEND, 6u);
-    RwRenderStateSet(rwRENDERSTATEFOGENABLE, 0);
-    RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, 2u);
-    RwRenderStateSet(rwRENDERSTATESHADEMODE, 1u);
-    RwRenderStateSet(rwRENDERSTATEZTESTENABLE, 0);
-    RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, 1u);
-    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, 1u);
-    GsRenderStateSet(GS_ALPHATESTMETHOD, GS_ALPHATESTMETHODALWAYS);
-    GsRenderStateSet(GS_ALPHATESTFAIL, GS_ALPHATESTFAILFBONLY);
-
-    for (i = 0; i < 4; i++) {
-        // First point is always the corner itself
-        in.x = corners[i].x;
-        in.y = corners[i].y;
-        CRadar_TransformRadarPointToScreenSpace(&out[0], &in);
-
-        // Then generate a quarter of the circle
-        int j;
-        for (j = 0; j < 7; j++) {
-            in.x = corners[i].x * cosf((float)(j) * (FRAC_PI_2 / 6.0f));
-            in.y = corners[i].y * sinf((float)(j) * (FRAC_PI_2 / 6.0f));
-            CRadar_TransformRadarPointToScreenSpace(&out[j + 1], &in);
-        };
-
-        CSprite2d_SetMaskVertices(8, &out, *NearScreenZ);
-        RwIm2DRenderPrimitive(rwPRIMTYPETRIFAN, CSprite2d_maVertices, 8);
-    }
-  
-    GsRenderStateSet(GS_ALPHATESTMETHOD, GS_ALPHATESTMETHODGREATEREQUAL);
-    GsRenderStateSet(GS_ALPHATESTFAIL, GS_ALPHATESTFAILKEEP);
-}
 
 static RwRGBA font_color;
 static RwRGBA font_shadow;
@@ -516,64 +467,6 @@ static void drawGPSDistance() {
 
 int _start()
 {  
-    IniReader ini;
-
-    float ini_float;
-    int ini_int;
-    bool force_circle_radar = false;
-
-    if (readini_open(&ini, "gps.ini")) {
-        while(readini_getline(&ini)) {
-            if (readini_emptyline(&ini)) {
-                continue;
-            } else if (readini_float(&ini, "gps_line_color_r", &ini_float)) {
-                gps_line_color_r = ini_float;
-
-            } else if (readini_float(&ini, "gps_line_color_g", &ini_float)) {
-                gps_line_color_g = ini_float;
-
-            } else if (readini_float(&ini, "gps_line_color_b", &ini_float)) {
-                gps_line_color_b = ini_float;
-
-            } else if (readini_float(&ini, "gps_line_width", &ini_float)) {
-                gps_line_width = ini_float;
-
-            } else if (readini_float(&ini, "gps_line_color_a", &ini_float)) {
-                gps_line_color_a = ini_float;
-
-            } else if (readini_float(&ini, "max_target_distance", &ini_float)) {
-                max_target_distance = ini_float;
-
-            } else if (readini_bool(&ini, "force_circle_radar", &force_circle_radar)) {
-
-            } else if (readini_bool(&ini, "gps_line_enable", &gps_line_enable)) {
-
-            } else if (readini_bool(&ini, "distance_text_enable", &distance_text_enable)) {
-
-            } else if (readini_bool(&ini, "auto_disable_target", &auto_disable_target)) {
-
-            } else if (readini_int(&ini, "distance_text_color_r", &ini_int)) {
-                distance_text_color_r = ini_int;
-            } else if (readini_int(&ini, "distance_text_color_g", &ini_int)) {
-                distance_text_color_g = ini_int;
-            } else if (readini_int(&ini, "distance_text_color_b", &ini_int)) {
-                distance_text_color_b = ini_int;
-            } else if (readini_int(&ini, "distance_text_color_a", &ini_int)) {
-                distance_text_color_a = ini_int;
-            } else if (readini_int(&ini, "distance_text_shadow_r", &ini_int)) {
-                distance_text_shadow_r = ini_int;
-            } else if (readini_int(&ini, "distance_text_shadow_g", &ini_int)) {
-                distance_text_shadow_g = ini_int;
-            } else if (readini_int(&ini, "distance_text_shadow_b", &ini_int)) {
-                distance_text_shadow_b = ini_int;
-            } else if (readini_int(&ini, "distance_text_shadow_a", &ini_int)) {
-                distance_text_shadow_a = ini_int;
-            }
-        }
-
-        readini_close(&ini);
-    }
-
     limitRadarPoint = (float (*)(float *a1))ReadCall(0x238974);
 
     CRGBA_CRGBA(&font_color, distance_text_color_r, 
@@ -586,24 +479,14 @@ int _start()
                               distance_text_shadow_b,
                               distance_text_shadow_a);
 
-    if (gps_line_enable) {
-        RedirectCall(0x26F2F4, GPSEventHandler);
-        RedirectCall(0x239090, GPSEventHandler);
-    }
+    RedirectCall(0x26F2F4, GPSEventHandler);
+    RedirectCall(0x239090, GPSEventHandler);
 
-    if (auto_disable_target) {
-        RedirectCall(0x2437E8, autoDisableTarget);
-    }
+    RedirectCall(0x2437E8, autoDisableTarget);
     
     DrawHud = (void (*)())ReadCall(0x2471E4);
 
-    if (distance_text_enable) {
-        RedirectCall(0x2471E4, drawGPSDistance);
-    }
-
-    if(*(uint32_t*)0x26F0AC != 0 || force_circle_radar) {
-        RedirectCall(0x26F0AC, CRadar_DrawRadarMask);
-    }
+    RedirectCall(0x2471E4, drawGPSDistance);
 
     return 0;
 }

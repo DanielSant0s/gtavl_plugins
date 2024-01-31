@@ -14,33 +14,74 @@
 
 #include "hooks.h"
 
-uint16_t* CHud_m_ItemToFlash = (uint16_t*)0x66BBFC;
+extern uint16_t CHud_m_ItemToFlash;
+extern uint8_t MaxHealth;
+extern uint32_t CWorld_PlayerInFocus[];
 
-uint8_t* MaxHealth = (uint8_t*)0x70974B;
-uint32_t* CWorld_PlayerInFocus = (uint32_t*)0x7095D0;
+float CStats_GetFatAndMuscleModifier(uint32_t);
+void CSprite2d_DrawBarChart(float, float, uint16_t, uint8_t, float, char, uint8_t, uint8_t, RwRGBA*, RwRGBA*);
 
-float (*CStats_GetFatAndMuscleModifier)(unsigned int) = (float (*)(unsigned int))0x2D8C20;
-void (*CSprite2d_DrawBarChart)(float, float, unsigned short, unsigned char, float, signed char, unsigned char, unsigned char, RwRGBA*, RwRGBA*) = (void (*)(float, float, unsigned short, unsigned char, float, signed char, unsigned char, unsigned char, RwRGBA*, RwRGBA*))0x2B0B00;
+void CHud_PrintArmourForPlayer(int playerID, float posX, float posY)
+{
+    float fPercentage;
+    RwRGBA v8; 
+    RwRGBA color; 
+
+    if ( CHud_m_ItemToFlash != 3 )
+    {
+        CRGBA_CRGBA(&v8, 0, 0, 0, 255);
+        CRGBA_CRGBA(&color, 22, 76, 90, 255);
+        fPercentage = *(float *)(CWorld_PlayerInFocus[111 * playerID] + 1416);
+
+        CSprite2d_DrawBarChart(84.0f, 420.0f, 27.5f, 9.0f, fPercentage, 0, 0, 1, &color, &v8);
+    }
+}
+
+float CHud_AbilityPercent = 100.0f;
+
+void CHud_PrintBreathOrAbilityForPlayer(int playerID, float posX, float posY)
+{
+    float fPercentage;
+    RwRGBA v8; 
+    RwRGBA color; 
+    int breath_activate;
+    uint32_t ped_player;
+
+    if ( CHud_m_ItemToFlash != 10 )
+    {
+        CRGBA_CRGBA(&v8, 0, 0, 0, 255);
+
+        asm volatile("move %0, $t6" : "=r" (breath_activate));
+
+        if (breath_activate) {
+            CRGBA_CRGBA(&color, 131, 190, 217, 255);
+            ped_player = *(uint32_t*)(CWorld_PlayerInFocus[111 * playerID] + 1208);
+            fPercentage = *(float *)(ped_player + 68) / 11.52f;
+        } else {
+            CRGBA_CRGBA(&color, 244, 203, 111, 255);
+            fPercentage = CHud_AbilityPercent;
+        }
+
+
+        CSprite2d_DrawBarChart(108.0f, 420.0f, 27.5f, 9.0f, fPercentage, 0, 0, 1, &color, &v8);
+    }
+}
 
 void CHud_PrintHealthForPlayer(int playerID, float posX, float posY)
 {
-    float width;
-    float fPercentage;
     float fPercentagea;
     RwRGBA v10;
     RwRGBA color;
 
-    if (*CHud_m_ItemToFlash != 4)
+    if (CHud_m_ItemToFlash != 4)
     {
-        fPercentage = 100.0f * 109.0f;
-        width = fPercentage / CStats_GetFatAndMuscleModifier(10);
         fPercentagea = (*(float*)(CWorld_PlayerInFocus[111 * playerID] + 1408));
         CRGBA_CRGBA(&v10, 0, 0, 0, 255);
 
         if (*(float*)(CWorld_PlayerInFocus[111 * playerID] + 1408) >= 30.0f) {
             CRGBA_CRGBA(&color, 0x3e, 0x9b, 0x01, 255);
         } else {
-            if ((*CTimer_m_FrameCounter & 8) != 0) {
+            if ((CTimer_m_FrameCounter & 8) != 0) {
                 CRGBA_CRGBA(&color, 255, 0, 0, 255);
             } else {
                 CRGBA_CRGBA(&color, 128, 0, 0, 255);
@@ -48,11 +89,11 @@ void CHud_PrintHealthForPlayer(int playerID, float posX, float posY)
             
         }
 
-        CSprite2d_DrawBarChart(40.0f, 420.0f, width, 9.0f, fPercentagea, 0, 0, 1, &color, &v10);
+        CSprite2d_DrawBarChart(38.7f, 420.0f, 47.0f, 9.0f, fPercentagea, 0, 0, 1, &color, &v10);
     }
 }
 
-float* CRadar_m_radarRange = (float*)0x66B958;
+extern float CRadar_m_radarRange;
 
 static uint32_t show_msec = 0;
 static uint32_t add_msec = 0;
@@ -63,9 +104,9 @@ static bool shop_active = false;
 
 #define PlayerInfoSize 111
 
-uint32_t* DisplayedScore = (uint32_t*)0x7096B8;
-uint32_t* Score = (uint32_t*)0x7096B4;
-uint8_t* PlayerInFocus = (uint8_t*)0x66BA74;
+extern uint32_t DisplayedScore;
+extern uint32_t Score[];
+extern uint8_t PlayerInFocus;
 
 static char money_diff_str[32];
 static char money_str[32];
@@ -77,172 +118,34 @@ static RwRGBA add_color, sub_color, cur_color, shadow_color, star_slot, star_slo
 
 #define ABS(a)  (((a) < 0) ? (-(a)) : (a))
 #define isNearlyEqualF(a, b, t) (fabsf(a - b) <= t)
-#define interpF(a, b, f) a = a + (f) * (b - a)
+#define interpF(a, b, f) a + (f) * (b - a)
 #define norm(value, min, max) (((value) < (min)) ? 0 : (((value) > (max)) ? 1 : (((value) - (min)) / ((max) - (min)))))
 #define lerp(no, mi, ma) ( (no) * ((ma) - (mi)) + (mi) )
 
 #define clamp(v, low, high) ((v)<(low) ? (low) : (v)>(high) ? (high) : (v))
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
+static bool bShowAmmo;
+static int nAmmoFadeAlpha;
+static int nTimeToShowAmmoDifference;
 
-enum eWeaponState
-{
-    WEAPONSTATE_READY,
-    WEAPONSTATE_FIRING,
-    WEAPONSTATE_RELOADING,
-    WEAPONSTATE_OUT_OF_AMMO,
-    WEAPONSTATE_MELEE_MADECONTACT
-};
+bool CDarkel_FrenzyOnGoing();
 
-enum eWeaponType
-{
-	WEAPON_UNARMED = 0x0,
-	WEAPON_BRASSKNUCKLE = 0x1,
-	WEAPON_GOLFCLUB = 0x2,
-	WEAPON_NIGHTSTICK = 0x3,
-	WEAPON_KNIFE = 0x4,
-	WEAPON_BASEBALLBAT = 0x5,
-	WEAPON_SHOVEL = 0x6,
-	WEAPON_POOLCUE = 0x7,
-	WEAPON_KATANA = 0x8,
-	WEAPON_CHAINSAW = 0x9,
-	WEAPON_DILDO1 = 0xA,
-	WEAPON_DILDO2 = 0xB,
-	WEAPON_VIBE1 = 0xC,
-	WEAPON_VIBE2 = 0xD,
-	WEAPON_FLOWERS = 0xE,
-	WEAPON_CANE = 0xF,
-	WEAPON_GRENADE = 0x10,
-	WEAPON_TEARGAS = 0x11,
-	WEAPON_MOLOTOV = 0x12,
-	WEAPON_ROCKET = 0x13,
-	WEAPON_ROCKET_HS = 0x14,
-	WEAPON_FREEFALL_BOMB = 0x15,
-	WEAPON_PISTOL = 0x16,
-	WEAPON_PISTOL_SILENCED = 0x17,
-	WEAPON_DESERT_EAGLE = 0x18,
-	WEAPON_SHOTGUN = 0x19,
-	WEAPON_SAWNOFF = 0x1A,
-	WEAPON_SPAS12 = 0x1B,
-	WEAPON_MICRO_UZI = 0x1C,
-	WEAPON_MP5 = 0x1D,
-	WEAPON_AK47 = 0x1E,
-	WEAPON_M4 = 0x1F,
-	WEAPON_TEC9 = 0x20,
-	WEAPON_COUNTRYRIFLE = 0x21,
-	WEAPON_SNIPERRIFLE = 0x22,
-	WEAPON_RLAUNCHER = 0x23,
-	WEAPON_RLAUNCHER_HS = 0x24,
-	WEAPON_FTHROWER = 0x25,
-	WEAPON_MINIGUN = 0x26,
-	WEAPON_SATCHEL_CHARGE = 0x27,
-	WEAPON_DETONATOR = 0x28,
-	WEAPON_SPRAYCAN = 0x29,
-	WEAPON_EXTINGUISHER = 0x2A,
-	WEAPON_CAMERA = 0x2B,
-	WEAPON_NIGHTVISION = 0x2C,
-	WEAPON_INFRARED = 0x2D,
-	WEAPON_PARACHUTE = 0x2E,
-	WEAPON_UNUSED = 0x2F,
-	WEAPON_ARMOUR = 0x30,
-	WEAPON_FLARE = 0x3A
-};
+static RwRGBA dropfade_color;
 
-typedef struct {
-    uint32_t m_nType;
-    uint32_t m_nState;
-	unsigned int m_nAmmoInClip;
-	unsigned int m_nTotalAmmo;
-	unsigned int m_nTimeForNextShot;
-	char field_14;
-	char field_15;
-	char field_16;
-	char field_17;
-    void *m_pFxSystem; // flamethrower, spraycan, extinguisher particle
-} CWeapon;
+bool DrawAmmoEnableOverride = false;
+int *DrawAmmoOverrideAmmoQuantity = NULL;
+int *DrawAmmoOverrideClipQuantity = NULL;
 
-#define getPedActiveWeaponSlot(ped) *(uint8_t*)((uint32_t)ped + 0x758)
-#define getPedWeapons(ped) (CWeapon*)((uint32_t)ped + 0x5E0)
+void DrawAmmoSetOverride(int *ammo_qt, int *clip_qt) {
+    DrawAmmoEnableOverride = true;
+    DrawAmmoOverrideAmmoQuantity = ammo_qt;
+    DrawAmmoOverrideClipQuantity = clip_qt;
+}
 
-char (*CPed_GetWeaponSkill)(void* ped) = (char (*)(void* ped))0x19A1A0;
-
-
-#define MAX_WEAPON_INFOS 80
-#define MAX_WEAPON_NAMES 50
-
-#define WEAPONINFO_NUM_WEAPONS_WITH_SKILLS 11
-#define WEAPONINFO_NUM_WEAPONS 46
-
-enum eWeaponSkill
-{
-	WEAPSKILL_POOR,
-	WEAPSKILL_STD,
-	WEAPSKILL_PRO,
-	WEAPSKILL_COP
-};
-
-typedef struct {
-    /* some info here https://code.google.com/p/mtasa-blue/source/browse/tags/1.3.4/MTA10/game_sa/CWeaponInfoSA.h */
-    unsigned int   m_nWeaponFire; // see eWeaponFire
-    float          m_fTargetRange; // max targeting range
-    float          m_fWeaponRange; // absolute gun range / default melee attack range
-    int            m_nModelId1; // modelinfo id
-    int            m_nModelId2; // second modelinfo id
-    unsigned int   m_nSlot;
-    struct {
-        unsigned int bCanAim : 1;
-        unsigned int bAimWithArm : 1;
-        unsigned int b1stPerson : 1;
-        unsigned int bOnlyFreeAim : 1;
-        unsigned int bMoveAim : 1; // can move when aiming
-        unsigned int bMoveFire : 1; // can move when firing
-        unsigned int b06 : 1; // this bitfield is not used
-        unsigned int b07 : 1; // this bitfield is not used
-        unsigned int bThrow : 1;
-        unsigned int bHeavy : 1; // can't run fast with this weapon
-        unsigned int bContinuosFire : 1;
-        unsigned int bTwinPistol : 1;
-        unsigned int bReload : 1; // this weapon can be reloaded
-        unsigned int bCrouchFire : 1; // can reload when crouching
-        unsigned int bReload2Start : 1; // reload directly after firing
-        unsigned int bLongReload : 1;
-        unsigned int bSlowdown : 1;
-        unsigned int bRandSpeed : 1;
-        unsigned int bExpands : 1;
-    }              m_nFlags;
-	unsigned int   m_nAnimToPlay; // instead of storing pointers directly to anims, use anim association groups
-	unsigned short m_nAmmoClip; // ammo in one clip
-	unsigned short m_nDamage; // damage inflicted per hit
-	CVector        m_vecFireOffset; // offset from weapon origin to projectile starting point
-	unsigned int   m_nSkillLevel; // what's the skill level of this weapontype
-	unsigned int   m_nReqStatLevel; // what stat level is required for this skill level
-	float          m_fAccuracy; // modify accuracy of weapon
-	float          m_fMoveSpeed; // how fast can move with weapon
-	float          m_fAnimLoopStart; // start of animation loop
-	float          m_fAnimLoopEnd; // end of animation loop
-	unsigned int   m_nAnimLoopFire; // time in animation when weapon should be fired
-	unsigned int   m_nAnimLoop2Start; // start of animation2 loop
-	unsigned int   m_nAnimLoop2End; // end of animation2 loop
-	unsigned int   m_nAnimLoop2Fire; // time in animation2 when weapon should be fired
-	float          m_fBreakoutTime; // time after which player can break out of attack and run off
-	float          m_fSpeed; // speed of projectile
-	float          m_fRadius; // radius affected
-	float          m_fLifespan; // time taken for shot to dissipate
-	float          m_fSpread; // angle inside which shots are created
-	unsigned short m_nAimOffsetIndex; // index into array of aiming offsets
-	unsigned char  m_nBaseCombo; // base combo for this melee weapon
-	unsigned char  m_nNumCombos; // how many further combos are available
-} CWeaponInfo;
-
-CWeaponInfo *(*CWeaponInfo_GetWeaponInfo)(uint32_t weaponType, unsigned char skill) = (CWeaponInfo *(*)(uint32_t weaponType, unsigned char skill))0x1410B0;
-
-bool bShowAmmo;
-int nAmmoFadeAlpha;
-int nTimeToShowAmmoDifference;
-
-bool (*CDarkel_FrenzyOnGoing)() = (bool (*)())0x2D1770;
-
-RwRGBA dropfade_color;
+void DrawAmmoClearOverride() {
+    DrawAmmoEnableOverride = false;
+}
 
 void CHudNew_DrawAmmo() {
     void* playa = FindPlayerPed(0);
@@ -254,7 +157,15 @@ void CHudNew_DrawAmmo() {
     int maxAmmoInClip = CWeaponInfo_GetWeaponInfo(weapons[slot].m_nType, CPed_GetWeaponSkill(playa))->m_nAmmoClip;
     char str_ammo[16], str_clip[16];
 
-    if (maxAmmoInClip <= 1 || maxAmmoInClip >= 1000) {
+    if (DrawAmmoEnableOverride) {
+        sprintf(str_ammo, "%d", *DrawAmmoOverrideAmmoQuantity);
+        if (DrawAmmoOverrideClipQuantity) {
+            sprintf(str_clip, "%d", *DrawAmmoOverrideClipQuantity);
+        } else {
+            strcpy(str_clip, "");
+        }
+    } 
+    else if (maxAmmoInClip <= 1 || maxAmmoInClip >= 1000) {
         sprintf(str_ammo, "%d", totalAmmo);
         strcpy(str_clip, "");
     }
@@ -280,15 +191,15 @@ void CHudNew_DrawAmmo() {
     }
 
     if (bShowAmmo)
-        nAmmoFadeAlpha = (int)interpF(nAmmoFadeAlpha, 255, 0.2f * *CTimer_ms_fTimeStep);
+        nAmmoFadeAlpha = (int)interpF(nAmmoFadeAlpha, 255, 0.2f * CTimer_ms_fTimeStep);
     else
-        nAmmoFadeAlpha = (int)interpF(nAmmoFadeAlpha, 0, 0.2f * *CTimer_ms_fTimeStep);
+        nAmmoFadeAlpha = (int)interpF(nAmmoFadeAlpha, 0, 0.2f * CTimer_ms_fTimeStep);
 
     static int previousTotalAmmo;
     static int previousAmmoInClip;
-    if (previousTotalAmmo != (totalAmmo - ammoInClip) || previousAmmoInClip != ammoInClip) {
+    if (previousTotalAmmo != (totalAmmo - ammoInClip) || previousAmmoInClip != ammoInClip || DrawAmmoEnableOverride) {
         bShowAmmo = true;
-        nTimeToShowAmmoDifference = *CTimer_m_snTimeInMilliseconds + 8000;
+        nTimeToShowAmmoDifference = CTimer_m_snTimeInMilliseconds + 8000;
     }
 
     CFont_SetBackground(0, 0);
@@ -319,8 +230,15 @@ void CHudNew_DrawAmmo() {
     }
 
     // heightLerp = interpF(heightLerp, GetShiftOffsetForAmmo(), 0.4f * CTimer_ms_fTimeStep);
+    if (DrawAmmoEnableOverride) {
+        CFont_SetColor(&cur_color);
+        
+        CFont_PrintString(612.0f-(str_clip[0]? (CFont_GetStringWidth(str_clip, 1, 1) + 9.0f) : 0.0f), 30.0f + heightLerp, str_ammo);
 
-    if (CDarkel_FrenzyOnGoing()
+        CFont_SetColor(&gray_color);
+        CFont_PrintString(612.0f, 30.0f + heightLerp, str_clip);
+    }
+    else if (CDarkel_FrenzyOnGoing()
         || weaponType == WEAPON_UNARMED
         || weaponType == WEAPON_DETONATOR
         || weaponType >= WEAPON_DILDO1 && weaponType < WEAPON_GRENADE
@@ -339,7 +257,7 @@ void CHudNew_DrawAmmo() {
         CFont_PrintString(612.0f, 30.0f + heightLerp, str_clip);
     }
 
-    if (nTimeToShowAmmoDifference < *CTimer_m_snTimeInMilliseconds)
+    if (nTimeToShowAmmoDifference < CTimer_m_snTimeInMilliseconds)
         bShowAmmo = false;
 
     previousTotalAmmo = (totalAmmo - ammoInClip);
@@ -387,8 +305,8 @@ void updateMoney() {
     }
 }
 
-void (*CShopping_LoadShop)(const char* a1) = (void (*)(const char* a1))0x4F1EB0;
-void (*CShopping_RemoveLoadedShop)() = (void (*)())0x4F2410;
+void CShopping_LoadShop(const char* a1);
+void CShopping_RemoveLoadedShop();
 
 void loadShopShowMoney(const char* a1) {
     shop_active = true;
@@ -399,7 +317,6 @@ void unloadShopHideMoney() {
     shop_active = false;
     CShopping_RemoveLoadedShop();
 }
-
 
 void drawPlayerMoney() {
     CPad* pad = CPad_GetPad(0);
@@ -413,11 +330,11 @@ void drawPlayerMoney() {
     }
 
     last_money = curr_money;
-    curr_money = Score[(*PlayerInFocus) * PlayerInfoSize];
+    curr_money = Score[PlayerInFocus * PlayerInfoSize];
 
     if (last_money != curr_money) {
-        add_msec = *CTimer_m_snTimeInMilliseconds;
-        show_msec = *CTimer_m_snTimeInMilliseconds;
+        add_msec = CTimer_m_snTimeInMilliseconds;
+        show_msec = CTimer_m_snTimeInMilliseconds;
         score_set_visible = true;
         money_visible = true;
 
@@ -431,7 +348,7 @@ void drawPlayerMoney() {
     }
 
     if ( pad->NewState.DPadDown && !pad->OldState.DPadDown ) {
-        show_msec = *CTimer_m_snTimeInMilliseconds;
+        show_msec = CTimer_m_snTimeInMilliseconds;
         money_visible = true;
         updateMoney();
         
@@ -440,7 +357,7 @@ void drawPlayerMoney() {
     if ( money_visible || shop_active ) {
         setupCurrentMoneyText();
         CFont_PrintString(612.0f, money_y, money_str);
-        if (((*CTimer_m_snTimeInMilliseconds - show_msec) > 5000) && !shop_active) {
+        if (((CTimer_m_snTimeInMilliseconds - show_msec) > 5000) && !shop_active) {
             money_visible = false;
         }
     }
@@ -448,7 +365,7 @@ void drawPlayerMoney() {
     if (score_set_visible) {
         setupSetMoneyText(money_diff_str[0] == '-');
         CFont_PrintString(612.0f, money_set_y, money_diff_str);
-        if ((*CTimer_m_snTimeInMilliseconds - add_msec) > 5000) {
+        if ((CTimer_m_snTimeInMilliseconds - add_msec) > 5000) {
             score_set_visible = false;
         }
     }
@@ -486,13 +403,48 @@ void DrawWantedStars() {
         star_buf[i] = ']';
     }
 
-    if (FindPlayerWanted(-1)->m_nLastTimeWantedLevelChanged + 2000 > *CTimer_m_snTimeInMilliseconds)
-        c = (( (*CTimer_m_snTimeInMilliseconds % 600) < 300 ) ? &cur_color : &gray_color);
+    if (FindPlayerWanted(-1)->m_nLastTimeWantedLevelChanged + 2000 > CTimer_m_snTimeInMilliseconds)
+        c = (( (CTimer_m_snTimeInMilliseconds % 600) < 300 ) ? &cur_color : &gray_color);
 
     CFont_SetDropColor(&shadow_color);
     CFont_SetColor(c);
     CFont_PrintString(x, y, star_buf);
 }
+
+
+static void (*DrawHud)();
+
+static float zoom;
+
+uint32_t zoomOutTimer = 0;
+
+void updateRadarZoom() {
+    WriteWord(0x267E04, (uint16_t)zoom);
+    CRadar_m_radarRange = zoom;
+}
+
+void showVehicleAreaZOomOutMinimap() {
+    CPad* pad = CPad_GetPad(0);
+
+    if(pad->NewState.DPadDown && !pad->OldState.DPadDown) {
+        WriteDword(0x66BC14, 1);
+        WriteDword(0x66BC0C, 1500);
+        zoom = 320.0f;
+        zoomOutTimer = CTimer_m_snTimeInMilliseconds;
+    }
+
+    if ( zoom > 160.0f ) {
+        if ( CTimer_m_snTimeInMilliseconds - zoomOutTimer > 1000 ) {
+            zoom -= 10.0f;
+            if ( 160.0f > zoom ) {
+                zoom = 160.0f;
+            }
+        }
+    }
+
+    DrawHud();
+}
+
 
 void injectHUDPatches() {
     CRGBA_CRGBA(&sub_color, 220, 128, 128, 255);
@@ -520,5 +472,24 @@ void injectHUDPatches() {
 
     RedirectCall(0x2AB4B0, CHud_PrintHealthForPlayer);
     RedirectCall(0x2AB4F8, CHud_PrintHealthForPlayer); 
+
+    RedirectCall(0x2AB518, CHud_PrintArmourForPlayer);
+    RedirectCall(0x2AB55C, CHud_PrintArmourForPlayer); 
+
+    WriteDword(0x2AB688, 0x0220702D); // move $t6, $s1
+    RedirectCall(0x2AB6AC, CHud_PrintBreathOrAbilityForPlayer);
+
+    WriteDword(0x2AB6B4, 0x0200702D); // move $t6, $s0
+    RedirectCall(0x2AB6F4, CHud_PrintBreathOrAbilityForPlayer); 
+
+    zoom = 160.0f;
+    
+    DrawHud = (void (*)())ReadCall(0x2471E4);
+    RedirectCall(0x2471E4, showVehicleAreaZOomOutMinimap);
+    MakeBranch(0x267D80, 0x27);
+    MakeNop(0x267D84);
+
+    RedirectCall(0x267E20, updateRadarZoom);
+    MakeNop(0x267E24);
 
 }

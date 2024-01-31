@@ -20,8 +20,8 @@
 #undef DEBUG
 #undef STANDALONE
 
-//#define rprintf(a...) do { } while(0)
-//#define dprintf(a...) do { } while(0)
+// #define rprintf(a...) do { } while(0)
+// #define dprintf(a...) do { } while(0)
 #define rprintf(fmt, args...) printf(fmt, ## args)
 #define dprintf(fmt, args...) printf(fmt, ## args)
 
@@ -234,18 +234,54 @@ struct dependancy_t {
 
 
 /* And our global variables. */
-static struct erl_record_t * erl_record_root = 0;
+static struct erl_record_t **erl_record_root = (struct erl_record_t **)0x3940A8;
 
-static htab * global_symbols = 0;
-static htab * loosy_relocs = 0;
+static htab **loosy_relocs = (htab **)0x3940B0;
 
-static struct dependancy_t * dependancy_root = 0;
+static htab **global_symbols = (htab **)0x3940AC;
+static struct dependancy_t **dependancy_root = (struct dependancy_t **)0x3940B4;
+static reroot **symbol_recycle = (reroot **)0x3940B8;
+
+static FILE *f = (FILE *)NULL;
+static RwFileFunction* fs = (RwFileFunction *)NULL;
+
+void open_symtable_file() {
+    f = rw_open("symbols.dat", "r");
+    fs = RwOsGetFileInterface();
+}
+
+void close_symtable_file() {
+    rw_close(f);
+}
+
+unsigned int find_symtable_file(const char* sym_name) {
+    char line[256];
+    char symName[256];
+    unsigned int symAddress, ret = 0;
+
+    fs->rwfseek(f, 0, SEEK_SET);
+
+    while (fs->rwfgets(line, sizeof(line), f) != NULL) {
+        if (line[0] == '#' || line[0] == '\n' || line[0] == '\r') {
+            continue;
+        }
+
+        if (sscanf(line, "%255s %x", symName, &symAddress) == 2) {
+            if (!strcmp(sym_name, symName)) {
+                ret = symAddress;
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
 
 
 static u32 align(u32 x, int align) {
 #ifdef FORCE_ALIGN
     if (align < 16)
-	align = 16;
+	    align = 16;
 #endif
 
     align--;
@@ -285,15 +321,13 @@ static void r_destroy_loosy(struct loosy_t * l) {
     destroy_loosy(l);
 }
 
-static reroot * symbol_recycle = 0;
-
 static struct symbol_t * create_symbol(struct erl_record_t * provider, u32 address) {
     struct symbol_t * r;
 
-    if (!symbol_recycle)
-	symbol_recycle = remkroot(sizeof(struct symbol_t));
+    if (!*symbol_recycle)
+	*symbol_recycle = remkroot(sizeof(struct symbol_t));
 
-    r = (struct symbol_t *) renew(symbol_recycle);
+    r = (struct symbol_t *) renew(*symbol_recycle);
 
     r->provider = provider;
     r->address = address;
@@ -302,7 +336,7 @@ static struct symbol_t * create_symbol(struct erl_record_t * provider, u32 addre
 }
 
 static void destroy_symbol(struct symbol_t * s) {
-    redel(symbol_recycle, s);
+    redel(*symbol_recycle, s);
 }
 
 static struct erl_record_t * allocate_erl_record() {
@@ -314,10 +348,10 @@ static struct erl_record_t * allocate_erl_record() {
     r->bytes = NULL;
     r->symbols = hcreate(6);
 
-    if ((r->next = erl_record_root))
+    if ((r->next = *erl_record_root))
 	r->next->prev = r;
     r->prev = 0;
-    erl_record_root = r;
+    *erl_record_root = r;
 
     r->flags = 0;
 
@@ -340,7 +374,7 @@ static void destroy_erl_record(struct erl_record_t * erl) {
     if (erl->prev)
 	erl->prev->next = erl->next;
     else
-	erl_record_root = erl->next;
+	*erl_record_root = erl->next;
 
     if (erl->next)
 	erl->next->prev = erl->prev;
@@ -396,8 +430,8 @@ static struct symbol_t * r_find_symbol(const char * symbol, struct erl_record_t 
 }
 
 struct symbol_t * erl_find_symbol(const char * symbol) {
-    if (global_symbols) if (hfind(global_symbols, symbol, strlen(symbol))) return hstuff(global_symbols);
-    return r_find_symbol(symbol, erl_record_root);
+    if (*global_symbols) if (hfind(*global_symbols, symbol, strlen(symbol))) return hstuff(*global_symbols);
+    return r_find_symbol(symbol, *erl_record_root);
 }
 
 static struct dependancy_t * add_dependancy(struct erl_record_t * depender, struct erl_record_t * provider) {
@@ -412,11 +446,11 @@ static struct dependancy_t * add_dependancy(struct erl_record_t * depender, stru
     d->depender = depender;
     d->provider = provider;
 
-    if ((d->next = dependancy_root))
+    if ((d->next = *dependancy_root))
 	d->next->prev = d;
 
     d->prev = 0;
-    dependancy_root = d;
+    *dependancy_root = d;
 
     return d;
 }
@@ -425,7 +459,7 @@ static void destroy_dependancy(struct dependancy_t * d) {
     if (d->prev)
 	d->prev->next = d->next;
     else
-	dependancy_root = d->next;
+	*dependancy_root = d->next;
 
     if (d->next)
 	d->next->prev = d->prev;
@@ -446,7 +480,7 @@ static void r_destroy_dependancy_r(struct erl_record_t * erl, struct dependancy_
 }
 
 static void destroy_dependancy_r(struct erl_record_t * erl) {
-    r_destroy_dependancy_r(erl, dependancy_root);
+    r_destroy_dependancy_r(erl, *dependancy_root);
 }
 
 static void add_loosy(struct erl_record_t * erl, u8 * reloc, int type, const char * symbol) {
@@ -454,14 +488,14 @@ static void add_loosy(struct erl_record_t * erl, u8 * reloc, int type, const cha
 
     l = create_loosy(erl, reloc, type);
 
-    if (!loosy_relocs)
-	loosy_relocs = hcreate(6);
+    if (!*loosy_relocs)
+	*loosy_relocs = hcreate(6);
 
-    if (!hadd(loosy_relocs, symbol, strlen(symbol), l)) {
-	    l->next = hstuff(loosy_relocs);
-	    hstuff(loosy_relocs) = l;
+    if (!hadd(*loosy_relocs, symbol, strlen(symbol), l)) {
+	    l->next = hstuff(*loosy_relocs);
+	    hstuff(*loosy_relocs) = l;
     } else {
-	    hkey(loosy_relocs) = (ub1 *)strdup(symbol);
+	    hkey(*loosy_relocs) = (ub1 *)strdup(symbol);
     }
 }
 
@@ -469,18 +503,18 @@ static int fix_loosy(struct erl_record_t * provider, const char * symbol, u32 ad
     struct loosy_t * l;
     int count = 0;
 
-    if (!loosy_relocs)
+    if (!*loosy_relocs)
 	return count;
 
-    if (hfind(loosy_relocs, symbol, strlen(symbol))) {
-	for (l = hstuff(loosy_relocs); l; l = l->next) {
+    if (hfind(*loosy_relocs, symbol, strlen(symbol))) {
+	for (l = hstuff(*loosy_relocs); l; l = l->next) {
 	    apply_reloc(l->reloc, l->type, address);
 	    add_dependancy(l->erl, provider);
 	    count++;
 	}
-	r_destroy_loosy(hstuff(loosy_relocs));
-	free(hkey(loosy_relocs));
-	hdel(loosy_relocs);
+	r_destroy_loosy(hstuff(*loosy_relocs));
+	free(hkey(*loosy_relocs));
+	hdel(*loosy_relocs);
     }
 
     return count;
@@ -502,9 +536,9 @@ static int add_symbol(struct erl_record_t * erl, const char * symbol, u32 addres
     if (erl) {
 	symbols = erl->symbols;
     } else {
-	if (!global_symbols)
-	    global_symbols = hcreate(6);
-	symbols = global_symbols;
+	if (!*global_symbols)
+	    *global_symbols = hcreate(6);
+	symbols = *global_symbols;
     }
 
     if (!is_local(symbol) && erl_find_symbol(symbol))
@@ -539,6 +573,7 @@ static int read_erl(FILE* elf_handle, u8 * elf_mem, u32 addr, struct erl_record_
     u32 fullsize = 0;
     struct erl_record_t * erl_record = 0;
     struct symbol_t * s;
+    u32 symbol_address;
 
     *p_erl_record = 0;
 
@@ -614,7 +649,7 @@ return code
         if (!(sec = (struct elf_section_t *) malloc(sizeof(struct elf_section_t) * head.e_shnum))) {
     	    dprintf("Not enough memory.\n");
 	        free_and_return(-1);
-	}
+	    }
 	    rw_seek(elf_handle, head.e_shoff, SEEK_SET);
         rw_read(elf_handle, sec, sizeof(struct elf_section_t) * head.e_shnum);
     }
@@ -796,7 +831,13 @@ return code
 	    switch(sym[sym_n].st_info & 15) {
 	    case NOTYPE:
 		    rprintf("external symbol reloc to symbol %s\n", strtab_names + sym[sym_n].st_name);
-		    if (!(s = erl_find_symbol(strtab_names + sym[sym_n].st_name))) {
+            if ((symbol_address = find_symtable_file(strtab_names + sym[sym_n].st_name))) {
+                printf("Found symbol at symbol table file. Address: %08X\n", symbol_address);
+                if (apply_reloc(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, symbol_address) < 0) {
+		    	    printf("Something went wrong in relocation.");
+		    	    free_and_return(-1);
+		        }
+            } else if (!(s = erl_find_symbol(strtab_names + sym[sym_n].st_name))) {
                 if(strcmp(strtab_names + sym[sym_n].st_name, "_Jv_RegisterClasses") != 0){
 		            printf("%s: Symbol not found, adding as loosy relocation.\n", strtab_names + sym[sym_n].st_name);
 		            add_loosy(erl_record, erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, strtab_names + sym[sym_n].st_name);
@@ -821,11 +862,17 @@ return code
 	    case OBJECT:
 	    case FUNC:
 		    rprintf("internal relocation to symbol %s\n", strtab_names + sym[sym_n].st_name);
-		    if ((s = erl_find_symbol(strtab_names + sym[sym_n].st_name))) {
+            if ((symbol_address = find_symtable_file(strtab_names + sym[sym_n].st_name))) {
+                printf("Found symbol at symbol table file. Address: %08X\n", symbol_address);
+                if (apply_reloc(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, symbol_address) < 0) {
+		    	    printf("Something went wrong in relocation.");
+		    	    free_and_return(-1);
+		        }
+            } else if ((s = erl_find_symbol(strtab_names + sym[sym_n].st_name))) {
 		        dprintf("Symbol alrw_ready exists at %08X. Let's use it instead.\n", s->address);
 		        if (apply_reloc(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, s->address) < 0) {
-		    	dprintf("Something went wrong in relocation.");
-		    	free_and_return(-1);
+		    	    dprintf("Something went wrong in relocation.");
+		    	    free_and_return(-1);
 		        }
 		        add_dependancy(erl_record, s->provider);
 		    } else {
@@ -889,34 +936,21 @@ static struct erl_record_t * _init_load_erl_wrapper_from_file(char * erl_id) {
 
 erl_loader_t _init_load_erl = _init_load_erl_wrapper_from_file;
 
-struct erl_record_t * load_plugin(const char * fname, char * erl_id) {
-    char * argv[2];
-
-    if (erl_id) {
-        struct erl_record_t * r;
-        if ((r = find_erl(erl_id)))
-    	    return r;
-    }
-
-    argv[0] = erl_id;
-    argv[1] = 0;
-
-    return load_erl(fname, 0, ERL_DYN_ADDR, 1, argv);
-}
-
 static struct erl_record_t * load_erl(const char * fname, u8 * elf_mem, u32 addr, int argc, char ** argv) {
     struct erl_record_t * r;
     struct symbol_t * s;
     FILE* elf_handle;
 
-    dprintf("Reding ERL file.\n");
+    dprintf("Reading ERL file.\n");
 
     if (fname) {
         if ((elf_handle = rw_open(fname, "rb")) < 0) {
     	    dprintf("Error operning erl file: %s\n", fname);
-	    return 0;
-	}
+	        return 0;
+	    }
     }
+
+    open_symtable_file();
 
     if (read_erl(elf_handle, elf_mem, addr, &r) < 0) {
 	    dprintf("Error loading erl file.\n");
@@ -929,6 +963,8 @@ static struct erl_record_t * load_erl(const char * fname, u8 * elf_mem, u32 addr
     if (fname) {
 	    rw_close(elf_handle);
     }
+
+    close_symtable_file();
 
 	if ((s = erl_find_local_symbol("erl_id", r))) {
 		r->name = *(char **) s->address;
@@ -955,22 +991,22 @@ static struct erl_record_t * load_erl(const char * fname, u8 * elf_mem, u32 addr
     }
 
     if ((s = erl_find_local_symbol("_init", r))) {
-	dprintf("_init = %08X\n", s->address);
-
+	    dprintf("_init = %08X\n", s->address);
         ((func_t)s->address)();
     }
 
     if ((s = erl_find_local_symbol("_start", r))) {
-	dprintf("_start = %08X\n", s->address);
+	    dprintf("_start = %08X\n", s->address);
 
         int _start_ret;     
         if ((_start_ret = ((start_t)s->address)(argc, argv))) {
-	    dprintf("Module's _start returned %i, unloading module.\n", _start_ret);
-	    if (unload_erl(r))
-		return 0;
-	}
-
+	        dprintf("Module's _start returned %i, unloading module.\n", _start_ret);
+	        if (unload_erl(r))
+		        return 0;
+	    }
     }
+
+    dprintf("Total memory allocated for plugins: %d bytes\n", *PluginUsedMemory);
 
     return r;
 }
@@ -997,7 +1033,7 @@ int unload_erl(struct erl_record_t * erl) {
 	    return 0;
     }
 
-    for (p = dependancy_root; p; p = p->next) {
+    for (p = *dependancy_root; p; p = p->next) {
 	    if (p->provider == erl) {
 	        dprintf("Other modules depend on it, won't unload.\n");
 	        return 0;
@@ -1025,7 +1061,7 @@ int unload_erl(struct erl_record_t * erl) {
 struct erl_record_t * erl_resolve(u32 address) {
     struct erl_record_t * r;
 
-    for (r = erl_record_root; r; r = r->next) {
+    for (r = *erl_record_root; r; r = r->next) {
 	u32 r_ptr = (u32) r->bytes;
 	if ((address >= r_ptr) && (address < (r_ptr + r->fullsize)))
 	    return r;
@@ -1037,7 +1073,7 @@ struct erl_record_t * erl_resolve(u32 address) {
 struct erl_record_t * find_erl(const char * name) {
     struct erl_record_t * r;
 
-    for (r = erl_record_root; r; r = r->next) {
+    for (r = *erl_record_root; r; r = r->next) {
 	if (r->name)
 	    if (!strcmp(name, r->name))
 		return r;
@@ -1060,3 +1096,19 @@ void erl_flush_symbols(struct erl_record_t * erl) {
 
     erl->symbols = 0;
 }
+
+struct erl_record_t * load_plugin(const char * fname, char * erl_id) {
+    char * argv[2];
+
+    if (erl_id) {
+        struct erl_record_t * r;
+        if ((r = find_erl(erl_id)))
+    	    return r;
+    }
+
+    argv[0] = erl_id;
+    argv[1] = 0;
+
+    return load_erl(fname, 0, ERL_DYN_ADDR, 1, argv);
+}
+

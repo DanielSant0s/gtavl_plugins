@@ -1,24 +1,43 @@
+# kernel
+FlushCache 0x53BA20
+
+# misc
+rw_open 0x233210
+rw_read 0x233250
+rw_seek 0x2332B0
+rw_close 0x233370
+loadLine 0x3C70A0
+setDirectory 0x2330B0
+
 # math
 sinf 0x53B178
 cosf 0x53AE48
 atan2f 0x53B338
 floorf 0x53AF48
-powf 0x00537468
+powf 0x537468
 rand 0x550248
+__extendsfdf2 0x531140
 
 # sifdev
 sceSifLoadModule 0x5449A0
+sceDopen 0x542388
+sceDclose 0x542450
+sceDread 0x5425B8
+sceRemove 0x542B18
+sceMkdir 0x541DE0
+sceRmdir 0x541F98
 
 open 0x540B28
 close 0x540DB8
-lseek 0x00540F30
-read 0x00541170
-write 0x005413E0
-chdir 0x00542D20
+lseek 0x540F30
+read 0x541170
+write 0x5413E0
+chdir 0x542D20
 
 # stdio
+scePrintf 0x54F7D0
 printf 0x54F7D0
-sprintf 0x00550F10
+sprintf 0x550F10
 sscanf 0x550FA8
 
 fopen 0x54C218
@@ -34,22 +53,24 @@ fexist 0x3332C8
 fclose 0x54BA80
 
 # stdlib
-malloc 0x001005E0
-free 0x00100780
+malloc 0x1005E0
+free 0x100780
+_Znwj 0x1005E0
+_ZdlPv 0x100780
 
 atof 0x54A340
 atoi 0x54A358
 dptofp 0x531D78
 
 # string
-memset 0x0054E568
-memcpy 0x0054E3B0
-memcmp 0x0054E318
-strlen 0x005517B8
-strcmp 0x00551558
-strcpy 0x005516A0
-strcat 0x00551298
-strncpy 0x00551D80
+memset 0x54E568
+memcpy 0x54E3B0
+memcmp 0x54E318
+strlen 0x5517B8
+strcmp 0x551558
+strcpy 0x5516A0
+strcat 0x551298
+strncpy 0x551D80
 strncmp 0x551BC8
 strcasecmp 0x5511C0
 strtok 0x552F80
@@ -64,16 +85,16 @@ TheCamera 0x6FE530
 # CFont
 CFont_SetOrientation 0x2A8C50
 CFont_SetColor 0x2A8900
-CFont_SetBackground 0x002A8BE0
-CFont_SetWrapx 0x002A8A60
-CFont_SetScale 0x002A8800
-CFont_SetFontStyle 0x002A89F0
-CFont_SetProportional 0x002A8BD0
-CFont_SetDropShadowPosition 0x002A8B90
-CFont_SetDropColor 0x002A8AA0
+CFont_SetBackground 0x2A8BE0
+CFont_SetWrapx 0x2A8A60
+CFont_SetScale 0x2A8800
+CFont_SetFontStyle 0x2A89F0
+CFont_SetProportional 0x2A8BD0
+CFont_SetDropShadowPosition 0x2A8B90
+CFont_SetDropColor 0x2A8AA0
 CFont_PrintString 0x2A6E20
-CFont_SetJustify 0x002A8C40
-CFont_SetEdge 0x002A8BB0
+CFont_SetJustify 0x2A8C40
+CFont_SetEdge 0x2A8BB0
 
 CFont_GetStringWidth 0x2A78A0
 
@@ -82,6 +103,7 @@ CFont_GetTextRect 0x2A7720
 # CPad 
 CPad_GetPad 0x248E70
 CPad_UpdatePads 0x247940
+CPad_GetLastTouched 0x247720
 
 # CRadar
 CRadar_ms_RadarTrace 0x701F00
@@ -91,9 +113,9 @@ CRadar_ChangeBlipScale 0x26BD30
 CRadar_ChangeBlipDisplay 0x26BDE0
 CRadar_DrawRotatingRadarSprite 0x26D000
 CRadar_TransformRealWorldPointToRadarSpace 0x26AEC0
-CRadar_TransformRadarPointToScreenSpace 0x0026AE00
-CRadar_LimitRadarPoint 0x0026ABA0
-CRadar_LimitToMap 0x0026AC30
+CRadar_TransformRadarPointToScreenSpace 0x26AE00
+CRadar_LimitRadarPoint 0x26ABA0
+CRadar_LimitToMap 0x26AC30
 drawRadarMap 0x26F090
 changeBlipColour 0x26BA30
 CRadar_ClearBlip 0x26B9A0
@@ -103,7 +125,7 @@ RadarOrigin 0x66B950
 CRGBA_CRGBA 0x02A53C0
 
 # CTexture
-CSprite2D_SetTexture 0x2B07A0
+CSprite2d_SetTexture 0x2B07A0
 CSprite2d_Delete 0x2B0750
 CSprite2d_Draw 0x2B09D0
 CSprite2d_DrawSprite 0x2B08D0
@@ -142,6 +164,7 @@ RwRasterCreate 0x342DA0
 RwRasterDestroy 0x342EA0
 RwRasterSubRaster 0x342F78
 RwRasterLock 0x3432F0
+RwRasterLockPalette 0x343370
 RwRasterUnlock 0x343330
 RwTextureCreate 0x346418
 RwTextureDestroy 0x3464A0
@@ -192,6 +215,10 @@ currentMode 0x66C228
 RpSkySuspend 0x35AB38
 sceGsSetDefDBuffDc 0x548620
 
+RwCameraClear 0x33D8A0
+
+CSprite2d_SetAddressing 0x2B0840
+
 # common
 FindPlayerWanted 0x264080
 IsPlayer 0x19CC40
@@ -208,7 +235,7 @@ FrontEndMenuManager 0x6FF940
 
 CEntity_GetColModel 0x232B50
 
-CTimer_m_snTimeInMilliseconds 0x0066BA14
+CTimer_m_snTimeInMilliseconds 0x66BA14
 CTimer_m_FrameCounter 0x66BA38
 CTimer_ms_fTimeStep 0x66BA30
 CTimer_ms_fTimeScale 0x66BA28
@@ -218,3 +245,212 @@ CGame_currArea 0x66B868
 CWeather_Wind 0x66BD64
 CBulletTrace_aTraces 0x8171F0
 CCoronas_RegisterCorona 0x299380
+
+CModelInfo_ms_modelInfoPtrs 0x7A8780
+
+CVehicle_SetWindowOpenFlag 0x176DC0
+CVehicle_ClearWindowOpenFlag 0x176E00
+
+CStreaming_ms_memoryAvailable 0x666E08
+
+CStreaming_ms_memoryUsed 0x66BE0C
+
+CWorld_FindGroundZForCoord 0x2869C0
+CRadar_ms_RadarTrace 0x701F00
+FrontEndMenuManager_m_nTargetBlipi 0x6FF970
+
+load_code_overlay 0x3C6990
+unload_code_overlay 0x3C6AA0
+
+load_plugin 0x8902C0
+unload_erl 0x890038
+erl_find_local_symbol 0x88DFF8
+erl_find_symbol 0x88E0D8
+
+missionLocals 0x6F3AC0
+
+CStreaming_IHaveUsedStreamingMemory 0x2C7420
+CStreaming_ImGonnaUseStreamingMemory 0x2C7410
+CStreaming_MakeSpaceFor 0x2C5670
+CGame_TidyUpMemory 0x244530
+
+CTheScripts_GetActualScriptThingIndex 0x316340
+CTheScripts_ScriptSpace 0x6B1FF0
+CTheScripts_FailCurrentMission 0x66B564
+_StyledText_2 0x7C2910
+CCutsceneMgr_IsCutsceneSkipButtonBeingPressed 0x304860
+CRunningScript_DoDeatharrestCheck 0x30A7F0
+CTheScripts_ReinitialiseSwitchStatementData 0x5008F0
+CTaskManager_GetSimplestActiveTask 0x45FAE0
+opcodeHandlerTable 0x5F91C0
+opcodeParams 0x6FDFB0
+SetScriptParams 0x1F7D20
+GetScriptParams 0x1F77D0
+GetScriptStringParam 0x1F7200
+GetScriptParamPointer 0x1F8300
+SetScriptCondResult 0x3077F0
+PrintHelp 0x2A9170
+PrintBig 0x18BCD0
+Print 0x18B570
+PrintNow 0x18B8B0
+pedPool 0x66B918
+vehPool 0x66B91C
+objPool 0x66B924
+GetPedStruct 0x1FFBB0
+GetVehStruct 0x1FFB70
+GetObjStruct 0x1FFB30
+GetPedHandle 0x19FA20
+GetVehHandle 0x17EF20
+GetObjHandle 0x132CC0
+CText_Get 0x18ED90
+gameTexts 0x69F290
+
+CPostEffects_ColourFilter 0x519F70
+CPostEffects_InfraredVision 0x5162B0
+CPostEffects_Grain 0x51A7E0
+CPostEffects_Radiosity 0x517A90
+
+CDraw_ms_fFOV 0x664B80
+
+CHud_m_ItemToFlash 0x66BBFC
+MaxHealth 0x70974B
+CWorld_PlayerInFocus 0x7095D0
+
+CStats_GetFatAndMuscleModifier 0x2D8C20
+CSprite2d_DrawBarChart 0x2B0B00
+
+CRadar_m_radarRange 0x66B958
+
+DisplayedScore 0x7096B8
+Score 0x7096B4
+PlayerInFocus 0x66BA74
+
+CPed_GetWeaponSkill 0x19A1A0
+CWeaponInfo_GetWeaponInfo 0x1410B0
+CDarkel_FrenzyOnGoing 0x2D1770
+CShopping_LoadShop 0x4F1EB0
+CShopping_RemoveLoadedShop 0x4F2410
+
+CLoadingScreen_Shutdown 0x5925D0
+RsTimer 0x5931F0
+
+fPercentage 0x66CACC
+CLoadingScreen_m_bReadyToDelete 0x66CADC
+CLoadingScreen_m_bLegalScreen 0x66CAB0
+CLoadingScreen_m_currDisplayedSplash 0x668C90
+CLoadingScreen_m_bFadeOutCurrSplashToBlack 0x66CAB8
+CLoadingScreen_m_bFading 0x66CAAC
+CLoadingScreen_m_FadeAlpha 0x66CABC
+CLoadingScreen_m_bFadeInNextSplashFromBlack 0x66CAB4
+CLoadingScreen_StartFading 0x5931C0
+
+flt_66CAC0 0x66CAC0
+flt_66CAD0 0x66CAD0
+flt_66CAD4 0x66CAD4
+
+byte_66CAD8 0x66CAD8
+
+CLoadingScreen_DisplayNextSplash 0x592D10
+AudioEngine 0x889C80
+CAudioEngine_ServiceLoadingTune 0x580920
+
+TheText 0x69F290
+
+CSprite2d_DrawRect 0x2B2090
+CSprite2d_DrawTextureRect 0x2B0960
+MenuInUse 0x66C848
+CMessages_InsertNumberInString 0x18C470
+CMenuSystem_CreateNewMenu 0x52BF80
+CMenuSystem_SwitchOffMenu 0x52C340
+Render2dStuff 0x246F60
+Render2dStuffAfterFade 0x247270
+CPlantMgr_Render 0x489380
+CPed_PreRenderAfterTest 0x19A740
+CRadar_DrawBlips 0x268080
+CWanted_SetPursuitCop 0x27D7E0
+CGeneral_LimitRadianAngle 0x245130
+CAudioEngine_GetCutsceneTrackStatus 0x581300
+CAEVehicleAudioEntity_StaticGetPlayerVehicleAudioSettingsForRadio 0x56F160
+CAERadioTrackManager_StopRadio 0x5653B0
+CAudioEngine_ReportFrontendAudioEvent 0x580D70
+CAERadioTrackManager_StartRadio 0x564FC0
+CAERadioTrackManager_DisplayRadioStationName 0x565E00
+RightStickSensValue 0x665204
+dword_7C3298 0x7C3298
+CHud_m_VehicleState 0x66BC58
+CHud_m_ZoneState 0x66BC14
+_StyledText_3 0x7C2990
+CPostEffects_m_bGrainEnable 0x66C70C
+grainLevel 0x6684E4
+displayHUD 0x6FF965
+radarMode 0x6FF968
+CHud_DrawGangOverlay 0x26E830
+FrontEndMenuManager_m_nTargetBlipIndex 0x6FF970
+PreRenderWater 0x182130
+CPathFind_DoPathSearch 0x1E5930
+ThePaths 0x6A6180
+CTheScripts_IsPlayerOnAMission 0x1FA3E0
+CSprite2d_SetMaskVertices 0x2B1FD0
+CSprite2d_maVertices 0x7C32F0
+skyRasterExt 0x66C208
+skyFrame_1 0x667928
+_rwDMAWaitQueue 0x34FA18
+skyZbuf_1 0x667920
+
+CTaskSimpleDie_Constructor 0x419400
+CTaskSimpleDie_Constructor0 0x4194B0
+CTaskSimpleDie_Constructor1 0x419590
+
+CCamera__setZoomFactors 0x226AF0
+
+CShadows_StoreShadowToBeRenderedSingle 0x1141D0
+CShadows_AddPermanentShadow 0x113560
+
+CShadows_pEmptyBunchList 0x66B234
+
+ShadowIndexList 0x685500
+
+CSimpleTransform_UpdateMatrix 0x25FAC0
+CPlaceable_AllocateMatrix 0x260090
+
+gFireManager 0x7C09B0
+
+StartFireEntity 0x29D310
+GetNumFiresInRange 0x29F500
+CWeapon_Fire 0x133AE0
+CCamera_Find3rdPersonCamTargetVector 0x21AA90
+CPed_Render 0x19B990
+
+RwStreamOpen 0x337F40
+RwStreamClose 0x337FF0
+RwStreamRead 0x337A48
+RwStreamFindChunk 0x3329D8
+RpClumpStreamRead 0x378628
+ClumpGetFirstAtomic 0x1106C0
+AtomicDefaultRenderCallBack 0x379088
+
+RwFrameRotate 0x33F110
+RwFrameScale 0x33F018
+RwV3dTransformPoints 0x339020
+RwFrameUpdateObjects 0x33F880
+RpClumpRender 0x379388
+GetAnimHierarchyFromSkinClump 0x110C80
+RpHAnimHierarchyGetMatrixArray 0x39E520
+RpHAnimIDGetIndex 0x39E528
+
+RwFrameTranslate 0x33F090
+RwFrameSetIdentity 0x33F310
+
+CEntity_Render 0x231360
+
+RwMatrixTranslate 0x334E70
+RwMatrixRotate 0x3353C8
+RwMatrixUpdate 0x3354E0
+RwFrameTransform 0x33F210
+
+RpClumpDestroy 0x377BA0
+CGameLogic_GameState 0x66BBA4
+
+ms_apProjectile 0x687020
+gaProjectileInfo 0x686BA0
+srand 0x550230

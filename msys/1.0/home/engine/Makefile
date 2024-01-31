@@ -11,26 +11,13 @@
 EE_LIB = engine.a
 
 EE_STDLIB = plugin_ps2/src/math.o \
-		    plugin_ps2/src/stdio.o \
-		    plugin_ps2/src/sifdev.o \
-		    plugin_ps2/src/stdlib.o \
 		    plugin_ps2/src/string.o \
 		    plugin_ps2/src/injector.o \
 			plugin_ps2/src/main.o
 
 EE_SALIB = plugin_sa/src/common.o \
 		   plugin_sa/src/CVector.o \
-		   plugin_sa/src/CVehicle.o \
-		   plugin_sa/src/CTexture.o \
-		   plugin_sa/src/CPad.o \
-		   plugin_sa/src/CTxdStore.o \
-		   plugin_sa/src/CRadar.o \
-		   plugin_sa/src/CRGBA.o \
-		   plugin_sa/src/CFont.o \
-		   plugin_sa/src/CCam.o \
-		   plugin_sa/src/rwcore.o
-
-#EE_READINI = readini/src/readini.o
+		   plugin_sa/src/CVehicle.o 
 
 EE_RWSE  = rw_se/src/secore.o 
 

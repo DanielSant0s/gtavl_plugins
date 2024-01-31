@@ -1,62 +1,10 @@
 #include <injector.h>
 #include <CCam.h>
+#include <CPad.h>
 #include <stdio.h>
+#include <math.h>
 #include <common.h>
 #include "hooks.h"
-
-enum eWeaponType
-{
-	WEAPON_UNARMED = 0x0,
-	WEAPON_BRASSKNUCKLE = 0x1,
-	WEAPON_GOLFCLUB = 0x2,
-	WEAPON_NIGHTSTICK = 0x3,
-	WEAPON_KNIFE = 0x4,
-	WEAPON_BASEBALLBAT = 0x5,
-	WEAPON_SHOVEL = 0x6,
-	WEAPON_POOLCUE = 0x7,
-	WEAPON_KATANA = 0x8,
-	WEAPON_CHAINSAW = 0x9,
-	WEAPON_DILDO1 = 0xA,
-	WEAPON_DILDO2 = 0xB,
-	WEAPON_VIBE1 = 0xC,
-	WEAPON_VIBE2 = 0xD,
-	WEAPON_FLOWERS = 0xE,
-	WEAPON_CANE = 0xF,
-	WEAPON_GRENADE = 0x10,
-	WEAPON_TEARGAS = 0x11,
-	WEAPON_MOLOTOV = 0x12,
-	WEAPON_ROCKET = 0x13,
-	WEAPON_ROCKET_HS = 0x14,
-	WEAPON_FREEFALL_BOMB = 0x15,
-	WEAPON_PISTOL = 0x16,
-	WEAPON_PISTOL_SILENCED = 0x17,
-	WEAPON_DESERT_EAGLE = 0x18,
-	WEAPON_SHOTGUN = 0x19,
-	WEAPON_SAWNOFF = 0x1A,
-	WEAPON_SPAS12 = 0x1B,
-	WEAPON_MICRO_UZI = 0x1C,
-	WEAPON_MP5 = 0x1D,
-	WEAPON_AK47 = 0x1E,
-	WEAPON_M4 = 0x1F,
-	WEAPON_TEC9 = 0x20,
-	WEAPON_COUNTRYRIFLE = 0x21,
-	WEAPON_SNIPERRIFLE = 0x22,
-	WEAPON_RLAUNCHER = 0x23,
-	WEAPON_RLAUNCHER_HS = 0x24,
-	WEAPON_FTHROWER = 0x25,
-	WEAPON_MINIGUN = 0x26,
-	WEAPON_SATCHEL_CHARGE = 0x27,
-	WEAPON_DETONATOR = 0x28,
-	WEAPON_SPRAYCAN = 0x29,
-	WEAPON_EXTINGUISHER = 0x2A,
-	WEAPON_CAMERA = 0x2B,
-	WEAPON_NIGHTVISION = 0x2C,
-	WEAPON_INFRARED = 0x2D,
-	WEAPON_PARACHUTE = 0x2E,
-	WEAPON_UNUSED = 0x2F,
-	WEAPON_ARMOUR = 0x30,
-	WEAPON_FLARE = 0x3A
-};
 
 enum eWeaponAimOffset {
     AIM_OFFSET_WEAPON_DEFAULT,
@@ -74,7 +22,8 @@ enum eWeaponAimOffset {
     AIM_OFFSET_WEAPON_CUNTGUN,
     AIM_OFFSET_WEAPON_ROCKETLA,
     AIM_OFFSET_WEAPON_HEATSEEK,
-    AIM_OFFSET_WEAPON_FLAME
+    AIM_OFFSET_WEAPON_FLAME,
+    AIM_OFFSET_WEAPON_GRENADE
 };
 
 typedef struct {
@@ -82,7 +31,7 @@ typedef struct {
 } tAimingCamData;
 
 static tAimingCamData gData[4];
-static CVector gOffsets[16];
+static CVector gOffsets[17] = { };
 
 void Process_AdvancedAimWeapon(uint32_t cam, CVector *vec, float arg3, float arg4, float arg5) {
     uint32_t playa = FindPlayerPed(-1);
@@ -130,33 +79,237 @@ void Process_AdvancedAimWeapon(uint32_t cam, CVector *vec, float arg3, float arg
             case WEAPON_COUNTRYRIFLE:
                 aimTypeId = AIM_OFFSET_WEAPON_CUNTGUN;
                 break;
-            case WEAPON_ROCKET:
+            case WEAPON_RLAUNCHER:
                 aimTypeId = AIM_OFFSET_WEAPON_ROCKETLA;
                 break;
-            case WEAPON_ROCKET_HS:
+            case WEAPON_RLAUNCHER_HS:
                 aimTypeId = AIM_OFFSET_WEAPON_HEATSEEK;
                 break;
             case WEAPON_FTHROWER:
                 aimTypeId = AIM_OFFSET_WEAPON_FLAME;
                 break;
+            case WEAPON_GRENADE:
+            case WEAPON_TEARGAS:
+            case WEAPON_MOLOTOV:
+            case WEAPON_SATCHEL_CHARGE:
+                aimTypeId = AIM_OFFSET_WEAPON_GRENADE;
+                break;
         }
         if (aimTypeId != -1) {
-            CVector offset = gOffsets[aimTypeId];
-            obj_space = TransformFromObjectSpace(playa, offset);
+            obj_space = TransformFromObjectSpace(playa, gOffsets[aimTypeId]);
             CCam_Process_AimWeapon(cam, &obj_space, arg3, arg4, arg5);
-        }
-        else
+        } else {
             CCam_Process_FollowPed_SA(cam, vec, arg3, arg4, arg5, 0);
+        }
     }
     else
         CCam_Process_AimWeapon(cam, vec, arg3, arg4, arg5);
 }
 
+float WeaponAimZoomSpeed = 4.0f;
+
+void AdjustTimeStep() {
+    uint32_t a1;
+    float weapon_zoom;
+
+    asm("move %0, $s4" : "=r" (a1)); // get from our parent function
+    asm("mfc1 %0, $f3" : "=r" (*(uint32_t*)&weapon_zoom));
+
+    float v17 = *(float *)(a1 + 180);
+    if ( weapon_zoom <= (float)(v17 + CTimer_ms_fTimeStep) )
+    {
+        if ( weapon_zoom >= (float)(v17 - CTimer_ms_fTimeStep) )
+            *(float *)(a1 + 180) = weapon_zoom;
+        else
+            *(float *)(a1 + 180) = v17 - (CTimer_ms_fTimeStep*WeaponAimZoomSpeed);
+    }
+    else
+    {
+        *(float *)(a1 + 180) = v17 + (CTimer_ms_fTimeStep*4.0f);
+    }
+}
+
+
+
+float (*CGeneral_GetATanOfXY)(float x, float y) = (float (*)(float x, float y))0x245200;
+
+static float mymodf(float numerator, float denominator) {
+    float quotient = numerator / denominator;
+    float integer_part = (quotient >= 0.0f) ? (int)quotient : (int)(quotient - 1);
+    float remainder = numerator - integer_part * denominator;
+
+    return remainder;
+}
+inline float invert_angle(float angle) {
+    angle = mymodf(angle, 134.0f);
+    float inverted_angle = mymodf(134.0f - angle, 134.0f);
+
+    return inverted_angle;
+}
+
+char CWeapon_Fire(void *this, CEntity *owner, CVector *vecOrigin, CVector *vecEffectPosn, CEntity *targetEntity, CVector *vecTarget, CVector *arg_14);
+
+void CCamera_Find3rdPersonCamTargetVector(CCamera *this, float dist, CVector* pos, CVector *unkVec, CVector *output);
+
+static CVector PlayerTargettedVector = {};
+static CVector UnkVector = {};
+
+static void (*Multiply3x3)(CVector *out, CMatrix *m, CVector *in) = (void (*)(CVector *out, CMatrix *m, CVector *in))0x1100D0;
+
+#define clamp(v, low, high) ((v)<(low) ? (low) : (v)>(high) ? (high) : (v))
+
+static float fastExp4(register float x)  // quartic spline approximation
+{
+    union { float f; int32_t i; } reinterpreter;
+
+    reinterpreter.i = (int32_t)(12102203.0f*x) + 127*(1 << 23);
+    int32_t m = (reinterpreter.i >> 7) & 0xFFFF;  // copy mantissa
+    // empirical values for small maximum relative error (1.21e-5):
+    reinterpreter.i += (((((((((((3537*m) >> 16)
+        + 13668)*m) >> 18) + 15817)*m) >> 14) - 80470)*m) >> 11);
+    return reinterpreter.f;
+}
+
+static float expClamp(float valor, float max, float ln) {
+    float result = fastExp4(clamp(valor, 0.0f, 1.0f) * ln) - 1.0f;
+    return clamp(result, 0.0f, max);
+}
+
+
+bool crosshair_defined = false;
+
+void ThrowProjectileControl() {
+    uint32_t a1, a2;
+    asm("move %0, $s2" : "=r" (a1)); // get from our parent function
+    asm("move %0, $s1" : "=r" (a2)); // get from our parent function
+
+    if (a2 == FindPlayerPed(-1)) {
+	    CMatrix *matrix = TheCamera.placeable.m_matrix;
+	    float x = matrix->up.x;
+	    float y = matrix->up.y;
+	    float z = matrix->up.z;
+	    float angle = CGeneral_GetATanOfXY(z, sqrtf(x * x + y * y)) * 57.295776f - 41.0f;
+	    while (angle < 0.0f)
+	    	angle += 360.0f;
+
+        float final = (invert_angle(angle) / 5.0f);
+        final = final > 15.0f? final : expClamp(final/26.0f, 35.0f, 3.55535f);
+        final = final < 15.6f? final : expClamp(final/26.0f, 100.0f, 4.60517f);
+        int slot = getPedActiveWeaponSlot(a2);
+        CWeapon* weapons = getPedWeapons(a2);
+        int weaponType = weapons[slot].m_nType;
+
+        if (  weaponType == WEAPON_SATCHEL_CHARGE ) 
+            final *= 2.5f;
+
+        CEntity* v22 = (CEntity*)FindPlayerPed(-1);
+        CVector in = { -0.2f, 0.0f, 0.3f };
+        CVector posn = { };
+        CVector v24 = { };
+        CVector *v28;
+
+        Multiply3x3(&v24, v22->placeable.m_matrix, &in);
+
+        posn.x = v24.x;
+        posn.y = v24.y;
+        posn.z = v24.z;
+
+        if ( v22->placeable.m_matrix )
+          v28 = &v22->placeable.m_matrix->pos;
+        else
+          v28 = &v22->placeable.placement.m_vPosn;
+
+        posn.x += v28->x;
+        posn.y += v28->y;
+        posn.z += v28->z;
+        CCamera_Find3rdPersonCamTargetVector(&TheCamera, final, &posn, &UnkVector, &PlayerTargettedVector);
+    } else {
+        *(float *)(*(uint32_t *)(a2 + 1208) + 44) = (float)(50.0f * (float)*(int *)(a1 + 32)) / 1000.0f;
+    }
+
+}
+
+char CWeapon_CustomTargetFire(void *this, CEntity *owner, CVector *vecOrigin, CVector *vecEffectPosn, CEntity *targetEntity, CVector *vecTarget, CVector *arg_14) {
+    if (owner == FindPlayerPed(-1)) {
+        CWeapon_Fire(this, owner, vecOrigin, vecEffectPosn, targetEntity, &PlayerTargettedVector, arg_14);
+    } else {
+       CWeapon_Fire(this, owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14); 
+    }
+}
+
+void VCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
+    CVector out, obj_space;
+    uint32_t playa = FindPlayerPed(-1);
+
+    out.x = 0.3f;
+    out.y = 0.0f;
+    out.z = 0.0f;
+
+    int slot = getPedActiveWeaponSlot(playa);
+
+    CPad* pad = CPad_GetPad(0);
+
+    if(pad->NewState.LeftShoulder2 && slot == 8) {
+        Process_AdvancedAimWeapon(this, a2, a3, a4, a5);
+        if (!crosshair_defined) {
+            *(uint32_t*)0x66B5A4 = 1;
+            crosshair_defined = true;
+        }
+    } else {
+        if (crosshair_defined) {
+            *(uint32_t*)0x66B5A4 = 0;
+            crosshair_defined = false;
+        }
+        obj_space = TransformFromObjectSpace(playa, out);
+        CCam_Process_FollowPed_SA(this, &obj_space, a3, a4, a5, a6);
+    }
+
+}
+
+void (*CTaskSimplePlayerOnFoot_ProcessPlayerWeapon)(void* this, CEntity* ped) = (void (*)(void* this, CEntity* ped))0x463BB0;
+void (*CWorld_UseDetonator)(CEntity* ped) = (void (*)(CEntity* ped))0x288470;
+
+void CTaskSimplePlayerOnFoot_CustomProcessPlayerWeapon(void* this, CEntity* ped) {
+    CPad* pad = CPad_GetPad(0);
+    if (pad->NewState.DPadLeft && !pad->OldState.DPadLeft) {
+        CWorld_UseDetonator(ped);
+    }
+    CTaskSimplePlayerOnFoot_ProcessPlayerWeapon(this, ped);
+}
+
 void setupAimPatches()
 {  
-    *(float *)0x66521C = 20.0f; // AIMWEAPON_RIFLE1_ZOOM
-    *(float *)0x665218 = 20.0f; // AIMWEAPON_RIFLE2_ZOOM
-    *(uint32_t *)0x204E44 = 0x3C0241a0; // AIMWEAPON_DEFAULT_ZOOM = 20.0f
+    RedirectCall(0x202A10, VCamera);
+
+    RedirectCall(0x408DE4, ThrowProjectileControl);
+    WriteByte(0x2AAD9F, 0x14);
+
+    WriteByte(0x409264, 0xFF); // Invalidate satchel charge anim decision
+
+    RedirectCall(0x408F40, CWeapon_CustomTargetFire);
+    RedirectCall(0x408F7C, CWeapon_CustomTargetFire);
+
+    RedirectCall(0x4676D4, CTaskSimplePlayerOnFoot_CustomProcessPlayerWeapon);
+    RedirectCall(0x4CBABC, CTaskSimplePlayerOnFoot_CustomProcessPlayerWeapon);
+
+    MakeNop(0x134268); // Make detonator useless
+    MakeNop(0x1342BC); // Make detonator useless
+    MakeNop(0x134168); // Make detonator useless
+    
+
+    MakeNop(0x408DE8);
+    MakeNop(0x408DEC);
+    MakeNop(0x408DF0);
+    MakeNop(0x408DF4);
+    MakeNop(0x408DF8);
+    MakeNop(0x408DFC);
+    MakeNop(0x408E00);
+    MakeNop(0x408E04);
+    MakeNop(0x408E08);
+
+    *(float *)0x66521C = 30.0f; // AIMWEAPON_RIFLE1_ZOOM
+    *(float *)0x665218 = 30.0f; // AIMWEAPON_RIFLE2_ZOOM
+    *(uint32_t *)0x204E44 = 0x3C0241F0; // AIMWEAPON_DEFAULT_ZOOM = 25.0f
     *(float *)0x665214 = 0.17453f; // AIMWEAPON_DRIVE_CLOSE_ENOUGH
     *(float *)0x665210 = 0.25f; // AIMWEAPON_DRIVE_SENS_MULT
     *(float *)0x66520C = 0.1f; // AIMWEAPON_FREETARGET_SENS
@@ -212,5 +365,16 @@ void setupAimPatches()
     gOffsets[2].y = 0.1f;
     gOffsets[2].z = 0.0f;
 
+    gOffsets[AIM_OFFSET_WEAPON_ROCKETLA].x = 0.22f;
+    gOffsets[AIM_OFFSET_WEAPON_ROCKETLA].y = 0.1f;
+    gOffsets[AIM_OFFSET_WEAPON_ROCKETLA].z = 0.0f;
+
+    gOffsets[AIM_OFFSET_WEAPON_GRENADE].x = 0.22f;
+    gOffsets[AIM_OFFSET_WEAPON_GRENADE].y = 0.1f;
+    gOffsets[AIM_OFFSET_WEAPON_GRENADE].z = 0.0f;
+
     RedirectCall(0x202AB8, Process_AdvancedAimWeapon);
+    RedirectCall(0x204EB0, AdjustTimeStep);
+    MakeNop(0x204EB4);
+    MakeBranch(0x204EB8, 0xD);
 }

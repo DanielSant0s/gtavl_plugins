@@ -21,5 +21,5 @@ void hooked_draw_rotated(uint32_t texture, float x1, float y1, float x2, float y
 
 void setupRotatedDrawPatch()
 {
-    RedirectCall(0x1F8A58, hooked_draw_rotated);
+    RedirectCall(0x1F8A58, &hooked_draw_rotated);
 }

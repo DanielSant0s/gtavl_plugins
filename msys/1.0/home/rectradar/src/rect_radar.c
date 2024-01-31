@@ -5,7 +5,7 @@
 #include <math.h>
 #include "hooks.h"
 
-int sub_10001600(float *a1, float *a2, float *a3, float *a4)
+static int sub_10001600(float *a1, float *a2, float *a3, float *a4)
 {
     int result;
     float v5;
@@ -203,7 +203,7 @@ float rectLimitRadarPoint(float *a1)
     float v5; // [esp+14h] [ebp-Ch] BYREF
     int v6[2]; // [esp+18h] [ebp-8h] BYREF
 
-    if ( *(unsigned char*)(FrontEndMenuManager + 101) )
+    if ( *(unsigned char*)(&FrontEndMenuManager + 101) )
     {
         v5 = a1[1] * a1[1] + *a1 * *a1;
         v5 = sqrtf(v5);

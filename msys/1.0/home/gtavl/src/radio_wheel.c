@@ -8,18 +8,20 @@
 #include <CPad.h>
 #include <CRGBA.h>
 #include <math.h>
+#include <injector.h>
 #include "hooks.h"
 #include "colour_filter.h"
 
-int (*CAudioEngine_GetCutsceneTrackStatus)() = (int (*)())0x581300;
-uint32_t *(*CAEVehicleAudioEntity_StaticGetPlayerVehicleAudioSettingsForRadio)() = (uint32_t *(*)())0x56F160;
-void (*CAERadioTrackManager_StopRadio)(int, uint32_t, char) = (void (*)(int, uint32_t, char))0x5653B0;
-void (*CAudioEngine_ReportFrontendAudioEvent)(uint32_t *, int, float, float) = (void (*)(uint32_t *, int, float, float))0x580D70;
-void (*CAERadioTrackManager_StartRadio)(int, int8_t, int8_t, int) = (void (*)(int, int8_t, int8_t, int))0x564FC0;
+int CAudioEngine_GetCutsceneTrackStatus();
+uint32_t *CAEVehicleAudioEntity_StaticGetPlayerVehicleAudioSettingsForRadio();
+void CAERadioTrackManager_StopRadio(int, uint32_t, char);
+void CAudioEngine_ReportFrontendAudioEvent(uint32_t *, int, float, float);
+void CAERadioTrackManager_StartRadio(int, int8_t, int8_t, int);
+void CAERadioTrackManager_DisplayRadioStationName(void* this);
 
-void (*CAERadioTrackManager_DisplayRadioStationName)(void* this) = (void (*)(void* this))0x565E00;
+bool allow_radiowheel_drawing = true;
 
-static bool radiowheel_visible = false;
+bool radiowheel_visible = false;
 static bool norm_timescale = true;
 
 static CTexture radio_icon[12];
@@ -41,6 +43,9 @@ static const char* radio_names[12] = {
 };
 
 static void RadioHud_loadTextures() {
+    //CStreaming_MakeSpaceFor(66328);
+    //CStreaming_ImGonnaUseStreamingMemory();
+    //CGame_TidyUpMemory(false, true);
     CTxdStore_PushCurrentTxd();
     int v7 = CTxdStore_FindTxdSlot("fronten1");
     if ( v7 == -1 )
@@ -51,14 +56,15 @@ static void RadioHud_loadTextures() {
 
     int i;
     for (i = 0; i < 12; i++) {
-        CSprite2D_SetTexture(&radio_icon[i], radio_names[i]);
+        CSprite2d_SetTexture(&radio_icon[i], radio_names[i], 0);
     }
 
-    CSprite2D_SetTexture(&radio_selector, "radio_selector");
+    CSprite2d_SetTexture(&radio_selector, "radio_selector", 0);
 
     CTxdStore_PopCurrentTxd();
     CTxdStore_RemoveTxd(v7);
-    CTxdStore_RemoveTxdSlot(v7);
+    //CTxdStore_RemoveTxdSlot(v7);
+    //CStreaming_IHaveUsedStreamingMemory();
 }
 
 static void RadioHud_unloadTextures() {
@@ -70,7 +76,8 @@ static void RadioHud_unloadTextures() {
     CSprite2d_Delete(&radio_selector);
 }
 
-static RwRGBA tex_color;
+RwRGBA radio_wheel_bgcolor;
+RwRGBA radio_wheel_texcolor;
 
 //int (*CAudioEngine_GetCurrentRadioStationID)() = (int (*)())0x580FF0;
 
@@ -88,12 +95,12 @@ static inline int calculatePointID(float x, float y, int maxID) {
     return pointID;
 }
 
-bool change_station = false;
+static bool change_station = false;
 
-float* RightStickSensValue = (float*)0x665204;
-float SensibilityBackup = 0.0f;
+extern float RightStickSensValue;
+static float SensibilityBackup = 0.0f;
 
-void RadioHud_process(int this)
+static void RadioHud_process(int this)
 {
     uint32_t *v8;
     uint8_t radioType;
@@ -121,11 +128,11 @@ void RadioHud_process(int this)
                         return;
 
                     v9 = CPad_GetPad(0);
-                    if (v9->NewState.DPadLeft) {
-                        if (!radiowheel_visible) {
+                    if (v9->NewState.DPadLeft && allow_radiowheel_drawing) {
+                        if (!radiowheel_visible ) {
                             radiowheel_visible = true;
-                            SensibilityBackup = *RightStickSensValue;
-                            *RightStickSensValue = 0.0f;
+                            SensibilityBackup = RightStickSensValue;
+                            RightStickSensValue = 0.0f;
                             pointID = *(uint8_t *)(this + 225);
                         }
 
@@ -147,7 +154,7 @@ void RadioHud_process(int this)
                     } else {
                         if (radiowheel_visible) {
                             radiowheel_visible = false;
-                            *RightStickSensValue = SensibilityBackup;
+                            RightStickSensValue = SensibilityBackup;
                         }
                     }
 
@@ -160,7 +167,7 @@ void RadioHud_process(int this)
 
 }
 
-void CSprite2d_DrawSpriteFixed(CTexture* texture, float x, float y, float w, float h, RwRGBA* color)
+static void CSprite2d_DrawSpriteFixed(CTexture* texture, float x, float y, float w, float h, RwRGBA* color)
 {
     w *= 0.85f;
     //x += 48.0f;
@@ -169,15 +176,14 @@ void CSprite2d_DrawSpriteFixed(CTexture* texture, float x, float y, float w, flo
 }
 
 
-void RadioHud_render(uint32_t this) {
+static void RadioHud_render(uint32_t this) {
     CAERadioTrackManager_DisplayRadioStationName(this);
     if (radiowheel_visible) {
         if (norm_timescale) {
-            *CTimer_ms_fTimeScale = 0.05f;
+            CTimer_ms_fTimeScale = 0.05f;
             norm_timescale = false;
             enable_blur = true;
             RadioHud_loadTextures();
-            CRGBA_CRGBA(&tex_color, 255, 255, 255, 255);
         }
 
         int i;
@@ -186,14 +192,21 @@ void RadioHud_render(uint32_t this) {
             float textureX = 0.85f * 120.0f * cosf(angle);
             float textureY = 120.0f * sinf(angle);
 
-            if (i == pointID-1) CSprite2d_DrawSpriteFixed(&radio_selector, (320.0f-26.0f) + textureX, (224.0f-26.0f) + textureY, 52.0f, 52.0f, &tex_color);
-            CSprite2d_DrawSpriteFixed(&radio_icon[i], (320.0f-24.0f) + textureX, (224.0f-24.0f) + textureY, 48.0f, 48.0f, &tex_color);
+            if (i == pointID-1) CSprite2d_DrawSpriteFixed(&radio_selector, (320.0f-26.0f) + textureX, (224.0f-26.0f) + textureY, 52.0f, 52.0f, &radio_wheel_bgcolor);
+            CSprite2d_DrawSpriteFixed(&radio_icon[i], (320.0f-24.0f) + textureX, (224.0f-24.0f) + textureY, 48.0f, 48.0f, &radio_wheel_texcolor);
         }
 
-    } else if (!norm_timescale) {
-        *CTimer_ms_fTimeScale = 1.0f;
+    } else if (!norm_timescale && allow_radiowheel_drawing) {
+        CTimer_ms_fTimeScale = 1.0f;
         norm_timescale = true;
         enable_blur = false;
         RadioHud_unloadTextures();
     }
+}
+
+void injectRadioWheelPatches() {
+    CRGBA_CRGBA(&radio_wheel_bgcolor, 255, 255, 255, 255);
+    CRGBA_CRGBA(&radio_wheel_texcolor, 255, 255, 255, 255);
+    RedirectCall(0x564870, &RadioHud_process);
+    RedirectJump(0x580FE4, &RadioHud_render);
 }

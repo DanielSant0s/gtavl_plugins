@@ -11,9 +11,9 @@
 
 #define MAX_RADIUS 300.0f
 
-CVector* TheCamera_m_vecGameCamPos = (CVector*)(0x6FE530 + 0x908);
+static CVector* TheCamera_m_vecGameCamPos = (CVector*)(0x6FE530 + 0x908);
 
-uint32_t* CModelInfo_ms_modelInfoPtrs = (uint32_t*)0x7A8780;
+extern uint32_t CModelInfo_ms_modelInfoPtrs[];
 
 void getVehicleDummyPos(CVector* ret, uint16_t veh_id, uint16_t dummy_id) {
 	CVector* base = &(*(CVector**)(CModelInfo_ms_modelInfoPtrs[veh_id] + 0x5C))[dummy_id];
@@ -22,7 +22,7 @@ void getVehicleDummyPos(CVector* ret, uint16_t veh_id, uint16_t dummy_id) {
 	ret->z = base->z;
 }
 
-int (*CDamageManager_GetLightStatus)(uint32_t, uint8_t) = (int (*)(uint32_t, uint8_t))0x162500;
+static int (*CDamageManager_GetLightStatus)(uint32_t, uint8_t) = (int (*)(uint32_t, uint8_t))0x162500;
 
 float getVehicleHeading(uint32_t vehicle) {
 	uint32_t v70;
@@ -36,7 +36,7 @@ float getVehicleHeading(uint32_t vehicle) {
 	return v71;
 }
 
-void (*CShadows_StoreShadowToBeRendered)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char) = (
+static void (*CShadows_StoreShadowToBeRendered)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char) = (
 	void (*)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char)
 )0x113FF0;
 
@@ -97,7 +97,6 @@ static void DrawVehicleReverselights(uint32_t vehicle) {
 }
 
 void hookedVehicleRender(uint32_t vehicle) {
-	CPad* pad = CPad_GetPad(0);
 	uint8_t veh_lights = getVehicleBombLightsWinchFlags(vehicle);
 
 	if ((getVehicleSubClass(vehicle) == VEHICLE_AUTOMOBILE || getVehicleSubClass(vehicle) == VEHICLE_BIKE) &&
@@ -138,17 +137,6 @@ void hookedVehicleRender(uint32_t vehicle) {
 			}
 		}
 	}
-
-	if(pad->NewState.DPadRight && !pad->OldState.DPadRight && vehicle == FindPlayerVehicle(-1, 0)) {
-		if(test_bit(veh_lights, 4)) {
-			clear_bit(veh_lights, 4);
-			set_bit(veh_lights, 3);
-		} else {
-			set_bit(veh_lights, 4);
-			clear_bit(veh_lights, 3);
-		}
-		setVehicleBombLightsWinchFlags(vehicle, veh_lights);
-	}
 	
 	CVehicle_Render(vehicle);
 }
@@ -163,7 +151,7 @@ int hookedExitVehicle(int a1) {
 	return ret;
 }
 
-void (*Camera_FollowCar)(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) = (void (*)(uint32_t, CVector *, int, int, int, char))0x209C90;
+static void (*Camera_FollowCar)(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) = (void (*)(uint32_t, CVector *, int, int, int, char))0x209C90;
 
 void VCarCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
     CVector out, obj_space, ret;
@@ -175,123 +163,24 @@ void VCarCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a
     Camera_FollowCar(this, &ret, a3, a4, a5, a6);
 }
 
-short CPad_GetAccelerate(CPad *this)
-{
-    short result;
+void (*CAutomobile_ProcessControlInputs)(uint32_t vehicle, uint8_t a2) = (void (*)(uint32_t vehicle, uint8_t a2))0x155170;
 
-    if ( this->DisablePlayerControls || this->Mode > 3 )
-        return 0;
-    switch ( this->Mode )
-    {
-        case 0:
-        case 1:
-        case 2:
-            result = this->NewState.RightShoulder2;
-            break;
-        case 3:
-            result = -2 * this->NewState.RightStickY < 0 ? 0 : (-2 * this->NewState.RightStickY);
-            break;
-        default:
-            return 0;
-    }
-    return result;
-}
+void MyCAutomobile_ProcessControlInputs(uint32_t vehicle, uint8_t a2) {
+	CPad* pad = CPad_GetPad(0);
+	uint8_t veh_lights = getVehicleBombLightsWinchFlags(vehicle);
 
-short CPad_GetBrake(CPad *this)
-{
-    short result;
+	CAutomobile_ProcessControlInputs(vehicle, a2);
 
-    if ( this->DisablePlayerControls || this->Mode > 3 )
-        return 0;
-    switch ( this->Mode )
-    {
-        case 0:
-        case 1:
-        case 2:
-            result = this->NewState.LeftShoulder2;
-            break;
-        case 3:
-            result = (this->NewState.RightStickY & 0x40000000) != 0 ? 0 : (2 * this->NewState.RightStickY);
-            break;
-        default:
-            return 0;
-    }
-    return result;
-}
-
-short CPad_GetHandBrake(CPad *this)
-{
-    short result;
-
-    if ( this->DisablePlayerControls || this->Mode > 3 )
-        return 0;
-    switch ( this->Mode )
-    {
-        case 0:
-        case 1:
-            result = this->NewState.ButtonCross;
-            break;
-        case 2:
-            result = this->NewState.ButtonTriangle;
-            break;
-        case 3:
-            result = this->NewState.LeftShoulder1;
-            break;
-        default:
-            return 0;
-    }
-    return result;
-}
-
-int CPad_GetLookLeft(CPad *this)
-{
-    short v1;
-    short v2;
-
-    if ( this->DisablePlayerControls )
-        return 0;
-    v1 = this->NewState.LeftShoulder2;
-    if ( v1 )
-    {
-        if ( !this->OldState.LeftShoulder2 )
-            return 0;
-    }
-    v2 = this->NewState.RightShoulder2;
-    if ( !v2 )
-    {
-        if ( this->OldState.RightShoulder2 )
-            return 0;
-    }
-    return v1 && !v2;
-}
-
-int CPad_GetLookRight(CPad *this)
-{
-    short v1; // dx
-    short v2; // ax
-
-    if ( this->DisablePlayerControls )
-        return 0;
-    v1 = this->NewState.RightShoulder2;
-    if ( v1 )
-    {
-        if ( !this->OldState.RightShoulder2 )
-            return 0;
-    }
-    v2 = this->NewState.LeftShoulder2;
-    if ( !v2 )
-    {
-        if ( this->OldState.LeftShoulder2 )
-            return 0;
-    }
-    return v1 && !v2;
-}
-
-int CPad_GetLookLeftRight(CPad *this)
-{
-    if ( !this->DisablePlayerControls )
-        return (this->NewState.RightShoulder2 - this->NewState.LeftShoulder2) / 2;
-    return 0;
+	if(pad->NewState.DPadRight && !pad->OldState.DPadRight) {
+		if(test_bit(veh_lights, 4)) {
+			clear_bit(veh_lights, 4);
+			set_bit(veh_lights, 3);
+		} else {
+			set_bit(veh_lights, 4);
+			clear_bit(veh_lights, 3);
+		}
+		setVehicleBombLightsWinchFlags(vehicle, veh_lights);
+	}
 }
 
 void CalculateDoorLock() {
@@ -320,9 +209,8 @@ int _start() {
 	RedirectCall(0x154328, hookedVehicleRender);
     WriteDword(0x65B990, (uint32_t)hookedVehicleRender);
 
-    RedirectFunction(0x249FF0, CPad_GetAccelerate);
-    RedirectFunction(0x249930, CPad_GetBrake);
-    RedirectFunction(0x2498B0, CPad_GetHandBrake);
+	WriteDword(0x65B6C8, (uint32_t)MyCAutomobile_ProcessControlInputs);
+	
 
     return 0;
 }

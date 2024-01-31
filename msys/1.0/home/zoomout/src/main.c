@@ -14,12 +14,11 @@ static void (*DrawHud)();
 
 static float zoom;
 
-float* CRadar_m_radarRange = (float*)0x66B958;
 uint32_t zoomOutTimer = 0;
 
 void updateRadarZoom() {
     WriteWord(0x267E04, (uint16_t)zoom);
-    *CRadar_m_radarRange = zoom;
+    CRadar_m_radarRange = zoom;
 }
 
 void showVehicleAreaZOomOutMinimap() {
@@ -29,11 +28,11 @@ void showVehicleAreaZOomOutMinimap() {
         WriteDword(0x66BC14, 1);
         WriteDword(0x66BC0C, 1500);
         zoom = 320.0f;
-        zoomOutTimer = *CTimer_m_snTimeInMilliseconds;
+        zoomOutTimer = CTimer_m_snTimeInMilliseconds;
     }
 
     if ( zoom > 160.0f ) {
-        if ( *CTimer_m_snTimeInMilliseconds - zoomOutTimer > 1000 ) {
+        if ( CTimer_m_snTimeInMilliseconds - zoomOutTimer > 1000 ) {
             zoom -= 10.0f;
             if ( 160.0f > zoom ) {
                 zoom = 160.0f;

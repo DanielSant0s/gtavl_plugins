@@ -1,4 +1,5 @@
-
+#ifndef PS2_WRAPPERS_H
+#define PS2_WRAPPERS_H
 
 typedef long unsigned int size_t;
 
@@ -30,6 +31,22 @@ struct sce_dirent {
         void    *d_private;     
 };
 
+typedef struct RwFileFunction{
+	int padding;  
+	void* (*rwfopen)(const char*, const char*);
+	int (*rwfclose)(void *);
+	size_t (*rwfread)(void *, void *, size_t);   
+	size_t (*rwfwrite)(void *, const void *, size_t);
+	char* (*rwfgets)(char *, int, void *);
+	int (*rwfputs)(int, int); 
+	int (*rwfeof)(void*);   
+	int (*rwfseek)(void *, long int, int);  
+	int (*rwfflush)(void*);
+	int (*rwftell)(void*);  
+} RwFileFunction;
+
+extern RwFileFunction* (*RwOsGetFileInterface)(void);
+
 extern void (*FlushCache)(int);
 
 extern FILE* (*rw_open)(const char*, const char*) __attribute__((section(".data")));
@@ -53,12 +70,11 @@ extern int (*sceRemove)(const char *filename);
 extern int (*sceMkdir)(const char *dirname, int flag);
 extern int (*sceRmdir)(const char *dirname);
 
-
-
 extern int (*printf)(const char *, ...);
+extern int (*sscanf)( const char * s, const char * format, ...);
 
-extern void* (*malloc)(size_t);
-extern void (*free)(void*);
+extern void* malloc(size_t);
+extern void free(void*);
 extern void* (*memset)(void *, int, size_t);
 extern void* (*memcpy)(void *, const void *, size_t);
 extern int (*memcmp)(const void *, const void *, size_t);
@@ -68,4 +84,8 @@ extern int (*strcmp)(const char *, const char *);
 extern char* (*strcpy)(char *, const char *);
 extern char* (*strcat)(char *, const char *);
 
+extern unsigned int* PluginUsedMemory;
+
 extern char * strdup(const char * s);
+
+#endif

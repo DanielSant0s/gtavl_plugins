@@ -21,4 +21,14 @@ void setupInGameMenuPatches();
 void injectHUDPatches();
 void injectRadarPatches();
 void injectMiscPatches();
+void injectRadioWheelPatches();
+void setupPauseMenuPatches();
+void injectLimitHooks();
+void injectGPSPatches();
+void injectVehiclePatches();
+void installSkyEdgeEngine();
+void injectPickupPatches();
+void installOilSystem();
+void injectPedRenderPatches();
+void injectWeaponPatches();
 

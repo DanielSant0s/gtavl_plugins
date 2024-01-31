@@ -200,6 +200,98 @@ struct CPhysical {
     void *m_pShadowData;
 };
 
+
+enum eObjectType {
+    OBJECT_MISSION = 2,
+    OBJECT_TEMPORARY = 3,
+    OBJECT_MISSION2 = 6
+};
+
+typedef struct {
+    CPhysical parent;
+    void           *m_pControlCodeList;
+    unsigned char   m_nObjectType; // see enum eObjectType
+    unsigned char   m_nBonusValue;
+    unsigned short  m_wCostValue;
+    struct {
+        unsigned int b01 : 1;
+        unsigned int b02 : 1;
+        unsigned int bPickupPropertyForSale : 1;
+        unsigned int bPickupInShopOutOfStock : 1;
+        unsigned int bGlassBroken : 1;
+        unsigned int b06 : 1;
+        unsigned int bIsExploded : 1;
+        unsigned int b08 : 1;
+
+        unsigned int bIsLampPost : 1;
+        unsigned int bIsTargatable : 1;
+        unsigned int bIsBroken : 1;
+        unsigned int bTrainCrossEnabled : 1;
+        unsigned int bIsPhotographed : 1;
+        unsigned int bIsLiftable : 1;
+        unsigned int bIsDoorMoving : 1;
+        unsigned int bbIsDoorOpen : 1;
+
+        unsigned int bHasNoModel : 1;
+        unsigned int bIsScaled : 1;
+        unsigned int bCanBeAttachedToMagnet : 1;
+        unsigned int b20 : 1;
+        unsigned int b21 : 1;
+        unsigned int b22 : 1;
+        unsigned int bFadingIn : 1; // works only for objects with type 2 (OBJECT_MISSION)
+        unsigned int bAffectedByColBrightness : 1;
+
+        unsigned int b25 : 1;
+        unsigned int bDoNotRender : 1;
+        unsigned int bFadingIn2 : 1;
+        unsigned int b28 : 1;
+        unsigned int b29 : 1;
+        unsigned int b30 : 1;
+        unsigned int b31 : 1;
+        unsigned int b32 : 1;
+    } m_nObjectFlags;
+    unsigned char   m_nColDamageEffect;
+    unsigned char   m_nStoredColDamageEffect;
+    char field_146;
+    char            m_nGarageDoorGarageIndex;
+    unsigned char   m_nLastWeaponDamage;
+    unsigned char   m_nDayBrightness : 4;
+    unsigned char   m_nNightBrightness : 4;
+    short           m_nRefModelIndex;
+    unsigned char   m_nCarColor[4]; // this is used for detached car parts
+    int             m_dwRemovalTime; // time when this object must be deleted
+    float           m_fHealth;
+    float           m_fDoorStartAngle; // this is used for door objects
+    float           m_fScale;
+    void           *m_pObjectInfo;
+    void           *m_pFire; // CFire *
+    short           m_wScriptTriggerIndex;
+    short           m_wRemapTxd; // this is used for detached car parts
+    RwTexture      *m_pRemapTexture; // this is used for detached car parts
+    void           *m_pDummyObject; // used for dynamic objects like garage doors, train crossings etc.
+    int             m_dwBurnTime; // time when particles must be stopped
+    float           m_fBurnDamage;
+} CObject;
+
+
+typedef struct {
+  CObject object;
+} CProjectile;
+
+typedef struct {
+	unsigned int  m_nWeaponType; // see eWeaponType
+	CEntity      *m_pCreator;
+	CEntity      *m_pVictim;
+	int           m_nDestroyTime;
+	bool          m_bActive;
+	char _pad11[3];
+	CVector       m_vecLastPosn;
+	void         *m_pFxSystem;
+} CProjectileInfo;
+
+extern CProjectile *ms_apProjectile[32]; // static CProjectile *ms_apProjectile[MAX_PROJECTILES]
+extern CProjectileInfo gaProjectileInfo[32];
+
 typedef struct 
 {
   CVector min;
@@ -230,6 +322,13 @@ typedef struct
 
 typedef struct 
 {
+	CCompressedVector normal;
+	unsigned short m_nDistance;
+	unsigned char m_nOrientation;
+} CColTrianglePlane;
+
+typedef struct 
+{
   short numSpheres;
   short numBoxes;
   short numTriangles;
@@ -240,7 +339,7 @@ typedef struct
   int lines;
   CCompressedVector *vertices;
   CColTriangle* triangles;
-  int trianglePlanes;
+  CColTrianglePlane *trianglePlanes;
   int numShadowTriangles;
   int numShadowVertices;
   int shadowVertices;
@@ -268,7 +367,7 @@ typedef struct {
     char _pad29[3];
 } CBulletTrace;
 
-extern CBulletTrace* CBulletTrace_aTraces;
+extern CBulletTrace CBulletTrace_aTraces[];
 
 typedef struct 
 {
@@ -425,41 +524,209 @@ typedef struct
 
 #define MAX_NUM_BULLETTRACES 16
 
-extern void (*CMatrix_Attach)(CVector *, uint32_t, CVector*);
-extern void (*sub_25F980)(CVector *, uint32_t, CVector*);
+void CMatrix_Attach(CVector *a1, uint32_t a2, CVector *a3);
+void sub_25F980(CVector *a1, uint32_t a2, CVector *a3);
+
+CColModel* CEntity_GetColModel(uint32_t entity);
+
+float CWorld_FindGroundZFor3DCoord(float x, float y, float z, int *b, uint32_t **ent);
+
+CWanted* FindPlayerWanted(int playerIndex);
+int IsPlayer(void* ped);
+uint32_t* FindPlayerVehicle(int playerIndex, int index);
+
+unsigned int FindPlayerPed(int playerIndex);
+
+void FindPlayerCoors(CVector *outPoint, int playerIndex);
 
 CVector TransformFromObjectSpace(uint32_t entity, CVector offset);
-
-extern CColModel *(*CEntity_GetColModel)(uint32_t);
-
-extern unsigned int FrontEndMenuManager;
-
-extern uint32_t* CTimer_m_snTimeInMilliseconds;
-
-extern uint32_t* CTimer_m_FrameCounter;
-
-extern uint32_t* CTimer_ms_fTimeStep;
-
-extern float* CTimer_ms_fTimeScale;
-
-extern uint32_t* CGame_currArea;
-
-extern float* CWeather_Wind;
-
-extern float (*CWorld_FindGroundZFor3DCoord)(float x, float y, float z, int *b, uint32_t **ent);
-
-extern CWanted* (*FindPlayerWanted)(int);
-extern int (*IsPlayer)(void* ped);
-extern uint32_t* (*FindPlayerVehicle)(int, int);
 
 CVector* getVehCoordinates(uint32_t* veh);
 
 CVector* getCharCoordinates(uint32_t* ped);
 
-extern unsigned int (*FindPlayerPed)(int playerIndex);
-
-extern void (*FindPlayerCoors)(CVector *outPoint, int playerIndex);
-
 float DistanceBetweenPoints(CVector* v1, CVector* v2);
+
+void CStreaming_IHaveUsedStreamingMemory(void);
+void CStreaming_ImGonnaUseStreamingMemory(void);
+void CStreaming_MakeSpaceFor(int);
+void CGame_TidyUpMemory(bool, bool);
+
+extern unsigned int FrontEndMenuManager;
+
+extern uint32_t CTimer_m_snTimeInMilliseconds;
+
+extern uint32_t CTimer_m_FrameCounter;
+
+extern float CTimer_ms_fTimeStep;
+
+extern float CTimer_ms_fTimeScale;
+
+extern uint32_t CGame_currArea;
+
+extern float CWeather_Wind;
+
+typedef struct HeapBlockDesc HeapBlockDesc;
+
+struct HeapBlockDesc {
+  uint32_t m_size;
+	int16_t m_memId;
+	int16_t m_ptrListIndex;
+	HeapBlockDesc *m_next;
+	HeapBlockDesc *m_prev;
+};
+
+
+
+enum eWeaponState
+{
+    WEAPONSTATE_READY,
+    WEAPONSTATE_FIRING,
+    WEAPONSTATE_RELOADING,
+    WEAPONSTATE_OUT_OF_AMMO,
+    WEAPONSTATE_MELEE_MADECONTACT
+};
+
+enum eWeaponType
+{
+	WEAPON_UNARMED = 0x0,
+	WEAPON_BRASSKNUCKLE = 0x1,
+	WEAPON_GOLFCLUB = 0x2,
+	WEAPON_NIGHTSTICK = 0x3,
+	WEAPON_KNIFE = 0x4,
+	WEAPON_BASEBALLBAT = 0x5,
+	WEAPON_SHOVEL = 0x6,
+	WEAPON_POOLCUE = 0x7,
+	WEAPON_KATANA = 0x8,
+	WEAPON_CHAINSAW = 0x9,
+	WEAPON_DILDO1 = 0xA,
+	WEAPON_DILDO2 = 0xB,
+	WEAPON_VIBE1 = 0xC,
+	WEAPON_VIBE2 = 0xD,
+	WEAPON_FLOWERS = 0xE,
+	WEAPON_CANE = 0xF,
+	WEAPON_GRENADE = 0x10,
+	WEAPON_TEARGAS = 0x11,
+	WEAPON_MOLOTOV = 0x12,
+	WEAPON_ROCKET = 0x13,
+	WEAPON_ROCKET_HS = 0x14,
+	WEAPON_FREEFALL_BOMB = 0x15,
+	WEAPON_PISTOL = 0x16,
+	WEAPON_PISTOL_SILENCED = 0x17,
+	WEAPON_DESERT_EAGLE = 0x18,
+	WEAPON_SHOTGUN = 0x19,
+	WEAPON_SAWNOFF = 0x1A,
+	WEAPON_SPAS12 = 0x1B,
+	WEAPON_MICRO_UZI = 0x1C,
+	WEAPON_MP5 = 0x1D,
+	WEAPON_AK47 = 0x1E,
+	WEAPON_M4 = 0x1F,
+	WEAPON_TEC9 = 0x20,
+	WEAPON_COUNTRYRIFLE = 0x21,
+	WEAPON_SNIPERRIFLE = 0x22,
+	WEAPON_RLAUNCHER = 0x23,
+	WEAPON_RLAUNCHER_HS = 0x24,
+	WEAPON_FTHROWER = 0x25,
+	WEAPON_MINIGUN = 0x26,
+	WEAPON_SATCHEL_CHARGE = 0x27,
+	WEAPON_DETONATOR = 0x28,
+	WEAPON_SPRAYCAN = 0x29,
+	WEAPON_EXTINGUISHER = 0x2A,
+	WEAPON_CAMERA = 0x2B,
+	WEAPON_NIGHTVISION = 0x2C,
+	WEAPON_INFRARED = 0x2D,
+	WEAPON_PARACHUTE = 0x2E,
+	WEAPON_UNUSED = 0x2F,
+	WEAPON_ARMOUR = 0x30,
+	WEAPON_FLARE = 0x3A
+};
+
+typedef struct {
+    uint32_t m_nType;
+    uint32_t m_nState;
+	unsigned int m_nAmmoInClip;
+	unsigned int m_nTotalAmmo;
+	unsigned int m_nTimeForNextShot;
+	char field_14;
+	char field_15;
+	char field_16;
+	char field_17;
+    void *m_pFxSystem; // flamethrower, spraycan, extinguisher particle
+} CWeapon;
+
+#define getPedActiveWeaponSlot(ped) *(uint8_t*)((uint32_t)ped + 0x758)
+#define getPedWeapons(ped) (CWeapon*)((uint32_t)ped + 0x5E0)
+
+char CPed_GetWeaponSkill(void* ped);
+
+#define MAX_WEAPON_INFOS 80
+#define MAX_WEAPON_NAMES 50
+
+#define WEAPONINFO_NUM_WEAPONS_WITH_SKILLS 11
+#define WEAPONINFO_NUM_WEAPONS 46
+
+enum eWeaponSkill
+{
+	WEAPSKILL_POOR,
+	WEAPSKILL_STD,
+	WEAPSKILL_PRO,
+	WEAPSKILL_COP
+};
+
+typedef struct {
+    /* some info here https://code.google.com/p/mtasa-blue/source/browse/tags/1.3.4/MTA10/game_sa/CWeaponInfoSA.h */
+    unsigned int   m_nWeaponFire; // see eWeaponFire
+    float          m_fTargetRange; // max targeting range
+    float          m_fWeaponRange; // absolute gun range / default melee attack range
+    int            m_nModelId1; // modelinfo id
+    int            m_nModelId2; // second modelinfo id
+    unsigned int   m_nSlot;
+    struct {
+        unsigned int bCanAim : 1;
+        unsigned int bAimWithArm : 1;
+        unsigned int b1stPerson : 1;
+        unsigned int bOnlyFreeAim : 1;
+        unsigned int bMoveAim : 1; // can move when aiming
+        unsigned int bMoveFire : 1; // can move when firing
+        unsigned int b06 : 1; // this bitfield is not used
+        unsigned int b07 : 1; // this bitfield is not used
+        unsigned int bThrow : 1;
+        unsigned int bHeavy : 1; // can't run fast with this weapon
+        unsigned int bContinuosFire : 1;
+        unsigned int bTwinPistol : 1;
+        unsigned int bReload : 1; // this weapon can be reloaded
+        unsigned int bCrouchFire : 1; // can reload when crouching
+        unsigned int bReload2Start : 1; // reload directly after firing
+        unsigned int bLongReload : 1;
+        unsigned int bSlowdown : 1;
+        unsigned int bRandSpeed : 1;
+        unsigned int bExpands : 1;
+    }              m_nFlags;
+	unsigned int   m_nAnimToPlay; // instead of storing pointers directly to anims, use anim association groups
+	unsigned short m_nAmmoClip; // ammo in one clip
+	unsigned short m_nDamage; // damage inflicted per hit
+	CVector        m_vecFireOffset; // offset from weapon origin to projectile starting point
+	unsigned int   m_nSkillLevel; // what's the skill level of this weapontype
+	unsigned int   m_nReqStatLevel; // what stat level is required for this skill level
+	float          m_fAccuracy; // modify accuracy of weapon
+	float          m_fMoveSpeed; // how fast can move with weapon
+	float          m_fAnimLoopStart; // start of animation loop
+	float          m_fAnimLoopEnd; // end of animation loop
+	unsigned int   m_nAnimLoopFire; // time in animation when weapon should be fired
+	unsigned int   m_nAnimLoop2Start; // start of animation2 loop
+	unsigned int   m_nAnimLoop2End; // end of animation2 loop
+	unsigned int   m_nAnimLoop2Fire; // time in animation2 when weapon should be fired
+	float          m_fBreakoutTime; // time after which player can break out of attack and run off
+	float          m_fSpeed; // speed of projectile
+	float          m_fRadius; // radius affected
+	float          m_fLifespan; // time taken for shot to dissipate
+	float          m_fSpread; // angle inside which shots are created
+	unsigned short m_nAimOffsetIndex; // index into array of aiming offsets
+	unsigned char  m_nBaseCombo; // base combo for this melee weapon
+	unsigned char  m_nNumCombos; // how many further combos are available
+} CWeaponInfo;
+
+CWeaponInfo *CWeaponInfo_GetWeaponInfo(uint32_t weaponType, unsigned char skill);
+
 
 #endif

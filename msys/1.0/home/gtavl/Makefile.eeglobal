@@ -1,0 +1,70 @@
+# _____     ___ ____     ___ ____
+#  ____|   |    ____|   |        | |____|
+# |     ___|   |____ ___|    ____| |    \    PS2DEV Open Source Project.
+#-----------------------------------------------------------------------
+# Copyright 2001-2004, ps2dev - http://www.ps2dev.org
+# Licenced under Academic Free License version 2.0
+# Review ps2sdk README & LICENSE files for further details.
+#
+# $Id: Makefile.eeglobal_sample 1610 2009-09-16 17:44:33Z jim $
+
+# Include directories
+EE_INCS := $(EE_INCS)
+
+# C compiler flags
+EE_CFLAGS := -D_EE -O2 -G0 -Wall $(EE_CFLAGS)
+
+EE_CFLAGS += -fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset
+EE_CFLAGS += -fno-builtin-printf -fno-builtin-strcat -fno-builtin-strchr
+EE_CFLAGS += -fno-builtin-strcmp -fno-builtin-strcpy -fno-builtin-strlen
+EE_CFLAGS += -fno-builtin-strncpy -fno-builtin-strrchr -fno-builtin-strncmp
+EE_CFLAGS += -fno-builtin-cosf -fno-builtin-sinf -fno-builtin-sprintf 
+EE_CFLAGS += -fno-builtin-fputs  -fno-builtin-strtok -fno-builtin-atan2f
+EE_CFLAGS += -fno-builtin-sqrtf -fno-builtin-fabsf -fno-builtin-floorf
+EE_CFLAGS += -fno-builtin-powf
+
+# C++ compiler flags
+EE_CXXFLAGS := -D_EE -O2 -G0 -Wall $(EE_CXXFLAGS)
+
+# Linker flags
+EE_LDFLAGS := $(EE_LDFLAGS)
+
+# Assembler flags
+EE_ASFLAGS := -G0 $(EE_ASFLAGS)
+
+# Link with following libraries.  This is a special case, and instead of
+# allowing the user to override the library order, we always make sure
+# libkernel is the last library to be linked.
+EE_LIBS +=
+
+# Externally defined variables: EE_BIN, EE_OBJS, EE_LIB
+
+# These macros can be used to simplify certain build rules.
+EE_C_COMPILE = $(EE_CC) $(EE_CFLAGS) $(EE_INCS)
+EE_CXX_COMPILE = $(EE_CXX) $(EE_CXXFLAGS) $(EE_INCS)
+
+%.o : %.c
+	$(EE_CC) $(EE_CFLAGS) $(EE_INCS) -c $< -o $@
+
+%.o : %.cc
+	$(EE_CXX) $(EE_CXXFLAGS) $(EE_INCS) -c $< -o $@
+
+%.o : %.cpp
+	$(EE_CXX) $(EE_CXXFLAGS) $(EE_INCS) -c $< -o $@
+
+%.o : %.S
+	$(EE_CC) $(EE_CFLAGS) $(EE_INCS) -c $< -o $@
+
+%.o : %.s
+	$(EE_AS) $(EE_ASFLAGS) $< -o $@
+
+$(EE_ERL) : $(EE_OBJS)
+	$(EE_CC) -mno-crt0 -o $(EE_ERL) $(EE_OBJS) $(EE_CFLAGS) $(EE_LDFLAGS) -Wl,-r -Wl,-d
+	$(EE_STRIP) --strip-unneeded -R .mdebug.eabi64 -R .reginfo -R .comment $(EE_ERL)
+
+$(EE_LIB) : $(EE_OBJS) $(EE_LIB:%.a=%.erl)
+	$(EE_AR) cru $(EE_LIB) $(EE_OBJS)
+
+$(EE_LIB:%.a=%.erl) : $(EE_OBJS)
+	$(EE_CC) -mno-crt0 -Wl,-r -Wl,-d -o $(EE_LIB:%.a=%.erl) $(EE_OBJS)
+	$(EE_STRIP) --strip-unneeded -R .mdebug.eabi64 -R .reginfo -R .comment $(EE_LIB:%.a=%.erl)

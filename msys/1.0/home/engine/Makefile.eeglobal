@@ -59,23 +59,12 @@ EE_CXX_COMPILE = $(EE_CXX) $(EE_CXXFLAGS) $(EE_INCS)
 	$(EE_AS) $(EE_ASFLAGS) $< -o $@
 
 EE_STDLIB = $(HOME)/engine/plugin_ps2/src/math.o \
-		    $(HOME)/engine/plugin_ps2/src/stdio.o \
-		    $(HOME)/engine/plugin_ps2/src/sifdev.o \
-		    $(HOME)/engine/plugin_ps2/src/stdlib.o \
 		    $(HOME)/engine/plugin_ps2/src/string.o \
 		    $(HOME)/engine/plugin_ps2/src/injector.o 
 
 EE_SALIB = $(HOME)/engine/plugin_sa/src/common.o \
 		   $(HOME)/engine/plugin_sa/src/CVector.o \
-		   $(HOME)/engine/plugin_sa/src/CVehicle.o \
-		   $(HOME)/engine/plugin_sa/src/CTexture.o \
-		   $(HOME)/engine/plugin_sa/src/CPad.o \
-		   $(HOME)/engine/plugin_sa/src/CTxdStore.o \
-		   $(HOME)/engine/plugin_sa/src/CRadar.o \
-		   $(HOME)/engine/plugin_sa/src/CRGBA.o \
-		   $(HOME)/engine/plugin_sa/src/CFont.o \
-		   $(HOME)/engine/plugin_sa/src/CCam.o \
-		   $(HOME)/engine/plugin_sa/src/rwcore.o
+		   $(HOME)/engine/plugin_sa/src/CVehicle.o 
 
 EE_RWSE  = $(HOME)/engine/rw_se/src/secore.o 
 
