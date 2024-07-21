@@ -4,7 +4,7 @@
 #include <CTexture.h>
 #include "hooks.h"
 
-void hooked_draw_rotated(uint32_t texture, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, RwRGBA* color)
+static void hooked_draw_rotated(uint32_t texture, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, RwRGBA* color)
 {
     x1 *= 0.85f;
     x2 *= 0.85f;

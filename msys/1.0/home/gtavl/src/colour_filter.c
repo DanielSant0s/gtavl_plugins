@@ -8,10 +8,10 @@ static RwRGBA rep_weights = { .r=140, .g=170, .b=255, .a=255 };
 static RwRGBA add_weights = { .r=150, .g=180, .b=255, .a=255 };
 
 RwRGBA customFilterReplaceColor = { .r=255, .g=255, .b=255, .a=255 };
-RwRGBA customFilterAddColor = { .r=255, .g=255, .b=255, .a=255 };
+RwRGBA customFilterAddColor =     { .r=255, .g=255, .b=255, .a=255 };
 
 RwRGBA BlurFilterReplaceColor = { .r=255, .g=255, .b=255, .a=255 };
-RwRGBA BlurFilterAddColor = { .r=255, .g=255, .b=255, .a=255 };
+RwRGBA BlurFilterAddColor =     { .r=255, .g=255, .b=255, .a=255 };
 
 int colour_filter_status = 1;
 
@@ -75,7 +75,7 @@ static void RenderCustomFiltering() {
     
 }
 
-void ColourFilterHook(RwRGBA c1, RwRGBA c2) {
+static void ColourFilterHook(RwRGBA c1, RwRGBA c2) {
     if(colour_filter_status) {
         RwRGBA out1 = { .r = (float)((c1.r * rep_weights.r) / 255.0f) * (customFilterReplaceColor.r / 255.0f), 
                         .g = (float)((c1.g * rep_weights.g) / 255.0f) * (customFilterReplaceColor.g / 255.0f), 

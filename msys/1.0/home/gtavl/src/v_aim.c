@@ -123,10 +123,10 @@ void AdjustTimeStep() {
         else
             *(float *)(a1 + 180) = v17 - (CTimer_ms_fTimeStep*WeaponAimZoomSpeed);
     }
-    else
+    /*else
     {
         *(float *)(a1 + 180) = v17 + (CTimer_ms_fTimeStep*4.0f);
-    }
+    }*/
 }
 
 

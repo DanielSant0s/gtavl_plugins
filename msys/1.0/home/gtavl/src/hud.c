@@ -21,7 +21,7 @@ extern uint32_t CWorld_PlayerInFocus[];
 float CStats_GetFatAndMuscleModifier(uint32_t);
 void CSprite2d_DrawBarChart(float, float, uint16_t, uint8_t, float, char, uint8_t, uint8_t, RwRGBA*, RwRGBA*);
 
-void CHud_PrintArmourForPlayer(int playerID, float posX, float posY)
+static void CHud_PrintArmourForPlayer(int playerID, float posX, float posY)
 {
     float fPercentage;
     RwRGBA v8; 
@@ -39,7 +39,7 @@ void CHud_PrintArmourForPlayer(int playerID, float posX, float posY)
 
 float CHud_AbilityPercent = 100.0f;
 
-void CHud_PrintBreathOrAbilityForPlayer(int playerID, float posX, float posY)
+static void CHud_PrintBreathOrAbilityForPlayer(int playerID, float posX, float posY)
 {
     float fPercentage;
     RwRGBA v8; 
@@ -67,7 +67,7 @@ void CHud_PrintBreathOrAbilityForPlayer(int playerID, float posX, float posY)
     }
 }
 
-void CHud_PrintHealthForPlayer(int playerID, float posX, float posY)
+static void CHud_PrintHealthForPlayer(int playerID, float posX, float posY)
 {
     float fPercentagea;
     RwRGBA v10;
@@ -147,7 +147,7 @@ void DrawAmmoClearOverride() {
     DrawAmmoEnableOverride = false;
 }
 
-void CHudNew_DrawAmmo() {
+static void CHudNew_DrawAmmo() {
     void* playa = FindPlayerPed(0);
     int slot = getPedActiveWeaponSlot(playa);
     CWeapon* weapons = getPedWeapons(playa);
@@ -308,17 +308,17 @@ void updateMoney() {
 void CShopping_LoadShop(const char* a1);
 void CShopping_RemoveLoadedShop();
 
-void loadShopShowMoney(const char* a1) {
+static void loadShopShowMoney(const char* a1) {
     shop_active = true;
     CShopping_LoadShop(a1);
 }
 
-void unloadShopHideMoney() {
+static void unloadShopHideMoney() {
     shop_active = false;
     CShopping_RemoveLoadedShop();
 }
 
-void drawPlayerMoney() {
+static void drawPlayerMoney() {
     CPad* pad = CPad_GetPad(0);
 
     float money_y = 30.0f;
@@ -372,7 +372,7 @@ void drawPlayerMoney() {
 
 }
 
-void DrawWantedStars() {
+static void DrawWantedStars() {
     if (FindPlayerWanted(-1)->m_nWantedLevel < 1)
         return;
 
@@ -418,12 +418,12 @@ static float zoom;
 
 uint32_t zoomOutTimer = 0;
 
-void updateRadarZoom() {
+static void updateRadarZoom() {
     WriteWord(0x267E04, (uint16_t)zoom);
     CRadar_m_radarRange = zoom;
 }
 
-void showVehicleAreaZOomOutMinimap() {
+static void showVehicleAreaZOomOutMinimap() {
     CPad* pad = CPad_GetPad(0);
 
     if(pad->NewState.DPadDown && !pad->OldState.DPadDown) {

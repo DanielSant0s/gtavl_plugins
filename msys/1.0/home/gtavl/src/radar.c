@@ -46,6 +46,22 @@ static void load_vhud_texture(const char* name, int slot) {
     //CStreaming_IHaveUsedStreamingMemory();
 }
 
+static bool bRedOrBlue = false;
+static bool bActivateRadarColorChange = false;
+static uint32_t bRadarColorTimer = 0;
+
+extern uint32_t AudioEngine;
+void (*CAudioEngine_PreloadCutsceneTrack)(uint32_t*, short, char) = (void (*)(uint32_t*, short , char))0x581010;
+void (*CAudioEngine_PlayPreloadedCutsceneTrack)(uint32_t*) = (void (*)(uint32_t*))0x5811A0;
+void (*CAudioEngine_StopCutsceneTrack)(uint32_t*) = (void (*)(uint32_t*))0x5814E0;
+
+static uint32_t* CAEAudioHardware = (uint32_t*)0x876990;
+uint32_t AECutsceneTrackManager = 0x880260;
+
+void (*CAEAudioHardware_SetChannelVolume)(uint32_t*, short channel, uint16_t channelId, float volume, uint8_t a4) = (void (*)(uint32_t*, short channel, uint16_t channelId, float volume, uint8_t a4))0x5582B0;
+void (*CAEAudioHardware_SetChannelFlags)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags) = (void (*)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags))0x558140;
+bool playingOST = false;
+
 static void DrawRadarCop(void* radar) {
     CVector screen_coords, radar_coords, *ent_coords;
     RwRGBA blip_colour;
@@ -57,7 +73,41 @@ static void DrawRadarCop(void* radar) {
 
     int i = 0;
 
+    if (FindPlayerWanted(0)->m_nWantedLevel > 2) {
+        if (!playingOST) {
+            playingOST = true;
+            CAudioEngine_PreloadCutsceneTrack(&AudioEngine, 0x272+randint(0, 12), 1);
+            CAudioEngine_PlayPreloadedCutsceneTrack(&AudioEngine);
+        }
+    } else {
+        if (playingOST) {
+            playingOST = false;
+            CAudioEngine_StopCutsceneTrack(&AudioEngine);
+        }
+    }
+
     if (FindPlayerWanted(0)->m_nWantedLevel > 0) {
+
+        if (!bActivateRadarColorChange) {
+            bActivateRadarColorChange = true;
+
+        }
+
+        if (bRadarColorTimer < CTimer_m_snTimeInMilliseconds) {
+            if (bRedOrBlue) {
+                WriteByte(0x26E29C, 0xFF);
+                WriteByte(0x26E2A4, 0xA5);
+                WriteByte(0x26E2A8, 0xA5);
+                WriteByte(0x26E2B0, 0xFF);
+            } else {
+                WriteByte(0x26E29C, 0xA5);
+                WriteByte(0x26E2A4, 0xA5);
+                WriteByte(0x26E2A8, 0xFF);
+                WriteByte(0x26E2B0, 0xFF);
+            }
+            bRedOrBlue ^= 1;
+            bRadarColorTimer = CTimer_m_snTimeInMilliseconds + 1000;
+        }
 
         for (i = pedPool->size; i; i--) {
             uint32_t* ped = (uint8_t*)pedPool->objects + (i - 1)*sizeof_CPed;
@@ -122,6 +172,14 @@ static void DrawRadarCop(void* radar) {
         }
 
     } else {
+        if (bActivateRadarColorChange) {
+            bActivateRadarColorChange = false;
+            WriteByte(0x26E29C, 0xFF);
+            WriteByte(0x26E2A4, 0xFF);
+            WriteByte(0x26E2A8, 0xFF);
+            WriteByte(0x26E2B0, 0xFF);
+        }
+
         if (hud_textures[0].texture) {
             CSprite2d_Delete(&hud_textures[0]);
             hud_textures[0].texture = NULL;
@@ -376,6 +434,11 @@ static void hookedRadarCentre() {
 void injectRadarPatches() {
     hud_textures[0].texture = NULL;
     hud_textures[1].texture = NULL;
+
+    WriteWord(0x559B80, 0xc140);
+    WriteWord(0x559BE4, 0xc140);
+    WriteByte(0x559BDC, 55); // Change cutscene audio flags to accept volume changes
+    WriteByte(0x559C3C, 55); // Change cutscene audio flags to accept volume changes
 
     RedirectCall(0x238974, &rectLimitRadarPoint);
     RedirectCall(0x23BE14, &rectLimitRadarPoint);

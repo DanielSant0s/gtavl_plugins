@@ -50,7 +50,7 @@ void injectPatches() {
     injectMiscPatches();
     setupAimPatches();
     setupFOVPatches();
-    //setupCameraPatches();
+    setupCloudsPatches();
     setupRotatedDrawPatch();
     setupWastedBustedScreen();
     setupLoadingScreenPatches();

@@ -57,7 +57,7 @@ void CHud_DrawBustedWastedMessage()
         } else {
             death_timestep += 0.4f * (CTimer_ms_fTimeStep * 0.02f * 1000.0f);
 
-            if (death_timestep > 1000.f && death_state == 1) {
+            if (death_timestep > 1000.0f && death_state == 1) {
                 asm volatile ("nop\n");
             }
 

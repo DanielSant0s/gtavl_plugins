@@ -418,13 +418,13 @@ void installSkyEdgeEngine()
 {  
     InjectRubbishPatches();
 
-    MakeNop(0x1190E4);
+    //MakeNop(0x1190E4);
 
-    RedirectCall(0x119358, ReturnShadowCrossProductOffset);
-    MakeNop(0x11935C);
+    //RedirectCall(0x119358, ReturnShadowCrossProductOffset);
+    //MakeNop(0x11935C);
 
-    RedirectCall(0x1198F8, ReturnShadowCrossProductOffset0);
-    RedirectCall(0x11A0C0, ReturnShadowCrossProductOffset0);
+    //RedirectCall(0x1198F8, ReturnShadowCrossProductOffset0);
+    //RedirectCall(0x11A0C0, ReturnShadowCrossProductOffset0);
 
     RedirectCall(0x152D88, SunGlareInject);
     RedirectCall(0x152D9C, SunGlareInject);

@@ -79,7 +79,7 @@ enum eZoneAttributes {
 
 static int (*CCullZones_FindAttributesForCoors)(CVector *a1) = (int (*)(CVector *a1))0X306AC0;
 
-static void CRubbish_Init(const char* a1) {
+void CRubbish_Init(const char* a1) {
     CGame_Init1(a1);
 
     int i;
@@ -146,7 +146,7 @@ static void CRubbish_Init(const char* a1) {
 	CRubbish_bRubbishInvisible = false;
 }
 
-static void CRubbish_Shutdown() {
+void CRubbish_Shutdown() {
 	RwTextureDestroy(gpRubbishTexture[0]);
 	gpRubbishTexture[0] = NULL;
 
@@ -162,7 +162,7 @@ static void CRubbish_Shutdown() {
     CGame_ShutdownRenderWare();
 }
 
-static void CRubbish_Render() {
+void CRubbish_Render() {
 	if (CGame_currArea > 0)
 		return;
 
@@ -279,7 +279,7 @@ static void CRubbish_Render() {
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)true);
 }
 
-static void CRubbish_StirUp(CPhysical* veh) {
+void CRubbish_StirUp(CPhysical* veh) {
 	if ((CTimer_m_FrameCounter ^ (veh->entity.m_nRandomSeed & 3)) == 0)
 		return;
 
@@ -337,7 +337,7 @@ static void CRubbish_StirUp(CPhysical* veh) {
     CVehicle_UpdatePassengerList(veh);
 }
 
-static void CRubbish_Update() {
+void CRubbish_Update() {
 	char foundGround = false;
 
 	if (CRubbish_bRubbishInvisible)
@@ -465,7 +465,7 @@ static void CRubbish_Update() {
 	}
 }
 
-static void CRubbish_SetVisibility(bool visible) {
+void CRubbish_SetVisibility(bool visible) {
 	CRubbish_bRubbishInvisible = (CGame_currArea > 0);
 }
 

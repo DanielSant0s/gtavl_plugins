@@ -12,7 +12,6 @@ void (*CPed_PreRenderProcessFire)(uint32_t);
 
 void CShadows_AddPermanentShadow(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t greeb, uint8_t blue, float drawDistance, uint32_t time, float upDistance);
 
-
 static bool AddedOil = false;
 static uint32_t AddedOilTime = 0;
 
@@ -20,11 +19,8 @@ void AddOilPuddle(RwTexture* texture, CVector* pos, int r, int g, int b, int a, 
     CShadows_AddPermanentShadow(4,
 	texture, pos,
 	0.4f, 0.0f, 0.0f, -0.4f,
-	a,
-	r,
-	g,
-	b,
-	4.0f, 40000, 1.0);
+	a, r, g, b,
+	4.0f, 40000, 1.0f);
 
 	AddedOil = true;
 	AddedOilTime = CTimer_m_snTimeInMilliseconds + 30000;

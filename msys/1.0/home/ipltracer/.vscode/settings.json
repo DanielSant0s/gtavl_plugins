@@ -13,15 +13,7 @@
         "ccam.h": "c",
         "string.h": "c",
         "cvehicle.h": "c",
-        "colour_filter.h": "c",
-        "stdio.h": "c",
-        "stdlib.h": "c",
-        "modules.h": "c",
-        "utility.h": "c",
-        "anim_association.h": "c",
-        "ctxdstore.h": "c",
-        "model_ids.h": "c",
-        "injector.h": "c"
+        "stdio.h": "c"
     },
     "C_Cpp.default.compilerPath": "d:\\Backup\\msys\\1.0\\local\\ps2dev\\ee\\bin\\ee-gcc.exe"
 }

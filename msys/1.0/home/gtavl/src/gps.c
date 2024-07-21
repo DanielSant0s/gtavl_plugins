@@ -66,7 +66,7 @@ extern unsigned int FrontEndMenuManager_m_nTargetBlipIndex;
 
 void PreRenderWater();
 
-void autoDisableTarget() {
+static void autoDisableTarget() {
     CVector player_coords;
 
     PreRenderWater();
@@ -81,6 +81,7 @@ void autoDisableTarget() {
     {
         CRadar_ClearBlip(FrontEndMenuManager_m_nTargetBlipIndex);
         FrontEndMenuManager_m_nTargetBlipIndex = 0;
+        gpsShown = false;
     }
 }
 
@@ -363,7 +364,7 @@ static void renderMissionTrace(tRadarTrace* trace) {
 
 bool CTheScripts_IsPlayerOnAMission();
 
-void GPSEventHandler(bool b) {
+static void GPSEventHandler(bool b) {
     int i;
 
     CHud_DrawGangOverlay(b);
@@ -376,6 +377,7 @@ void GPSEventHandler(bool b) {
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_PLANE
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_HELI
         && *(unsigned int *)(*(unsigned int *)(playa + 1484) + 0x5D0) != VEHICLE_BMX)) {
+            gpsShown = false;
             return;
     }
 
@@ -438,11 +440,11 @@ extern RwIm2DVertex CSprite2d_maVertices[];
 static RwRGBA font_color;
 static RwRGBA font_shadow;
 
-void drawGPSDistance() {
+static void drawGPSDistance() {
     DrawHud();
 
     if (gpsShown) {
-        CFont_SetOrientation(ALIGN_CENTER);
+        CFont_SetOrientation(ALIGN_RIGHT);
         CFont_SetColor(&font_color);
         CFont_SetBackground(0, 0);
         CFont_SetWrapx(70.0f);
@@ -451,10 +453,10 @@ void drawGPSDistance() {
         CFont_SetProportional(1);
         CFont_SetDropShadowPosition(0);
         CFont_SetDropColor(&font_shadow);
-        CFont_SetEdge(2);
+        CFont_SetEdge(0);
         CVector radarBottom, tmp;
-        tmp.x = 0.0f;
-        tmp.y = -1.0f;
+        tmp.x = 0.9f;
+        tmp.y = -0.45f;
         CRadar_TransformRadarPointToScreenSpace(&radarBottom, &tmp);
         char text[16];
         if (gpsDistance > 1000.0f)

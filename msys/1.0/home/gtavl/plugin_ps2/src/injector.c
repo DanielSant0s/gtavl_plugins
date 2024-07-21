@@ -50,6 +50,10 @@ void WriteDword(uint32_t address, uint32_t value) {
     *(uint32_t*)address = value;
 }
 
+void WriteFloat(uint32_t address, float value) {
+    *(float*)address = value;
+}
+
 void MakeNop(uint32_t address) {
     WriteDword(address, 0);
 }

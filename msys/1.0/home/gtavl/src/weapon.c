@@ -18,21 +18,11 @@
 
 void (*CProjectileInfo_Update)(void) = (void (*)(void))0x131650;
 
-float random_float_seed(float min, float max, uint16_t seed) {
-    unsigned int resetSeed = rand() / 2;
 
-    srand(seed);
-    float x = (float)rand();
-    srand((RsTimer(0) / 2) + resetSeed); // reset
-
-    return (max - min) * (x / 2147483600) + min;
-}
 
 static void (*Multiply3x3)(CVector *out, CMatrix *m, CVector *in) = (void (*)(CVector *out, CMatrix *m, CVector *in))0x1100D0;
 
 static void (*CPhysical_AddToMovingList)(CPhysical* this) = (void (*)(CPhysical* this))0x24C2D0;
-
-CProjectile* addedSpeed[32] = {};
 
 void CProjectileInfo_UpdateRotation() {
     CVector v173, outVec;
@@ -62,7 +52,6 @@ void CProjectileInfo_UpdateRotation() {
                         ms_apProjectile[i]->object.parent.m_vecTurnSpeed.x = outVec.x * 0.02f;
                         ms_apProjectile[i]->object.parent.m_vecTurnSpeed.y = outVec.y * 0.02f;
                         ms_apProjectile[i]->object.parent.m_vecTurnSpeed.z = outVec.z * 0.02f;
-                        addedSpeed[i] = ms_apProjectile[i];
                     }   
                 }
             }
@@ -104,8 +93,7 @@ void CWeapon_DoBulletImpactEvent(void* this, CEntity* pFiringEntity, CEntity* pC
             if ( ms_apProjectile[i]->object.parent.entity.m_nModelIndex == MODEL_GRENADE || 
                  ms_apProjectile[i]->object.parent.entity.m_nModelIndex == MODEL_SATCHEL ) {
                 if (DistanceBetweenPoints(&pColPoint->m_vecPoint, getVehCoordinates(&ms_apProjectile[i]->object.parent.entity)) < 1.2f ||
-                    DistanceBetweenPoints(&last_exploded_projectile, getVehCoordinates(&ms_apProjectile[i]->object.parent.entity)) < 6.5f || 
-                    GetNumFiresInRange(&gFireManager, getVehCoordinates(&ms_apProjectile[i]->object.parent.entity), 2.0f) > 0 ) {
+                    DistanceBetweenPoints(&last_exploded_projectile, getVehCoordinates(&ms_apProjectile[i]->object.parent.entity)) < 6.5f) {
                     if (gaProjectileInfo[i].m_bActive) {
                         CExplosion_AddExplosion(
                             NULL,
@@ -141,6 +129,22 @@ void CWeapon_DoBulletImpactEvent(void* this, CEntity* pFiringEntity, CEntity* pC
     CWeapon_DoBulletImpact(this, pFiringEntity, pCollideEntity, vecStart, vecEnd, pColPoint, vecAhead);
 }
 
+void (*CTaskSimpleUseGun_AimGun)(void* task, CEntity* ped) = (void (*)(void* task, CEntity* ped))0x407230;
+
+void CTaskSimpleUseGun_AimGunSmoothIK(void* task, CEntity* ped) {
+
+     // MoveState
+	if (*(uint32_t*)(((uint32_t)(ped) + 0x570)) <= 4)
+	{
+		WriteFloat(0x8D2E70, 0.17f);
+	}
+	else
+	{
+		WriteFloat(0x8D2E70, 0.3f);
+	}
+    CTaskSimpleUseGun_AimGun(task, ped);
+}
+
 void injectWeaponPatches() {
     RedirectCall(0x133938, CProjectileInfo_UpdateRotation);
 
@@ -150,4 +154,12 @@ void injectWeaponPatches() {
     RedirectCall(0x1363D8, CWeapon_DoBulletImpactEvent);
     RedirectCall(0x13A198, CWeapon_DoBulletImpactEvent);
     RedirectCall(0x13B6B4, CWeapon_DoBulletImpactEvent);
+
+    RedirectCall(0x405760, CTaskSimpleUseGun_AimGunSmoothIK);
+
+    // Disable sniper changing moon size
+    MakeNop(0x139508);
+    MakeNop(0x13950C);
+    MakeNop(0x139510);
+    MakeNop(0x139514);
 }

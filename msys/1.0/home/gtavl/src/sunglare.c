@@ -294,7 +294,7 @@ void CVehicle_DoSunGlare(int this)
                 objects[1] = v85;
                 *(float *)&v86 = (float)v24 * 0.0078125f;
                 objects[2] = v86;
-                if ( *(float *)&v86 > 0.0 )
+                if ( *(float *)&v86 > 0.0f )
                 {
                     v25 = *(unsigned short *)(*(uint32_t *)(v19 + 24) + 8 * v4 + 2);
                     v26 = (short *)(*(uint32_t *)(v19 + 20) + 6 * v25);

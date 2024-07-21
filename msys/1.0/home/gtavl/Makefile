@@ -20,13 +20,11 @@ GTAVL_OBJS += src/loading.o \
            src/wasted_busted.o \
 		   src/draw_rotate.o \
 		   src/v_aim.o \
-		   src/vcamera.o \
 		   src/fov.o \
 		   src/radio_wheel.o \
 		   src/radar.o \
 		   src/menu_ui.o \
 		   src/pause_menu.o \
-		   src/misc.o \
 		   src/limits.o \
 		   src/gps.o \
 		   src/veh_funcs.o \
@@ -38,6 +36,8 @@ GTAVL_OBJS += src/loading.o \
 		   src/rubbish.o \
 		   src/oil_system.o \
 		   src/hud.o \
+		   src/clouds.o \
+		   src/misc.o \
 		   src/main.o
 
 EE_STDLIB = plugin_ps2/src/math.o \
@@ -50,7 +50,7 @@ EE_SALIB = plugin_sa/src/common.o \
 
 EE_RWSE  = rw_se/src/secore.o 
 
-EE_OBJS = $(EE_STDLIB) $(EE_SALIB) $(EE_RWSE) $(GTAVL_OBJS)
+EE_OBJS = $(GTAVL_OBJS) $(EE_STDLIB) $(EE_SALIB) $(EE_RWSE) 
 
 all: $(EE_ERL)
 

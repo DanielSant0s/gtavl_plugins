@@ -31,6 +31,16 @@ static CTexture loading_icon;
 
 static void (*CLoadingScreen_LoadSplashes)();
 
+extern uint32_t AudioEngine;
+void CAudioEngine_ServiceLoadingTune(uint32_t*, float);
+
+void (*CAudioEngine_PreloadBeatTrack)(uint32_t*, short) = (void (*)(uint32_t*, short))0x581310;
+void (*CAudioEngine_PlayPreloadedBeatTrack)(uint32_t*, bool) = (void (*)(uint32_t*, bool))0x5814A0;
+void (*CAudioEngine_StopBeatTrack)(uint32_t*) = (void (*)(uint32_t*))0x5814E0;
+void (*CAudioEngine_Service)(uint32_t*) = (void (*)(uint32_t*))0x580730;
+
+bool started_playing_track = false;
+
 static void load_loading_img() {
     CLoadingScreen_LoadSplashes();
 
@@ -74,10 +84,6 @@ extern float flt_66CAD4;
 extern uint8_t byte_66CAD8;
 
 void CLoadingScreen_DisplayNextSplash();
-
-extern uint32_t AudioEngine;
-
-void CAudioEngine_ServiceLoadingTune(uint32_t*, float);
 
 static void CLoadingScreen_Update()
 {

@@ -19,6 +19,8 @@ void WriteWord(uint32_t address, uint16_t value);
 
 void WriteDword(uint32_t address, uint32_t value);
 
+void WriteFloat(uint32_t address, float value);
+
 void MakeNop(uint32_t address);
 
 void MakeRetn(uint32_t address);

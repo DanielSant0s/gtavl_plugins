@@ -9,7 +9,7 @@ static float VehicleMaxFOV = 78.0f;
 static float EmergencyVehicleMinFOV = 80.0f;
 static float skyMultitude = 10.0f;
 
-void SetFOV(float fov)
+static void SetFOV(float fov)
 {
     CDraw_ms_fFOV = fov * 1.22656f;
 }

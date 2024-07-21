@@ -215,6 +215,8 @@ typedef struct {
 void CPed_CustomRender(uint32_t ped) {
     CPed_Render(ped);
 
+    //(*(m_nPedFlags *)(ped + 0x4A4)).bForceDieInCar = true;
+
 	if (IsPlayer(ped)) {
 		//*(uint8_t *)(ped + 1940) = 2;
 		//(*(m_nPedFlags *)(ped + 0x4A4)).bRemoveHead = true;
@@ -281,8 +283,41 @@ void CPed_CustomRender(uint32_t ped) {
 			RwTextureDestroy(tplate);
 		}
 	}
+}
 
+int (*sub_419FF0)(int, int, int) = (int (*)(int, int, int))0x419FF0;
 
+int CTaskComplexDieInCar_CreateSubTask(int a1, int a2, int a3) {
+    (*(m_nPedFlags *)(a3 + 0x4A4)).bCanBeShotInVehicle = false;
+
+    return sub_419FF0(a1, 214, a3);
+}
+
+void (*CTaskComplexDieInCar_PreparePedVehicleForPedDeath)(int, int) = (void (*)(int, int))0x419B80;
+
+int CTaskComplexDieInCar_CreateSubTaskPrepare(int a1, int a2, int a3) {
+    CTaskComplexDieInCar_PreparePedVehicleForPedDeath(a1, *(int *)(a3 + 1484));
+    *(uint32_t *)(a1 + 16) = CTimer_m_snTimeInMilliseconds;
+    *(uint32_t *)(a1 + 20) = 2000;
+    *(uint8_t *)(a1 + 24) = 1;
+
+    (*(m_nPedFlags *)(a3 + 0x4A4)).bCanBeShotInVehicle = false;
+
+    return sub_419FF0(a1, 214, a3);
+}
+
+int (*CFireManager_StartScriptFire)(uint32_t *this, CVector* pos, CEntity* target, float _fUnused, char _nUnused, char nGenerations, int nStrength) = 
+(int (*)(uint32_t *this, CVector* pos, CEntity* target, float _fUnused, char _nUnused, char nGenerations, int nStrength))0x29ED50;
+
+void FireOnDrivers() {
+    uint32_t s3;
+    asm("move %0, $s3" : "=r" (s3)); // get from our parent function
+
+    int v1 = *(int *)(s3 + 0x468);
+    if ( v1 )
+        CFireManager_StartScriptFire(&gFireManager, v1 + 4, v1, 0.8f, 1, 0, 1);
+
+    asm volatile ("lw $v1, 0x5D0(%0)\n" : : "r"(s3));
 }
 
 void injectPedRenderPatches() {
@@ -291,4 +326,9 @@ void injectPedRenderPatches() {
     WriteDword(0x65BB80, CPed_CustomRender);
     WriteDword(0x65BBF0, CPed_CustomRender);
     WriteDword(0x65BE00, CPed_CustomRender);
+
+    RedirectCall(0x419DA0, CTaskComplexDieInCar_CreateSubTaskPrepare);
+    RedirectCall(0x419DFC, CTaskComplexDieInCar_CreateSubTask);
+
+    RedirectCall(0x145C50, FireOnDrivers);
 }
