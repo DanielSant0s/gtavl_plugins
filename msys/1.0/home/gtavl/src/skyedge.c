@@ -13,6 +13,7 @@
 #include <CCam.h>
 #include <math.h>
 
+#include "model_ids.h"
 #include "modules.h"
 #include "renderbuffer.h"
 #include "hooks.h"
@@ -414,6 +415,228 @@ void ReturnShadowCrossProductOffset0() {
     asm volatile ("mtc1 %0, $f0" : : "r" (*(uint32_t*)&test_cpoffset));
 }
 
+typedef enum 
+{
+    PLTYPE_POINTLIGHT = 0,
+    PLTYPE_SPOTLIGHT = 1,
+    PLTYPE_DARKLIGHT = 2,
+} ePointLightType;
+
+typedef struct {
+	CVector m_vecPosn;
+	CVector m_vecDirection;
+    float m_fRange;
+    float m_fColorRed;
+    float m_fColorGreen;
+    float m_fColorBlue;
+    CEntity *m_pEntityToLight;
+    unsigned char m_nType; // see ePointLightType
+    unsigned char m_nFogType;
+    bool m_bGenerateShadows;
+    char _pad0;
+} CPointLight;
+
+static unsigned int* NumLights = (unsigned int*)0x66BBE0;
+
+// lights array. Count: MAX_POINTLIGHTS (32)
+static CPointLight *aLights = (CPointLight*)0x7C1B10;
+
+const unsigned int MAX_POINTLIGHTS = 32;
+
+static float VectorMagnitude(CVector *vector) { return sqrtf(vector->x * vector->x + vector->y * vector->y + vector->z * vector->z); }
+
+unsigned short CalculateShadowStrength(float currDist, float maxDist, unsigned short maxStrength) {
+    //assert(maxDist >= currDist); // Otherwise integer underflow will occur
+
+    const float halfMaxDist = maxDist / 2.f;
+    if (currDist >= halfMaxDist) { // Anything further than half the distance is faded out
+        return (unsigned short)((1.f - (currDist - halfMaxDist) / halfMaxDist) * maxStrength);
+    } else { // Anything closer than half the max distance is full strength
+        return (unsigned short)maxStrength;
+    }
+}
+
+CVector normalize(CVector v) {
+    float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    CVector normalized = { v.x / length, v.y / length, v.z / length };
+    return normalized;
+}
+
+float fmaxf(float a, float b) {
+    return (a > b) ? a : b;
+}
+
+float fminf(float a, float b) {
+    return (a < b) ? a : b;
+}
+
+float ath_acosf(float x) {
+  float y = sqrtf(1.0f - x * x);
+  float t = atan2f(y, x);
+  return t;
+}
+
+float calculateAngle(CVector *v1, CVector *v2) {
+    float dotProduct = v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
+    float length1 = sqrtf(v1->x * v1->x + v1->y * v1->y + v1->z * v1->z);
+    float length2 = sqrtf(v2->x * v2->x + v2->y * v2->y + v2->z * v2->z);
+    return ath_acosf(dotProduct / (length1 * length2));
+}
+
+void calculateShadow(CVector *shadowPos, CVector *lightPos, CVector *lightDir, float *topX, float *topY, float *rightX, float *rightY) {
+    CVector dir, norm_pos;
+    if (lightDir) {
+        dir = *lightDir;
+    } else {
+        dir.x = shadowPos->x - lightPos->x;
+        dir.y = shadowPos->y - lightPos->y;
+        dir.z = shadowPos->z - lightPos->z;
+        
+    }
+
+    dir = normalize(dir);
+
+    *topX = -dir.x;
+    *topY = -dir.y;
+    *rightX =  dir.y * 0.75f;  
+    *rightY = -dir.x * 0.75f; 
+
+    CVector defaultDir = {0.0f, 0.0f, -1.0f}; 
+    float angle = calculateAngle(&defaultDir, &dir);
+
+    float cosAngle = cosf(angle);
+    float sinAngle = sinf(angle);
+    
+    float rotatedTopX = *topX * cosAngle - *topY * sinAngle;
+    float rotatedTopY = *topX * sinAngle + *topY * cosAngle;
+    float rotatedRightX = *rightX * cosAngle - *rightY * sinAngle;
+    float rotatedRightY = *rightX * sinAngle + *rightY * cosAngle;
+
+    *topX = fmaxf(fminf(rotatedTopX, 1.0f), -1.0f);
+    *topY = fmaxf(fminf(rotatedTopY, 1.0f), -1.0f);
+    *rightX = fmaxf(fminf(rotatedRightX, 1.0f), -1.0f);
+    *rightY = fmaxf(fminf(rotatedRightY, 1.0f), -1.0f);
+}
+
+typedef struct {
+    float range;
+    float dist;
+} RangeData;
+
+void (*CShadows_CalcPedShadowValues)(CVector *sunPosn, float* displacementX, float* displacementY, float* frontX, float* frontY, float* sideX, float* sideY) = 
+(void (*)(CVector *sunPosn, float* displacementX, float* displacementY, float* frontX, float* frontY, float* sideX, float* sideY))0x11C640;
+
+bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
+    bool has_lights = false;
+    float min_dist = 0.0f;
+    CColourSet* CTimeCycle_m_CurrentColours = (CColourSet*)0x7067C0;
+
+    if (!CTimeCycle_m_CurrentColours->m_nShadowStrength) {
+        return;
+    }
+
+    const CVector plyrPos;
+    FindPlayerCoors(&plyrPos, -1);
+
+    int i = 0;
+    for (i = 0; i < *NumLights; i++) {
+        if (aLights[i].m_nType != PLTYPE_POINTLIGHT && aLights[i].m_nType != PLTYPE_SPOTLIGHT) {
+            continue;
+        }
+        if (!aLights[i].m_bGenerateShadows) {
+            continue;
+        }
+        if (aLights[i].m_fColorRed == 0.f && aLights[i].m_fColorGreen == 0.f && aLights[i].m_fColorBlue == 0.f) { // If it's black => ignore
+            continue;
+        }
+
+        CVector lightToPlyr;
+        lightToPlyr.x = aLights[i].m_vecPosn.x - plyrPos.x;
+        lightToPlyr.y = aLights[i].m_vecPosn.y - plyrPos.y;
+        lightToPlyr.z = aLights[i].m_vecPosn.z - plyrPos.z;
+
+        const float lightToPlyrDist = VectorMagnitude(&lightToPlyr);
+
+        if (lightToPlyrDist >= aLights[i].m_fRange || lightToPlyrDist == 0.f) { // NOTSA: Zero check to prevent (possible) division-by-zero
+            continue;
+        }
+
+        has_lights = true;
+
+        if (fminf(lightToPlyrDist, min_dist) != min_dist) {
+            ret->dist = lightToPlyrDist;
+            ret->range = aLights[i].m_fRange;
+            min_dist = lightToPlyrDist;
+        }
+
+        float frontX;
+        float frontY;
+        float sideX;
+        float sideY;
+
+        CVector light_pos = aLights[i].m_vecPosn;
+
+        CVector *light_dir = (aLights[i].m_nType == PLTYPE_SPOTLIGHT) ? &aLights[i].m_vecDirection : NULL;
+
+        CVector shadow_pos;
+
+        calculateShadow(&plyrPos, &light_pos, light_dir, &frontX, &frontY, &sideX, &sideY);
+
+        if (light_dir) {
+            shadow_pos.x = plyrPos.x + light_dir->x;
+            shadow_pos.y = plyrPos.y + light_dir->y;
+        } else {
+            shadow_pos.x = plyrPos.x - frontX - sideX;
+            shadow_pos.y = plyrPos.y - frontY - sideY;   
+        }
+
+        shadow_pos.z = plyrPos.z;
+
+        CShadows_StoreShadowToBeRenderedSingle(
+            1,
+            *(RwTexture**)0x66B204,
+            &shadow_pos,
+            frontX,
+            frontY,
+            sideX, 
+            sideY,
+            CalculateShadowStrength(
+                lightToPlyrDist,
+                aLights[i].m_fRange / (light_dir? 4 : 1),
+                10 * CTimeCycle_m_CurrentColours->m_nShadowStrength / 8u // Same as mult by `0.625` and then casting to int
+            ),
+            0, 0, 0,
+            4.0f,
+            false,
+            1.f,
+            NULL,
+            true
+        );
+    }
+
+    return has_lights;
+}
+
+void CShadows_StoreShadowForPlayer(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings) {
+    short ped_intensity = intensity;
+    RangeData distance;
+
+    if (drawOnBuildings) {
+        if (CShadows_RenderExtraPlayerShadows(&distance)) {
+            if (distance.dist > 1.0f) {
+                ped_intensity = (short)((float)intensity * ((float)distance.dist / distance.range));
+            } else {
+                ped_intensity = 32;
+            }
+        }
+
+    }
+
+    CShadows_StoreShadowToBeRenderedSingle(type, texture, posn, topX, topY, rightX, rightY, ped_intensity, red, green, blue, zDistance, drawOnWater, scale, realTimeShadow, drawOnBuildings);
+}
+
+
+
 void installSkyEdgeEngine()
 {  
     InjectRubbishPatches();
@@ -447,6 +670,12 @@ void installSkyEdgeEngine()
     RedirectCall(0x246CC8, rotate_clut);
     RedirectCall(0x246E20, rotate_clut);
     RedirectCall(0x17F8A8, sort_water_texture);
+
+    //RedirectCall(0x26F930, CShadows_RenderExtraPlayerShadows);
+    RedirectCall(0x1156F0, CShadows_StoreShadowForPlayer);
+    WriteDword(0x17E018, 0x0080402D);
+    WriteDword(0x17E064, 0x0080402D);
+    WriteDword(0x17E168, 0x0080402D);
 
     //RedirectCall(0x24693C, SkyEdgeCameraClear);
 }

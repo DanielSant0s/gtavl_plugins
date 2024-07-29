@@ -42,8 +42,6 @@ static void (*CShadows_StoreShadowToBeRendered)(unsigned char, CVector *, float,
 	void (*)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char)
 )0x113FF0;
 
-void CShadows_StoreShadowToBeRenderedSingle(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings);
-
 void drawRearLights(CVector *pos, float a, float length, uint8_t r, uint8_t g, uint8_t b) {
 	float x1 = 0.0f, y1 = 0.0f;
 

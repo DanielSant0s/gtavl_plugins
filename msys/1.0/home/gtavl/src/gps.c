@@ -56,9 +56,16 @@ void CHud_DrawGangOverlay(int);
 static bool gpsShown;
 
 static float gpsDistance;
-static CNodeAddress resultNodes[MAX_NODE_POINTS];
-static CVector nodePoints[MAX_NODE_POINTS];
-static RwIm2DVertex lineVerts[MAX_NODE_POINTS * 4];
+
+//static CNodeAddress resultNodes[MAX_NODE_POINTS];
+//static CVector nodePoints[MAX_NODE_POINTS];
+//static RwIm2DVertex lineVerts[MAX_NODE_POINTS * 4];
+
+
+
+static CNodeAddress *resultNodes = NULL;
+static CVector *nodePoints = NULL;
+static RwIm2DVertex* lineVerts = NULL;
 
 static bool missionRouteShown = false;
 
@@ -66,7 +73,7 @@ extern unsigned int FrontEndMenuManager_m_nTargetBlipIndex;
 
 void PreRenderWater();
 
-static void autoDisableTarget() {
+void autoDisableTarget() {
     CVector player_coords;
 
     PreRenderWater();
@@ -94,14 +101,14 @@ unsigned int CPathFind_FindNodePointer(void *this, CNodeAddress a2)
     return *((unsigned int *)this + a2.m_nAreaId + 513) + 28 * a2.m_nNodeId;
 }
 
-static void CPathNode_GetCoors(CVector* out, unsigned int this)
+void CPathNode_GetCoors(CVector* out, unsigned int this)
 {
     out->x = (float)(*(short *)(this + 8) * 0.125f);
     out->y = (float)(*(short *)(this + 10) * 0.125f);
     out->z = (float)(*(short *)(this + 12) * 0.125f);
 }
 
-static void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
+void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
     vertex->u.els.scrVertex.x = x;
     vertex->u.els.scrVertex.y = y;
     vertex->u.els.scrVertex.z = NearScreenZ - 0.5f;
@@ -112,7 +119,7 @@ static void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
     vertex->u.els.color = line_color;
 }
 
-static void processGPS(CVector* dest_coords) {
+void processGPS(CVector* dest_coords) {
     CVector player_coords;
     unsigned int i;
 
@@ -326,7 +333,7 @@ static void processGPS(CVector* dest_coords) {
 
 }
 
-static void renderMissionTrace(tRadarTrace* trace) {
+void renderMissionTrace(tRadarTrace* trace) {
     CVector destVec;
     switch (trace->m_nBlipType) {
     case 1:
@@ -364,7 +371,7 @@ static void renderMissionTrace(tRadarTrace* trace) {
 
 bool CTheScripts_IsPlayerOnAMission();
 
-static void GPSEventHandler(bool b) {
+void GPSEventHandler(bool b) {
     int i;
 
     CHud_DrawGangOverlay(b);
@@ -440,7 +447,7 @@ extern RwIm2DVertex CSprite2d_maVertices[];
 static RwRGBA font_color;
 static RwRGBA font_shadow;
 
-static void drawGPSDistance() {
+void drawGPSDistance() {
     DrawHud();
 
     if (gpsShown) {
@@ -469,6 +476,10 @@ static void drawGPSDistance() {
 
 void injectGPSPatches()
 {  
+    resultNodes = br_alloc_array(CNodeAddress, MAX_NODE_POINTS);
+    nodePoints = br_alloc_array(CVector, MAX_NODE_POINTS);
+    lineVerts = br_alloc_array(RwIm2DVertex, MAX_NODE_POINTS*4);
+
     limitRadarPoint = (float (*)(float *a1))ReadCall(0x238974);
 
     CRGBA_CRGBA(&font_color, distance_text_color_r, 

@@ -43,8 +43,11 @@ void injectPatches() {
     CCustomRadar_LimitRadarPoint = (void (*)(CVector*))ReadCall(0x268164);
 
     installOilSystem();
-    injectPickupPatches();
     injectLimitHooks();
+    setupColourFilterPatches();
+    injectHUDPatches();
+
+    injectPickupPatches();
     installSkyEdgeEngine();
     injectRadioWheelPatches();
     injectMiscPatches();
@@ -54,10 +57,8 @@ void injectPatches() {
     setupRotatedDrawPatch();
     setupWastedBustedScreen();
     setupLoadingScreenPatches();
-    setupColourFilterPatches();
     setupInGameMenuPatches();
     injectRadarPatches();
-    injectHUDPatches();
     injectGPSPatches();
     setupPauseMenuPatches();
     injectVehiclePatches();
@@ -77,6 +78,9 @@ void injectPatches() {
 
 int _start()
 {
+    br_init(true);
+
     injectPatches();
+
     return 0;
 }

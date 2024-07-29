@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <CVector.h>
+#include "bios_alloc.h"
 
 extern void (*CCustomRadar_LimitRadarPoint)(CVector*);
 

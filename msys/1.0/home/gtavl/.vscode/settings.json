@@ -21,7 +21,10 @@
         "anim_association.h": "c",
         "ctxdstore.h": "c",
         "model_ids.h": "c",
-        "injector.h": "c"
+        "injector.h": "c",
+        "bios_alloc.h": "c",
+        "alloc.h": "c",
+        "stdbool.h": "c"
     },
     "C_Cpp.default.compilerPath": "d:\\Backup\\msys\\1.0\\local\\ps2dev\\ee\\bin\\ee-gcc.exe"
 }
