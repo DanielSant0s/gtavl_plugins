@@ -8,6 +8,22 @@
 #include <CRGBA.h>
 #include <math.h>
 #include "hooks.h"
+//#include "utility.h"
+
+#include "virtual_mem.h"
+
+#include "bios_alloc.h"
+
+enum RwTextureAddressMode
+{
+    rwTEXTUREADDRESSNATEXTUREADDRESS = 0,   /**<Invalid addressing mode */
+    rwTEXTUREADDRESSWRAP,                   /**<UV wraps (tiles) */
+    rwTEXTUREADDRESSMIRROR,                 /**<Alternate UV is flipped */
+    rwTEXTUREADDRESSCLAMP,                  /**<UV is clamped to 0-1 */
+    rwTEXTUREADDRESSBORDER,                 /**<Border colour takes effect outside of 0-1 */
+    rwTEXTUREADDRESSMODEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwTextureAddressMode RwTextureAddressMode;
 
 void CRadar_DrawBlips(void*);
 char CWanted_SetPursuitCop(void *, void *);
@@ -21,6 +37,98 @@ static float angle = 0.0f;
 #define get_entity_model(entity) *(short *)((char*)entity + 34)
 
 static CTexture hud_textures[10];
+
+RwTexture dummy_tex = { 0 };
+RwRaster dummy_raster = { 0 };
+
+RwRaster *base_raster;
+
+VirtualMemoryBlock hud_textures_block;
+
+typedef struct {
+    size_t texture;
+    size_t raster;
+    size_t pixels;
+    size_t palette;
+} TextureOffsets;
+
+TextureOffsets radar_cop_offsets;
+
+static void (*CGame_Init1)(const char*);
+
+static RwTexture* (*RwTextureRead)(const char* name, const char* mask) = (RwTexture* (*)(const char* name, const char* mask))0x345A80;
+
+void preload_hud_textures(const char* a1) {
+    CGame_Init1(a1);
+
+    RwTexture* tmp_tex = NULL;
+
+    dummy_tex.refCount = 1;
+    dummy_tex.raster = NULL;
+
+    register_block(&hud_textures_block, 2*(sizeof(RwTexture) + sizeof(RwRaster) + 16*sizeof(RwRGBA) + (32*32/2)) + 1024/*security margin*/, false);
+
+    CTxdStore_PushCurrentTxd();
+    
+    int v7 = CTxdStore_FindTxdSlot("vlhud");
+
+    if ( v7 == -1 )
+        v7 = CTxdStore_AddTxdSlot("vlhud");
+
+    CTxdStore_LoadTxd(v7, "MODELS\\VLHUD.TXD");
+    CTxdStore_AddRef(v7);
+
+    CTxdStore_SetCurrentTxd(v7);
+
+    //CSprite2d_SetTexture(&hud_textures[slot], name, 0);
+
+    tmp_tex = RwTextureRead("radar_cop", NULL);
+
+    dummy_tex.filterAddressing = tmp_tex->filterAddressing;
+
+    size_t current_offset = 0;
+
+    write_block(&hud_textures_block, &dummy_tex, current_offset, sizeof(RwTexture));
+    radar_cop_offsets.texture = current_offset;
+    current_offset += sizeof(RwTexture);
+
+    dummy_raster.parent = NULL; /* Top level raster if a sub raster */
+    dummy_raster.cpPixels = NULL; /* Pixel pointer when locked */
+    dummy_raster.palette = NULL; /* Raster palette */
+    dummy_raster.width = tmp_tex->raster->width; /* Dimensions of raster */
+    dummy_raster.height = tmp_tex->raster->height; /* Dimensions of raster */
+    dummy_raster.depth = tmp_tex->raster->depth; /* Dimensions of raster */
+    dummy_raster.stride = tmp_tex->raster->stride; /* Lines bytes of raster */
+    dummy_raster.cType = tmp_tex->raster->cType;  /* Type of raster */
+    dummy_raster.cFlags = tmp_tex->raster->cFlags; /* Raster flags */
+    dummy_raster.privateFlags = tmp_tex->raster->privateFlags; /* Raster private flags */
+    dummy_raster.cFormat = tmp_tex->raster->cFormat; /* Raster format */
+
+    dummy_raster.originalPixels = NULL;
+    dummy_raster.originalWidth = tmp_tex->raster->originalWidth;
+    dummy_raster.originalHeight = tmp_tex->raster->originalHeight;
+    dummy_raster.originalStride = tmp_tex->raster->originalStride;
+
+    write_block(&hud_textures_block, &dummy_raster, current_offset, sizeof(RwRaster));
+    radar_cop_offsets.raster = current_offset;
+    current_offset += sizeof(RwRaster);
+
+    write_block(&hud_textures_block, tmp_tex->raster->cpPixels, current_offset, (32*32/2));
+    radar_cop_offsets.pixels = current_offset;
+    current_offset += (32*32/2);
+
+    write_block(&hud_textures_block, tmp_tex->raster->palette, current_offset, 16*sizeof(RwRGBA));
+    radar_cop_offsets.palette = current_offset;
+    current_offset += 16*sizeof(RwRGBA);
+
+    RwTextureDestroy(tmp_tex);
+
+    CTxdStore_PopCurrentTxd();
+
+    dump_block(&hud_textures_block);
+
+    //free_virtual_memory();
+}
 
 static void load_vhud_texture(const char* name, int slot) {
     //CStreaming_MakeSpaceFor(306464);
@@ -44,6 +152,8 @@ static void load_vhud_texture(const char* name, int slot) {
     //CTxdStore_RemoveTxdSlot(v7);
 
     //CStreaming_IHaveUsedStreamingMemory();
+
+    memset(&dummy_raster, 0, sizeof(RwRaster));
 }
 
 static bool bRedOrBlue = false;
@@ -62,7 +172,7 @@ void (*CAEAudioHardware_SetChannelVolume)(uint32_t*, short channel, uint16_t cha
 void (*CAEAudioHardware_SetChannelFlags)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags) = (void (*)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags))0x558140;
 bool playingOST = false;
 
-static void DrawRadarCop(void* radar) {
+void DrawRadarCop(void* radar) {
     CVector screen_coords, radar_coords, *ent_coords;
     RwRGBA blip_colour;
 
@@ -129,8 +239,27 @@ static void DrawRadarCop(void* radar) {
                 ent_coords = getCharCoordinates(ped);
 
                 if (ent_coords->x != 0.0f && ent_coords->y != 0.0f ) {
-                    if (!hud_textures[0].texture)
-                        load_vhud_texture("radar_cop", 0);
+                    if (!hud_textures[0].texture) {
+                        //load_vhud_texture("radar_cop", 0);
+                        hud_textures[0].texture = &dummy_tex;
+
+                        base_raster = RwRasterCreate(32, 32, 4, rwRASTERTYPETEXTURE | rwRASTERFORMAT8888 | rwRASTERFORMATPAL4);
+
+                        read_block(&hud_textures_block, &dummy_tex, radar_cop_offsets.texture, sizeof(RwTexture));
+                        //read_block(&hud_textures_block, &dummy_raster, radar_cop_offsets.raster, sizeof(RwRaster));
+ //
+                        //dummy_raster.originalPixels = br_alloc((32*32)/2);
+                        //dummy_raster.cpPixels = dummy_raster.originalPixels;
+                        //dummy_raster.palette = br_alloc(16*sizeof(RwRGBA));
+
+                        dummy_tex.raster = base_raster;
+                        RwRasterLock(base_raster, 0, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
+                        RwRasterLockPalette(base_raster, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
+                        read_block(&hud_textures_block, base_raster->cpPixels, radar_cop_offsets.pixels, (32*32/2));
+                        read_block(&hud_textures_block, base_raster->palette, radar_cop_offsets.palette, 16*sizeof(RwRGBA));
+
+                        //memcpy(base_raster, &dummy_raster, sizeof(RwRaster));
+                    }
 
                     CRadar_TransformRealWorldPointToRadarSpace(&radar_coords, ent_coords);
 
@@ -181,7 +310,8 @@ static void DrawRadarCop(void* radar) {
         }
 
         if (hud_textures[0].texture) {
-            CSprite2d_Delete(&hud_textures[0]);
+            //CSprite2d_Delete(&hud_textures[0]);
+            RwRasterDestroy(base_raster);
             hud_textures[0].texture = NULL;
         }
 
@@ -196,7 +326,7 @@ static void DrawRadarCop(void* radar) {
     CRadar_DrawBlips(radar);
 }
 
-static int sub_10001600(float *a1, float *a2, float *a3, float *a4)
+int sub_10001600(float *a1, float *a2, float *a3, float *a4)
 {
     int result;
     float v5;
@@ -385,7 +515,7 @@ static int sub_10001600(float *a1, float *a2, float *a3, float *a4)
     return result;
 }
 
-static float rectLimitRadarPoint(float *a1)
+float rectLimitRadarPoint(float *a1)
 {
     float result; // st7
     float v2; // st7
@@ -434,6 +564,11 @@ static void hookedRadarCentre() {
 void injectRadarPatches() {
     hud_textures[0].texture = NULL;
     hud_textures[1].texture = NULL;
+
+    
+    CGame_Init1 = (void (*)())ReadCall(0x242B9C);
+
+    RedirectCall(0x242B9C, preload_hud_textures);
 
     WriteWord(0x559B80, 0xc140);
     WriteWord(0x559BE4, 0xc140);

@@ -20,19 +20,22 @@ __extendsfdf2 0x531140
 
 # sifdev
 sceSifLoadModule 0x5449A0
+sceSifSearchModuleByName 0x544608
 sceDopen 0x542388
 sceDclose 0x542450
 sceDread 0x5425B8
-sceRemove 0x542B18
+sceRemove 0x541DC0
 sceMkdir 0x541DE0
 sceRmdir 0x541F98
+sceSync 0x542D40
 
-open 0x540B28
-close 0x540DB8
-lseek 0x540F30
-read 0x541170
-write 0x5413E0
+sceOpen 0x540B28
+sceClose 0x540DB8
+sceLseek 0x540F30
+sceRead 0x541170
+sceWrite 0x5413E0
 chdir 0x542D20
+sceGetstat 0x542710
 
 # stdio
 scePrintf 0x54F7D0

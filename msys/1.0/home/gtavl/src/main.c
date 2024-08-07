@@ -13,7 +13,11 @@
 
 #include "hooks.h"
 
-static uint32_t LookBehindTimeLimit = 0;
+#include <sifdev.h>
+
+#include "virtual_mem.h"
+
+uint32_t LookBehindTimeLimit = 0;
 
 bool CPad_GetLookBehindForCar(CPad *this)
 {
@@ -38,6 +42,32 @@ bool CPad_GetLookBehindForCar(CPad *this)
 }
 
 void (*CCustomRadar_LimitRadarPoint)(CVector*);
+
+
+inline void nopdelay(void)
+{
+    int i = 0xfffff;
+
+    do {
+        __asm__("nop\nnop\nnop\nnop\nnop\n");
+    } while (i-- != -1);
+}
+
+bool wait_device(char *path) {
+    struct sce_stat buffer;
+    int ret = -1;
+    int retries = 500;
+
+    while(ret != 0 && retries > 0) {
+        ret = sceGetstat(path, &buffer);
+        /* Wait untill the device is ready */
+        nopdelay();
+
+        retries--;
+    }
+
+    return ret == 0;
+}
 
 void injectPatches() {
     CCustomRadar_LimitRadarPoint = (void (*)(CVector*))ReadCall(0x268164);
@@ -78,7 +108,22 @@ void injectPatches() {
 
 int _start()
 {
+    if (sceSifSearchModuleByName("usbd") < 0) {
+        sceSifLoadModule("cdrom0:\\SYSTEM\\USBD.IRX", 0, 0);
+    }
+
+    if (sceSifSearchModuleByName("bdm") < 0) {
+        //sceSifLoadModule("cdrom0:\\SYSTEM\\USBHDFSD.IRX", 0, 0);
+        sceSifLoadModule("cdrom0:\\SYSTEM\\BDM.IRX", 0, 0);
+        sceSifLoadModule("cdrom0:\\SYSTEM\\BDMFS_FATFS.IRX", 0, 0);
+        sceSifLoadModule("cdrom0:\\SYSTEM\\USBMASS_BD.IRX", 0, 0);
+    }
+
     br_init(true);
+
+    wait_device("mass:");
+
+    init_virtual_memory("mass:gtavl.vmem", MB(32)); 
 
     injectPatches();
 

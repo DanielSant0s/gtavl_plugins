@@ -14,9 +14,8 @@ EE_ERL = gtavl.erl
 
 EE_INCS += -Iplugin_sa/include/ -Iplugin_ps2/include/ -Irw_se/include/ 
 
-GTAVL_OBJS += 	src/alloc.o \
-		   	  	src/bios_alloc.o \
-				src/colour_filter.o \
+GTAVL_OBJS += 	src/colour_filter.o \
+				src/menu_ui.o \
 				src/limits.o \
 			  	src/oil_system.o \
 		   	  	src/pickups.o \
@@ -25,7 +24,6 @@ GTAVL_OBJS += 	src/alloc.o \
 		   	  	src/v_aim.o \
 		   	  	src/fov.o \
 		   	  	src/radio_wheel.o \
-		   	  	src/radar.o \
 		   	  	src/pause_menu.o \
 		   	  	\
 		   	  	src/veh_funcs.o \
@@ -38,10 +36,13 @@ GTAVL_OBJS += 	src/alloc.o \
 				\
 		   	  	src/loading.o \
 				src/clouds.o \
-				src/menu_ui.o \
 				src/hud.o \
 		   	  	src/gps.o \
+				src/radar.o \
 		   	  	src/misc.o \
+				src/alloc.o \
+		   	  	src/bios_alloc.o \
+				src/virtual_mem.o \
 		   	  	src/main.o
 
 EE_STDLIB = plugin_ps2/src/math.o \
