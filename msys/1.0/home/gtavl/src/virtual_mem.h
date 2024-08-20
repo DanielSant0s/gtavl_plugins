@@ -36,7 +36,9 @@ typedef struct {
 
 void init_virtual_memory(const char *filename, size_t total_size);
 
-void register_block(VirtualMemoryBlock *block, size_t block_size, bool cached);
+void alloc_block(VirtualMemoryBlock *block, size_t block_size, bool cached);
+
+void free_block(VirtualMemoryBlock *block);
 
 void read_block(VirtualMemoryBlock *block, char *buffer, size_t offset, size_t length);
 

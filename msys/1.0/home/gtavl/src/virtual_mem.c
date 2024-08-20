@@ -4,7 +4,13 @@
 VirtualMemory vm;
 
 void init_virtual_memory(const char *filename, size_t total_size) {
-    //sceRemove(filename);
+    int fd = sceOpen(filename, SCE_RDONLY);
+
+    if (fd) {
+        sceClose(fd);
+        sceRemove(filename);
+    }
+
     vm.file = sceOpen(filename, SCE_RDWR | SCE_CREAT);
     vm.name = filename;
     
@@ -37,18 +43,30 @@ size_t virtual_memory_usage() {
     return vm.usage;
 }
 
-void register_block(VirtualMemoryBlock *block, size_t block_size, bool cached) {
-    block->id = vm.next_block_id++;
+void alloc_block(VirtualMemoryBlock *block, size_t block_size, bool cached) {
+    block->id = vm.next_block_id;
     block->size = block_size;
     block->cached = (cached && (block_size <= MAX_SEGMENT_SIZE * CACHE_SIZE));
+
     vm.usage += block->size;
+    vm.next_block_id += block->size;
 }
 
-void destroy_block(VirtualMemoryBlock *block) {
+void free_block(VirtualMemoryBlock *block) {
     vm.usage -= block->size;
 
     block->id = -1;
     block->size = 0;
+}
+
+void read_block_raw(int block_id, char *buffer, size_t offset, size_t length) {
+    sceLseek(vm.file, block_id + offset, 0);
+    sceRead(vm.file, buffer, length);
+}
+
+void write_block_raw(int block_id, char *buffer, size_t offset, size_t length) {
+    sceLseek(vm.file, block_id + offset, 0);
+    sceWrite(vm.file, buffer, length);
 }
 
 void read_segment(int block_id, char *buffer, size_t offset, size_t length) {
@@ -63,8 +81,7 @@ void read_segment(int block_id, char *buffer, size_t offset, size_t length) {
         }
     }
 
-    sceLseek(vm.file, block_id * MAX_SEGMENT_SIZE + offset, 0);
-    sceRead(vm.file, buffer, length);
+    read_block_raw(block_id, buffer, offset, length);
 
     int least_used_index = 0;
     for (i = 1; i < CACHE_SIZE; i++) {
@@ -83,16 +100,13 @@ void read_segment(int block_id, char *buffer, size_t offset, size_t length) {
     vm.cache[least_used_index].access_count = 1;
     vm.cache[least_used_index].data = (char *)br_alloc(length);
 
-    sceLseek(vm.file, block_id * MAX_SEGMENT_SIZE + offset, 0);
-    sceRead(vm.file, vm.cache[least_used_index].data, length);
+    read_block_raw(block_id, vm.cache[least_used_index].data, offset, length);
     memcpy(buffer, vm.cache[least_used_index].data, length);
 }
 
 void read_block(VirtualMemoryBlock *block, char *buffer, size_t offset, size_t length) {
     if (!block->cached) {
-        sceLseek(vm.file, block->id * block->size + offset, 0);
-        sceRead(vm.file, buffer, length);
-
+        read_block_raw(block->id, buffer, offset, length);
         return;
     }
 
@@ -109,8 +123,7 @@ void read_block(VirtualMemoryBlock *block, char *buffer, size_t offset, size_t l
 }
 
 void write_segment(int block_id, const char *buffer, size_t offset, size_t length) {
-    sceLseek(vm.file, block_id * MAX_SEGMENT_SIZE + offset, 0);
-    sceWrite(vm.file, buffer, length);
+    write_block_raw(block_id, buffer, offset, length);
 
     int i;
     for (i = 0; i < CACHE_SIZE; i++) {
@@ -140,16 +153,13 @@ void write_segment(int block_id, const char *buffer, size_t offset, size_t lengt
     vm.cache[least_used_index].access_count = 1;
     vm.cache[least_used_index].data = (char *)br_alloc(length);
 
-    sceLseek(vm.file, block_id * MAX_SEGMENT_SIZE + offset, 0);
-    sceRead(vm.file, vm.cache[least_used_index].data, length);
+    read_block_raw(block_id, vm.cache[least_used_index].data, offset, length);
     memcpy(vm.cache[least_used_index].data, buffer, length);
 }
 
 void write_block(VirtualMemoryBlock *block, const char *buffer, size_t offset, size_t length) {
     if (!block->cached) {
-        sceLseek(vm.file, block->id * block->size + offset, 0);
-        sceWrite(vm.file, buffer, length);
-
+        write_block_raw(block->id, buffer, offset, length);
         return;
     }
 
@@ -162,16 +172,6 @@ void write_block(VirtualMemoryBlock *block, const char *buffer, size_t offset, s
         offset += segment_length;
         length -= segment_length;
         segment_length = length > MAX_SEGMENT_SIZE ? MAX_SEGMENT_SIZE : length;
-    }
-}
-
-void dump_block(VirtualMemoryBlock *block) {
-    char data[4] = { 0 };
-    int i;
-
-    for (i = 0; i < block->size; i+= 4) {
-        read_block(block, data, i, 4);
-        printf("%02x %02x %02x %02x\n", data[0], data[1], data[2], data[3]);
     }
 }
 

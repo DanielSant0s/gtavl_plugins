@@ -66,7 +66,7 @@ void preload_hud_textures(const char* a1) {
     dummy_tex.refCount = 1;
     dummy_tex.raster = NULL;
 
-    register_block(&hud_textures_block, 2*(sizeof(RwTexture) + sizeof(RwRaster) + 16*sizeof(RwRGBA) + (32*32/2)) + 1024/*security margin*/, false);
+    alloc_block(&hud_textures_block, 2*(sizeof(RwTexture) + sizeof(RwRaster) + 16*sizeof(RwRGBA) + (32*32/2)) + 1024/*security margin*/, false);
 
     CTxdStore_PushCurrentTxd();
     
@@ -124,8 +124,6 @@ void preload_hud_textures(const char* a1) {
     RwTextureDestroy(tmp_tex);
 
     CTxdStore_PopCurrentTxd();
-
-    dump_block(&hud_textures_block);
 
     //free_virtual_memory();
 }
