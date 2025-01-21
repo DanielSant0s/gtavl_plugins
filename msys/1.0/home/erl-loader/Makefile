@@ -27,9 +27,10 @@ EE_CFLAGS += -fno-builtin-printf -fno-builtin-strcat -fno-builtin-strchr
 EE_CFLAGS += -fno-builtin-strcmp -fno-builtin-strcpy -fno-builtin-strlen
 EE_CFLAGS += -fno-builtin-strncpy -fno-builtin-strrchr -fno-builtin-strncmp
 
-LOADER_BIN = $(EE_BIN_DIR)erl-loader.elf
+LOADER_BIN = relocator.elf
 
 all: $(EE_OBJS_DIR) $(EE_BIN_DIR) $(LOADER_BIN)
+	sh -c "./export_plugin_api.sh"
 
 $(LOADER_BIN) : $(EE_OBJS)
 	$(EE_CC) $(EE_CFLAGS) -o $(LOADER_BIN) $(EE_OBJS) $(EE_LDFLAGS) $(EE_LIBS) 

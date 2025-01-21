@@ -67,3 +67,7 @@ void MakeBranch(uint32_t address, uint16_t offset) {
     WriteDword(address, 0x10000000 + offset);
     MakeNop(address+4);
 }
+
+void CallOnEvent(uint32_t address, uint16_t event, bool after) {
+
+}

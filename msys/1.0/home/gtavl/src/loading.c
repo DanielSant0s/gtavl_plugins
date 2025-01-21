@@ -34,10 +34,10 @@ static void (*CLoadingScreen_LoadSplashes)();
 extern uint32_t AudioEngine;
 void CAudioEngine_ServiceLoadingTune(uint32_t*, float);
 
-void (*CAudioEngine_PreloadBeatTrack)(uint32_t*, short) = (void (*)(uint32_t*, short))0x581310;
-void (*CAudioEngine_PlayPreloadedBeatTrack)(uint32_t*, bool) = (void (*)(uint32_t*, bool))0x5814A0;
-void (*CAudioEngine_StopBeatTrack)(uint32_t*) = (void (*)(uint32_t*))0x5814E0;
-void (*CAudioEngine_Service)(uint32_t*) = (void (*)(uint32_t*))0x580730;
+void CAudioEngine_PreloadBeatTrack(uint32_t* a1, short a2);
+void CAudioEngine_PlayPreloadedBeatTrack(uint32_t* a1, bool a2);
+void CAudioEngine_StopBeatTrack(uint32_t* a1);
+void CAudioEngine_Service(uint32_t* a1);
 
 bool started_playing_track = false;
 
@@ -171,7 +171,7 @@ static void drawImageRotate(float x, float y, float width, float height, float a
 static float icon_angle = 0.0f;
 
 static bool debug_loading = false;
-char* debugmsg = NULL;
+static char* debugmsg = NULL;
 
 static void renderLoadingAnim() { 
     CPad_UpdatePads();

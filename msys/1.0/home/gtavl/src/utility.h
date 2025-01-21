@@ -27,6 +27,4 @@ int GetRandomNumber() {
     return rand() & RAND_MAX;
 }
 
-RwTexture* (*RwTextureRead)(const char* name, const char* mask) = (RwTexture* (*)(const char* name, const char* mask))0x345A80;
-
 #endif

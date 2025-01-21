@@ -13,9 +13,9 @@
 
 #include "modules.h"
 
-static CVector* CTimeCycle_m_VectorToSun = (CVector*)0x709380;
+extern CVector CTimeCycle_m_VectorToSun[16];
 
-void CVector2D_Normalise(CVector* a1)
+static void CVector2D_Normalise(CVector* a1)
 {
     float v1; // st5
     float v2; // st7
@@ -33,13 +33,11 @@ void CVector2D_Normalise(CVector* a1)
     }
 }
 
+void CCollision_CalculateTrianglePlanes(CCollisionData* a1);
 
+void CMatrix_mul(CVector *outPoint, CMatrix *m, CVector *point);
 
-static void (*CCollision_CalculateTrianglePlanes)(CCollisionData* a1) = (void (*)(CCollisionData* a1))0x11EF30;
-
-static void (*CMatrix_mul)(CVector *outPoint, CMatrix *m, CVector *point) = (void (*)(CVector *outPoint, CMatrix *m, CVector *point))0x110310;
-
-void CVehicle_DoSunGlare(int this)
+static void CVehicle_DoSunGlare(int this)
 {
     bool v2;
     float *v3;
@@ -374,7 +372,7 @@ void CVehicle_DoSunGlare(int this)
     }
 }
 
-static void (*CShadows_StoreShadowForVehicle)(uint32_t, uint32_t) = (void (*)(uint32_t, uint32_t))0x1142A0;
+void CShadows_StoreShadowForVehicle(uint32_t, uint32_t);
 
 void SunGlareInject(uint32_t vehicle, uint32_t a2) {
     CShadows_StoreShadowForVehicle(vehicle, a2);

@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #define FLT_MAX 3.402823466e+38f
+#define M_PI 3.14159265358979323846f
 #define RAND_MAX 2147483600
 
 float sinf(float);
@@ -22,7 +23,7 @@ int min(int a, int b);
 
 int randint(int min, int max);
 
-float random_float_seed(float min, float max, uint16_t seed);
+float random_float_seed(float min, float max, uint32_t seed);
 float random_float(float min, float max);
 
 #endif

@@ -73,7 +73,7 @@ extern unsigned int FrontEndMenuManager_m_nTargetBlipIndex;
 
 void PreRenderWater();
 
-void autoDisableTarget() {
+static void autoDisableTarget() {
     CVector player_coords;
 
     PreRenderWater();
@@ -96,19 +96,19 @@ int CPathFind_DoPathSearch(unsigned int*, unsigned char, CVector, CNodeAddress, 
 
 extern unsigned int ThePaths;
 
-unsigned int CPathFind_FindNodePointer(void *this, CNodeAddress a2)
+static unsigned int CPathFind_FindNodePointer(void *this, CNodeAddress a2)
 {
     return *((unsigned int *)this + a2.m_nAreaId + 513) + 28 * a2.m_nNodeId;
 }
 
-void CPathNode_GetCoors(CVector* out, unsigned int this)
+static void CPathNode_GetCoors(CVector* out, unsigned int this)
 {
     out->x = (float)(*(short *)(this + 8) * 0.125f);
     out->y = (float)(*(short *)(this + 10) * 0.125f);
     out->z = (float)(*(short *)(this + 12) * 0.125f);
 }
 
-void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
+static void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
     vertex->u.els.scrVertex.x = x;
     vertex->u.els.scrVertex.y = y;
     vertex->u.els.scrVertex.z = NearScreenZ - 0.5f;
@@ -119,7 +119,7 @@ void Setup2dVertex(RwIm2DVertex *vertex, float x, float y) {
     vertex->u.els.color = line_color;
 }
 
-void processGPS(CVector* dest_coords) {
+static void processGPS(CVector* dest_coords) {
     CVector player_coords;
     unsigned int i;
 
@@ -333,7 +333,7 @@ void processGPS(CVector* dest_coords) {
 
 }
 
-void renderMissionTrace(tRadarTrace* trace) {
+static void renderMissionTrace(tRadarTrace* trace) {
     CVector destVec;
     switch (trace->m_nBlipType) {
     case 1:
@@ -371,7 +371,7 @@ void renderMissionTrace(tRadarTrace* trace) {
 
 bool CTheScripts_IsPlayerOnAMission();
 
-void GPSEventHandler(bool b) {
+static void GPSEventHandler(bool b) {
     int i;
 
     CHud_DrawGangOverlay(b);
@@ -447,7 +447,7 @@ extern RwIm2DVertex CSprite2d_maVertices[];
 static RwRGBA font_color;
 static RwRGBA font_shadow;
 
-void drawGPSDistance() {
+static void drawGPSDistance() {
     DrawHud();
 
     if (gpsShown) {

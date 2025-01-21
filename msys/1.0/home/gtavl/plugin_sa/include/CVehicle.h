@@ -2,7 +2,7 @@
 #define CVEHICLE_H_
 
 #include <stdint.h>
-
+#include <common.h>
 
 enum eVehicleType {
     VEHICLE_AUTOMOBILE,
@@ -32,6 +32,26 @@ enum eVehicleApperance {
     LIGHT_FRONT_RIGHT = 1,
     LIGHT_REAR_RIGHT = 2,
     LIGHT_REAR_LEFT = 3
+};
+
+enum eVehicleDummy {
+    DUMMY_LIGHT_FRONT_MAIN      = 0,
+    DUMMY_LIGHT_REAR_MAIN       = 1,
+
+    DUMMY_LIGHT_FRONT_SECONDARY = 2,
+    DUMMY_LIGHT_REAR_SECONDARY  = 3,
+
+    DUMMY_SEAT_FRONT            = 4,
+    DUMMY_SEAT_REAR             = 5,
+
+    DUMMY_EXHAUST               = 6,
+    DUMMY_ENGINE                = 7,
+    DUMMY_GAS_CAP               = 8,
+    DUMMY_TRAILER_ATTACH        = 9,
+    DUMMY_HAND_REST             = 10,
+    DUMMY_EXHAUST_SECONDARY     = 11,
+    DUMMY_WING_AIR_TRAIL        = 12,
+    DUMMY_VEHICLE_GUN           = 13,
 };
 
 typedef struct {
@@ -107,6 +127,10 @@ typedef struct {
 #define getVehicleBombLightsWinchFlags(veh) *(uint8_t*)((uint32_t)veh + 1200)
 #define setVehicleBombLightsWinchFlags(veh, val) *(uint8_t*)((uint32_t)veh + 1200) = val
 #define getVehicleHealth(veh) *(float*)((uint32_t)veh + 1224)
+
+void getVehicleDummyPos(CVector* ret, uint16_t veh_id, uint16_t dummy_id);
+
+float getVehicleHeading(uint32_t vehicle);
 
 #define sizeof_CVehicle 2688
 

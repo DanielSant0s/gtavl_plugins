@@ -113,6 +113,17 @@ struct CEntity {
     
 };
 
+enum eEntityType
+{
+	ENTITY_TYPE_NOTHING,
+	ENTITY_TYPE_BUILDING,
+	ENTITY_TYPE_VEHICLE,
+	ENTITY_TYPE_PED,
+	ENTITY_TYPE_OBJECT,
+	ENTITY_TYPE_DUMMY,
+	ENTITY_TYPE_NOTINPOOLS
+};
+
 typedef struct CQuaternion CQuaternion;
 
 struct CQuaternion {
@@ -822,6 +833,8 @@ typedef struct {
     float          m_fLodDistMult;
 
 } CColourSet;
+
+extern uint32_t CModelInfo_ms_modelInfoPtrs[];
 
 void CShadows_StoreShadowToBeRenderedSingle(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings);
 

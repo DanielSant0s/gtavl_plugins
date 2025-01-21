@@ -133,9 +133,9 @@ bool CDarkel_FrenzyOnGoing();
 
 static RwRGBA dropfade_color;
 
-bool DrawAmmoEnableOverride = false;
-int *DrawAmmoOverrideAmmoQuantity = NULL;
-int *DrawAmmoOverrideClipQuantity = NULL;
+static bool DrawAmmoEnableOverride = false;
+static int *DrawAmmoOverrideAmmoQuantity = NULL;
+static int *DrawAmmoOverrideClipQuantity = NULL;
 
 void DrawAmmoSetOverride(int *ammo_qt, int *clip_qt) {
     DrawAmmoEnableOverride = true;
@@ -297,7 +297,7 @@ inline void setupCurrentMoneyText() {
     CFont_SetColor(&cur_color);
 }
 
-void updateMoney() {
+static void updateMoney() {
     if (curr_money < 0) {
         sprintf(money_str, "-$%d", curr_money);
     } else {
@@ -416,7 +416,7 @@ static void (*DrawHud)();
 
 static float zoom;
 
-uint32_t zoomOutTimer = 0;
+static uint32_t zoomOutTimer = 0;
 
 static void updateRadarZoom() {
     WriteWord(0x267E04, (uint16_t)zoom);

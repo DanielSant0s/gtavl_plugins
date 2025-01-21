@@ -43,7 +43,7 @@ static int vecHeadersSize = 0;
 
 #define LINE_BUFSIZE 256
 
-void MenuUi_ReadConfig()
+static void MenuUi_ReadConfig()
 {
     CRGBA_CRGBA(&windowBgColor, 0, 0, 0, 200);
     CRGBA_CRGBA(&titleBgColor, 0, 0, 0, 250);
@@ -57,7 +57,7 @@ void MenuUi_ReadConfig()
     CRGBA_CRGBA(&emptyColor, 0, 0, 0, 0);
 }
 
-void MenuUi_ReadHeaderInfo()
+static void MenuUi_ReadHeaderInfo()
 {
     RwFileFunction *fs = RwOsGetFileInterface();
 
@@ -83,7 +83,7 @@ void MenuUi_ReadHeaderInfo()
 /* 
     Printing text at the center pos with wrapping
 */
-void MenuUi_WrapXCenteredPrint(char* pGXT, CRect windowRect)
+static void MenuUi_WrapXCenteredPrint(char* pGXT, CRect windowRect)
 {
     char* pText = CText_Get(&TheText, pGXT);
     float textPosX = windowRect.left + (windowRect.right - windowRect.left) / 2;
@@ -136,7 +136,7 @@ void MenuUi_WrapXCenteredPrint(char* pGXT, CRect windowRect)
     }
 }
 
-unsigned char MenuUi_CreateNewMenu(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment) {
+static unsigned char MenuUi_CreateNewMenu(int type, char *pTitle, float posX, float posY, float width, char columns, bool interactive, bool background, int alignment) {
     //CStreaming_MakeSpaceFor(306464);
     //CStreaming_ImGonnaUseStreamingMemory();
     //CGame_TidyUpMemory(false, true);
@@ -173,7 +173,7 @@ unsigned char MenuUi_CreateNewMenu(int type, char *pTitle, float posX, float pos
     return CMenuSystem_CreateNewMenu(type, pTitle, posX, posY, width, columns, interactive, background, alignment);
 }
 
-void MenuUi_SwitchOffMenu(unsigned char handle) {
+static void MenuUi_SwitchOffMenu(unsigned char handle) {
     CSprite2d_Delete(&menuBoughtSprite);
     CSprite2d_Delete(&menuSelectorSprite);
 
@@ -191,7 +191,7 @@ void MenuUi_SwitchOffMenu(unsigned char handle) {
     CMenuSystem_SwitchOffMenu(handle);
 }
 
-void MenuUi_DisplayStandardMenu(unsigned char panelId, bool bBrightFont)
+static void MenuUi_DisplayStandardMenu(unsigned char panelId, bool bBrightFont)
 {
     tMenuPanel* pMenuPanel = MenuInUse[panelId];
     float textPaddingX = 640.0f / 64.0f;

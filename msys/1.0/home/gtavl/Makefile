@@ -14,7 +14,13 @@ EE_ERL = gtavl.erl
 
 EE_INCS += -Iplugin_sa/include/ -Iplugin_ps2/include/ -Irw_se/include/ 
 
-GTAVL_OBJS += 	src/colour_filter.o \
+GTAVL_OBJS += 	src/main.o \
+				src/alloc.o \
+		   	  	src/bios_alloc.o \
+				src/virtual_mem.o \
+				src/renderbuffer.o \
+				\
+				src/colour_filter.o \
 				src/menu_ui.o \
 				src/limits.o \
 			  	src/oil_system.o \
@@ -30,20 +36,17 @@ GTAVL_OBJS += 	src/colour_filter.o \
 		   	  	src/render_ped.o \
 		   	  	src/weapon.o \
 		   	  	src/sunglare.o \
-		   	  	src/renderbuffer.o \
-		   	  	src/skyedge.o \
-		   	  	src/rubbish.o \
 				\
+				src/hud.o \
 		   	  	src/loading.o \
 				src/clouds.o \
-				src/hud.o \
 		   	  	src/gps.o \
 				src/radar.o \
-		   	  	src/misc.o \
-				src/alloc.o \
-		   	  	src/bios_alloc.o \
-				src/virtual_mem.o \
-		   	  	src/main.o
+				src/skyedge.o \
+				src/rain_fx.o \
+				src/postfx.o \
+				src/rubbish.o \
+		   	  	src/misc.o 
 
 EE_STDLIB = plugin_ps2/src/math.o \
 		    plugin_ps2/src/string.o \
@@ -55,7 +58,7 @@ EE_SALIB = plugin_sa/src/common.o \
 
 EE_RWSE  = rw_se/src/secore.o 
 
-EE_OBJS = $(GTAVL_OBJS) $(EE_STDLIB) $(EE_SALIB) $(EE_RWSE) 
+EE_OBJS = $(EE_STDLIB) $(EE_SALIB) $(EE_RWSE) $(GTAVL_OBJS)
 
 all: $(EE_ERL)
 

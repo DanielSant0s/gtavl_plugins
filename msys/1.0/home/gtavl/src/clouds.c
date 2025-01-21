@@ -5,30 +5,27 @@
 #include <common.h>
 #include "hooks.h"
 
-void* RwIm3DTransformUnsetTexture(RxObjSpace3dVertex *pVerts, RwUInt32 numVerts, RwMatrix *ltm, RwUInt32 flags) {
+#include "bios_alloc.h"
+
+static void* RwIm3DTransformUnsetTexture(RxObjSpace3dVertex *pVerts, RwUInt32 numVerts, RwMatrix *ltm, RwUInt32 flags) {
 	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, NULL);
 	return RwIm3DTransform(pVerts, numVerts, ltm, flags);
 }
 
 
-void (*CSprite_RenderBufferedOneXLUSprite)(CVector *pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, uint8_t intensity, int recipNearZ, uint8_t a11) = 
-(void (*)(CVector *pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, uint8_t intensity, int recipNearZ, uint8_t a11))0x3C4260;
+void CSprite_RenderBufferedOneXLUSprite(CVector *pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, uint8_t intensity, int recipNearZ, uint8_t a11);
 
 
-void CSprite_RenderBufferedOneXLUSpriteAspect(CVector *pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, uint8_t intensity, int recipNearZ, uint8_t a11) {
+static void CSprite_RenderBufferedOneXLUSpriteAspect(CVector *pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, uint8_t intensity, int recipNearZ, uint8_t a11) {
     CSprite_RenderBufferedOneXLUSprite(pos, w*0.75f, h, r, g, b, intensity, recipNearZ, a11);
 }
 
-void (*CSprite_RenderOneXLUSprite)(float x, float y, float z, float halfWidth, float halfHeight, 
+void CSprite_RenderOneXLUSprite(float x, float y, float z, float halfWidth, float halfHeight, 
 								 unsigned char red, unsigned char green, unsigned char blue, 
 								 short alpha, float rhw, unsigned char intensity, unsigned char udir, 
-								 unsigned char vdir) = 
-(void (*)(float x, float y, float z, float halfWidth, float halfHeight, 
-								 unsigned char red, unsigned char green, unsigned char blue, 
-								 short alpha, float rhw, unsigned char intensity, unsigned char udir, 
-								 unsigned char vdir))0x11DA20;
+								 unsigned char vdir);
 
-void CSprite_RenderOneXLUSpriteAspect(float x, float y, float z, float halfWidth, float halfHeight, 
+static void CSprite_RenderOneXLUSpriteAspect(float x, float y, float z, float halfWidth, float halfHeight, 
 								 unsigned char red, unsigned char green, unsigned char blue, 
 								 short alpha, float rhw, unsigned char intensity, unsigned char udir, 
 								 unsigned char vdir) 
@@ -49,15 +46,15 @@ enum eStarSides
     SSidesCount
 };
 
-float StarCoorsX[SSidesCount][AMOUNT_OF_SIDESTARS]; 
-float StarCoorsY[SSidesCount][AMOUNT_OF_SIDESTARS];
+float *StarCoorsX = NULL; 
+float *StarCoorsY = NULL;
 
-float StarSizes[SSidesCount][AMOUNT_OF_SIDESTARS];
+float *StarSizes = NULL;
 
-const float fSmallStars = 0.5f, fMiddleStars = 1.5f;
-uint8_t nStarsHourStart = 22, nStarsHourLast = 5;
+static const float fSmallStars = 0.5f, fMiddleStars = 1.5f;
+static uint8_t nStarsHourStart = 22, nStarsHourLast = 5;
 
-const CVector PositionsTable[SSidesCount] =
+static const CVector PositionsTable[SSidesCount] =
 {
     { 100.0f,  0.0f,   10.0f}, // Left
     {-100.0f,  0.0f,   10.0f}, // Right
@@ -72,11 +69,11 @@ extern int CClock_ms_nGameClockMinutes; // 0x66B7B0
 extern float CWeather_CloudCoverage; // 0x66BD40
 extern float CWeather_Foggyness; // 0x66BD44
 
-bool (*CSprite_CalcScreenCoors)(CVector*, CVector*, float*, float*, bool, bool) = (bool (*)(CVector*, CVector*, float*, float*, bool, bool))0x11D0E0;
+bool CSprite_CalcScreenCoors(CVector* posn, CVector* out, float* w, float* h, bool checkMaxVisible, bool checkMinVisible);
 
 extern float CDraw_ms_fFOV;
 
-void DrawSkyStars()
+static void DrawSkyStars()
 {
     float v7 = 640.0f * (float)(70.0f / CDraw_ms_fFOV);
     float v8 = 448.0f * (float)(70.0f / CDraw_ms_fFOV);
@@ -114,23 +111,23 @@ void DrawSkyStars()
             {
             case SSide_Left:
             case SSide_Right:
-                WorldStarPos.y -= StarCoorsX[side][i];
-                WorldStarPos.z += StarCoorsY[side][i];
+                WorldStarPos.y -= StarCoorsX[(AMOUNT_OF_SIDESTARS*side)+i];
+                WorldStarPos.z += StarCoorsY[(AMOUNT_OF_SIDESTARS*side)+i];
                 break;
 
             case SSide_Front:
             case SSide_Back:
-                WorldStarPos.x -= StarCoorsX[side][i];
-                WorldStarPos.z += StarCoorsY[side][i];
+                WorldStarPos.x -= StarCoorsX[(AMOUNT_OF_SIDESTARS*side)+i];
+                WorldStarPos.z += StarCoorsY[(AMOUNT_OF_SIDESTARS*side)+i];
                 break;
 
             default:
-                WorldStarPos.x += StarCoorsX[side][i];
-                WorldStarPos.y += StarCoorsY[side][i];
+                WorldStarPos.x += StarCoorsX[(AMOUNT_OF_SIDESTARS*side)+i];
+                WorldStarPos.y += StarCoorsY[(AMOUNT_OF_SIDESTARS*side)+i];
                 break;
             }
 
-            float size = StarSizes[side][i];
+            float size = StarSizes[(AMOUNT_OF_SIDESTARS*side)+i];
             uint8_t brightness = (uint8_t)((1.0f - 0.015f * (rand() % 32)) * intensity);
             
             CSprite_RenderBufferedOneXLUSpriteAspect(&WorldStarPos, size * v7, size * v8, brightness, brightness, brightness, 255, 255, 0);
@@ -139,6 +136,10 @@ void DrawSkyStars()
 }
 
 void setupCloudsPatches() {
+    StarCoorsX = br_alloc_array(float, SSidesCount*AMOUNT_OF_SIDESTARS);
+    StarCoorsY = br_alloc_array(float, SSidesCount*AMOUNT_OF_SIDESTARS);
+    StarSizes =  br_alloc_array(float, SSidesCount*AMOUNT_OF_SIDESTARS);
+
     RedirectCall(0x2ED840, &RwIm3DTransformUnsetTexture);
 
     RedirectCall(0x2ECDA0, &CSprite_RenderBufferedOneXLUSpriteAspect);
@@ -162,16 +163,16 @@ void setupCloudsPatches() {
         int i;
         for (i = 0; i < AMOUNT_OF_SIDESTARS; ++i)
         {
-            StarCoorsX[side][i] = 90.0f * random_float(-1.0f, 1.0f);
+            StarCoorsX[(AMOUNT_OF_SIDESTARS*side)+i] = 90.0f * random_float(-1.0f, 1.0f);
 
             // Side = SSide_Up is when rendering stars directly ABOVE us
             if (side == SSide_Up) {
-                StarCoorsY[side][i] = 80.0f * random_float(-1.0f, 1.0f);
+                StarCoorsY[(AMOUNT_OF_SIDESTARS*side)+i] = 80.0f * random_float(-1.0f, 1.0f);
             } else {
-                StarCoorsY[side][i] = 80.0f * random_float(-0.35f, 1.0f);
+                StarCoorsY[(AMOUNT_OF_SIDESTARS*side)+i] = 80.0f * random_float(-0.35f, 1.0f);
             }
 
-            StarSizes[side][i] = 0.8f * random_float(fSmallStars, fMiddleStars);
+            StarSizes[(AMOUNT_OF_SIDESTARS*side)+i] = 0.8f * random_float(fSmallStars, fMiddleStars);
         }
     }
 

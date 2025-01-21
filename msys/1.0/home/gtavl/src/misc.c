@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <common.h>
 #include <math.h>
+#include <string.h>
 #include "hooks.h"
 
 #include "anim_association.h"
@@ -57,64 +58,28 @@ static void RegisterCharDamage() {
 void* CTaskSimpleDie_Constructor(void* task, int animGroupId, int animId, float blendDelta, float animSpeed);
 void* CTaskSimpleDie_Constructor0(void* task, const char* animName, const char* animBlock, int animFlags, float blendDelta, float animSpeed);
 
-static const char* front_death_anims[] = {
-    "deathmod_15",
-    "deathmod_19",
-    "deathmod_22",
-    "deathmod_23",
-    "KO_shot_stom",
-    "deathmod_29",
-    "deathmod_35",
-};
+static const char* front_death_anims[] =        { "15", "19", "22", "23", "KO_shot_stom", "29", "35", };
+static const char* strong_front_death_anims[] = { "6", "16", "5", };
+static const char* back_death_anims[] =         { "11", "12", "13", "14", "24", "30", "37", };
+static const char* left_death_anims[] =         { "3", "21", "31", "33", "38", };
+static const char* right_death_anims[] =        { "4", "20", "32", "34", "39", };
+static const char* shot_front_anims[] =         { "KO_shot_face", "26", "17", "25", "28", };
+static const char* shot_strong_front_anims[] =  { "18", "8", "2", "3", "9", "27", };
 
-static const char* strong_front_death_anims[] = {
-    "deathmod_6",
-    "deathmod_16",
-    "deathmod_5",
-};
+static void* init_death_anim(const char** anim_group, int num_anims, void* task, float blendDelta, float animSpeed) {
+    char anim_name[16] = "deathmod_";
 
-static const char* back_death_anims[] = {
-    "deathmod_11",
-    "deathmod_12",
-    "deathmod_13",
-    "deathmod_14",
-    "deathmod_24",
-    "deathmod_30",
-    "deathmod_37",
-};
+    const char* anim_base = anim_group[randint(0, num_anims)];
 
-static const char* left_death_anims[] = {
-    "deathmod_3",
-    "deathmod_21",
-    "deathmod_31",
-    "deathmod_33",
-    "deathmod_38",  
-};
+    if (((anim_base[0]>='0') && (anim_base[0]<='9'))) {
+        strcat(anim_name, anim_base);
+        anim_base = anim_name;
+    }
 
-static const char* right_death_anims[] = {
-    "deathmod_4",
-    "deathmod_20",
-    "deathmod_32",
-    "deathmod_34",
-    "deathmod_39",
-};
+    printf("anim %s\n", anim_base);
 
-static const char* shot_front_anims[] = {
-    "KO_shot_face",
-    "deathmod_26",
-    "deathmod_17",
-    "deathmod_25",
-    "deathmod_28",
-};
-
-static const char* shot_strong_front_anims[] = {
-    "deathmod_18",
-    "deathmod_8",
-    "deathmod_2",
-    "deathmod_3",
-    "deathmod_9",
-    "deathmod_27",
-};
+    return CTaskSimpleDie_Constructor0(task, anim_base, "PED", 208, blendDelta, animSpeed);
+}
 
 static void* CTaskSimpleDie_CustomConstructor(void* task, int animGroupId, int animId, float blendDelta, float animSpeed) {
     if (randint(0, 5) == 5) 
@@ -122,37 +87,35 @@ static void* CTaskSimpleDie_CustomConstructor(void* task, int animGroupId, int a
 
     if (animId == ANIM_ID_KO_SKID_FRONT) {
         if (LastCharDamageDamage > 200.0f) {
-            return CTaskSimpleDie_Constructor0(task, strong_front_death_anims[randint(0, 3)], "PED", 208, blendDelta, animSpeed);
+            return init_death_anim(strong_front_death_anims, 3, task, blendDelta, animSpeed);
         }
-        return CTaskSimpleDie_Constructor0(task, front_death_anims[randint(0, 7)], "PED", 208, blendDelta, animSpeed);
+        return init_death_anim(front_death_anims, 7, task, blendDelta, animSpeed);
     } else if (animId == ANIM_ID_KO_SKID_BACK) {
-        return CTaskSimpleDie_Constructor0(task, back_death_anims[randint(0, 7)], "PED", 208, blendDelta, animSpeed);
+        return init_death_anim(back_death_anims, 7, task, blendDelta, animSpeed);
     } else if (animId == ANIM_ID_KO_SPIN_L) {
-        return CTaskSimpleDie_Constructor0(task, left_death_anims[randint(0, 5)], "PED", 208, blendDelta, animSpeed);
+        return init_death_anim(left_death_anims, 5, task, blendDelta, animSpeed);
     } else if (animId == ANIM_ID_KO_SPIN_R) {
-        return CTaskSimpleDie_Constructor0(task, right_death_anims[randint(0, 5)], "PED", 208, blendDelta, animSpeed);
+        return init_death_anim(right_death_anims, 5, task, blendDelta, animSpeed);
     } else if (animId == ANIM_ID_KO_SHOT_FRONT_0) {
         if (LastCharDamageDamage < 30.0f && LastCharDamageBodyPart == 9) {
-            return CTaskSimpleDie_Constructor0(task, shot_front_anims[randint(0, 5)], "PED", 208, blendDelta, animSpeed);
+            return init_death_anim(shot_front_anims, 5, task, blendDelta, animSpeed);
         }
-        return CTaskSimpleDie_Constructor0(task, shot_strong_front_anims[randint(0, 6)], "PED", 208, blendDelta, animSpeed);
+        return init_death_anim(shot_strong_front_anims, 6, task, blendDelta, animSpeed);
     }
 
     return CTaskSimpleDie_Constructor(task, animGroupId, animId, blendDelta, animSpeed);
     
 }
 
-void (*CSprite_RenderBufferedOneXLUSprite2D)(float x, float y, float w, float h, RwRGBA* color, short intensity, uint8_t alpha) = 
-(void (*)(float x, float y, float w, float h, RwRGBA* color, short intensity, uint8_t alpha))0x3C4500;
+void CSprite_RenderBufferedOneXLUSprite2D(float x, float y, float w, float h, RwRGBA* color, short intensity, uint8_t alpha);
 
-void CSprite_RenderBufferedOneXLUSprite2DAspect(float x, float y, float w, float h, RwRGBA* color, short intensity, uint8_t alpha) {
+static void CSprite_RenderBufferedOneXLUSprite2DAspect(float x, float y, float w, float h, RwRGBA* color, short intensity, uint8_t alpha) {
     CSprite_RenderBufferedOneXLUSprite2D(x, y, w*0.75f, h, color, intensity, alpha);
 }
 
-void (*CSprite_RenderBufferedOneXLUSprite_Rotate)(CVector* pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, short intensity, float recipNearZ, float angle, uint8_t a12) = 
-(void (*)(CVector* pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, short intensity, float recipNearZ, float angle, uint8_t a12))0x3C43A0;
+void CSprite_RenderBufferedOneXLUSprite_Rotate(CVector* pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, short intensity, float recipNearZ, float angle, uint8_t a12);
 
-void CSprite_RenderBufferedOneXLUSprite_Rotate_Aspect(CVector* pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, short intensity, float recipNearZ, float angle, uint8_t a12) {
+static void CSprite_RenderBufferedOneXLUSprite_Rotate_Aspect(CVector* pos, float w, float h, uint8_t r, uint8_t g, uint8_t b, short intensity, float recipNearZ, float angle, uint8_t a12) {
     CSprite_RenderBufferedOneXLUSprite_Rotate(pos, w*0.75f, h, r, g, b, intensity, recipNearZ, angle, a12);
 }
 
@@ -371,7 +334,7 @@ extern uint8_t CTimeCycle_m_nHighLightMinIntensity[NUM_HOURS][NUM_WEATHERS];
 extern uint8_t CTimeCycle_m_nWaterFogAlpha[NUM_HOURS][NUM_WEATHERS];
 extern uint8_t CTimeCycle_m_nDirectionalMult[NUM_HOURS][NUM_WEATHERS];
 
-void (*CGame_InitialiseCoreDataAfterRW)(void) = (void (*)(void))0x88E320;
+void CGame_InitialiseCoreDataAfterRW();
 
 static void SetupCustomColorCycleData() {
     CGame_InitialiseCoreDataAfterRW();
@@ -581,8 +544,8 @@ void injectMiscPatches() {
 	WriteByte(0x66B8B8, 0); // Enable Invert Look
 
     WriteByte(0x64B6A8, 255); // marker_r
-    WriteByte(0x64B6A9, 255); //marker_g
-    WriteByte(0x64B6AA, 0); //marker_b
+    WriteByte(0x64B6A9, 255); // marker_g
+    WriteByte(0x64B6AA, 0);   // marker_b
 
     WriteWord(0x242DFC, 2000);  // Make a day pass in 48 minutes
     WriteDword(0x66B79C, 2000); // Make a day pass in 48 minutes

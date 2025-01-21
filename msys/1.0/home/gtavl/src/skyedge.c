@@ -30,15 +30,15 @@ static int (*CCustomCarEnvMapPipeline__SetFxSpecTexture)(void *a1, RwTexture *a2
 static RwRaster *pEnvRaster, *pSpecRaster;
 static RwTexture *ScreenSpaceEnvTexture, *ScreenSpaceSpecTexture;
 
-void SetSpecReflections(void *a1, RwTexture *a2) {
+static void SetSpecReflections(void *a1, RwTexture *a2) {
     CCustomCarEnvMapPipeline__SetFxSpecTexture(a1, ScreenSpaceSpecTexture);
 }
 
-void SetEnvReflections(void *a1, RwTexture *a2) {
+static void SetEnvReflections(void *a1, RwTexture *a2) {
     CCustomCarEnvMapPipeline__SetFxEnvTexture(a1, ScreenSpaceEnvTexture);
 }
 
-void CreateScreenSpaceTexture(const char* a1) {
+static void CreateScreenSpaceTexture(const char* a1) {
     CGame_Init2(a1);
 
     pEnvRaster = RwRasterCreate(128, 128, 24, rwRASTERTYPETEXTURE | rwRASTERDONTALLOCATE);
@@ -56,9 +56,9 @@ void CreateScreenSpaceTexture(const char* a1) {
     ScreenSpaceSpecTexture->filterAddressing = rwFILTERLINEAR;
 }
 
-void RenderScreenSpaceEnvTexture() {
-    GetBackBufferOffset(pEnvRaster, 32, 128);
-    GetBackBufferOffset(pSpecRaster, 256, 0);
+static void RenderScreenSpaceEnvTexture() {
+    seGetBackBufferOffset(pEnvRaster, 32, 128);
+    seGetBackBufferOffset(pSpecRaster, 256, 0);
 
     hook_RenderEffects();
 }
@@ -90,15 +90,15 @@ static RwTexture *texWaterclear256 = (RwTexture *)0x66B380;
 
 void (*CWaterLevel_RenderWater)(void) = (void (*)(void))0x182850;
 
-uint32_t time_to_rotate = 0;
+static uint32_t time_to_rotate = 0;
 
-void swap(int *xp, int *yp) {
+static void swap(int *xp, int *yp) {
     int tmp = *xp;
     *xp = *yp;
     *yp = tmp;
 }
 
-int partition(int arr[], int low, int high) {
+static int partition(int arr[], int low, int high) {
     int pivot = arr[high];
     int i = (low - 1);
     int j;
@@ -112,7 +112,7 @@ int partition(int arr[], int low, int high) {
     return (i + 1);
 }
 
-void r_quickSort(int arr[], int low, int high) {
+static void r_quickSort(int arr[], int low, int high) {
     if (low < high) {
         int pi = partition(arr, low, high);
 
@@ -121,22 +121,22 @@ void r_quickSort(int arr[], int low, int high) {
     }
 }
 
-void quickSort(int arr[], int n) {
+static void quickSort(int arr[], int n) {
     r_quickSort(arr, 0, n-1); // It's still recursive, but I've normalized the function call so it can be placed in arrays or structs
 }
 
 
-uint8_t pack4bit(uint8_t pixel1, uint8_t pixel2) {
+static uint8_t pack4bit(uint8_t pixel1, uint8_t pixel2) {
     return (pixel1 << 4) | (pixel2 & 0x0F);
 }
 
-void unpack4bit(uint8_t packedByte, uint8_t *pixel1, uint8_t *pixel2) {
+static void unpack4bit(uint8_t packedByte, uint8_t *pixel1, uint8_t *pixel2) {
     *pixel1 = (packedByte >> 4) & 0x0F;
     *pixel2 = packedByte & 0x0F;
 }
 
 
-void sort_water_texture() {
+static void sort_water_texture() {
     RwRGBA *in_pallete = (RwRGBA *)texWaterclear256->raster->palette;
     uint8_t *in_texture = texWaterclear256->raster->cpPixels;
     RwRGBA out_palette[16];
@@ -170,13 +170,13 @@ void sort_water_texture() {
     CTxdStore_PopCurrentTxd();
 }
 
-void rotate_up(RwRGBA *out, RwRGBA *in) {
+static void rotate_up(RwRGBA *out, RwRGBA *in) {
     memcpy(&out[0], &in[14], sizeof(RwRGBA));
     memcpy(&out[1], &in[0], 14*sizeof(RwRGBA));
     memcpy(in, out, 15*sizeof(RwRGBA));
 }
 
-void rotate_down(RwRGBA *out, RwRGBA *in) {
+static void rotate_down(RwRGBA *out, RwRGBA *in) {
     memcpy(&out[14], &in[0], sizeof(RwRGBA));
     memcpy(&out[0], &in[1], 14*sizeof(RwRGBA));
     memcpy(in, out, 15*sizeof(RwRGBA));
@@ -193,9 +193,9 @@ static ShiftDirection direction = UP;
 static bool hold = false;
 static int hold_coef = 0;
 
-void rotate_clut() {
+static void rotate_clut() {
     RwRGBA out_pallete[16];
-    RwRGBA *in_pallete = (RwRGBA *)RwRasterLockPalette(texWaterclear256->raster, 1);
+    RwRGBA *in_pallete = (RwRGBA *)RwRasterLockPalette(texWaterclear256->raster, rwRASTERLOCKWRITE);
 
     if (CTimer_m_snTimeInMilliseconds > time_to_rotate) {
         if (!hold) {
@@ -226,9 +226,6 @@ void rotate_clut() {
 }
 
 extern int skyRasterExt;
-
-extern uint64_t skyFrame_1;
-extern uint64_t skyZbuf_1;
 
 typedef struct _SkyMemBlock _SkyMemBlock;
 struct _SkyMemBlock
@@ -405,12 +402,12 @@ bool SkyEdgeCameraClear(uint8_t *pCam, RwRGBA *col, int nClearWhich)
 
 */
 
-void ReturnShadowCrossProductOffset() {
+static void ReturnShadowCrossProductOffset() {
     float test_cpoffset = -0.5f;
     asm volatile ("mtc1 %0, $f1" : : "r" (*(uint32_t*)&test_cpoffset));
 }
 
-void ReturnShadowCrossProductOffset0() {
+static void ReturnShadowCrossProductOffset0() {
     float test_cpoffset = -0.5f;
     asm volatile ("mtc1 %0, $f0" : : "r" (*(uint32_t*)&test_cpoffset));
 }
@@ -436,16 +433,16 @@ typedef struct {
     char _pad0;
 } CPointLight;
 
-static unsigned int* NumLights = (unsigned int*)0x66BBE0;
+extern unsigned int NumLights;
+
+#define MAX_POINTLIGHTS 32
 
 // lights array. Count: MAX_POINTLIGHTS (32)
-static CPointLight *aLights = (CPointLight*)0x7C1B10;
-
-const unsigned int MAX_POINTLIGHTS = 32;
+extern CPointLight aLights[MAX_POINTLIGHTS];
 
 static float VectorMagnitude(CVector *vector) { return sqrtf(vector->x * vector->x + vector->y * vector->y + vector->z * vector->z); }
 
-unsigned short CalculateShadowStrength(float currDist, float maxDist, unsigned short maxStrength) {
+static unsigned short CalculateShadowStrength(float currDist, float maxDist, unsigned short maxStrength) {
     //assert(maxDist >= currDist); // Otherwise integer underflow will occur
 
     const float halfMaxDist = maxDist / 2.f;
@@ -456,34 +453,34 @@ unsigned short CalculateShadowStrength(float currDist, float maxDist, unsigned s
     }
 }
 
-CVector normalize(CVector v) {
+static CVector normalize(CVector v) {
     float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
     CVector normalized = { v.x / length, v.y / length, v.z / length };
     return normalized;
 }
 
-float fmaxf(float a, float b) {
+static float fmaxf(float a, float b) {
     return (a > b) ? a : b;
 }
 
-float fminf(float a, float b) {
+static float fminf(float a, float b) {
     return (a < b) ? a : b;
 }
 
-float ath_acosf(float x) {
+static float ath_acosf(float x) {
   float y = sqrtf(1.0f - x * x);
   float t = atan2f(y, x);
   return t;
 }
 
-float calculateAngle(CVector *v1, CVector *v2) {
+static float calculateAngle(CVector *v1, CVector *v2) {
     float dotProduct = v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
     float length1 = sqrtf(v1->x * v1->x + v1->y * v1->y + v1->z * v1->z);
     float length2 = sqrtf(v2->x * v2->x + v2->y * v2->y + v2->z * v2->z);
     return ath_acosf(dotProduct / (length1 * length2));
 }
 
-void calculateShadow(CVector *shadowPos, CVector *lightPos, CVector *lightDir, float *topX, float *topY, float *rightX, float *rightY) {
+static void calculateShadow(CVector *shadowPos, CVector *lightPos, CVector *lightDir, float *topX, float *topY, float *rightX, float *rightY) {
     CVector dir, norm_pos;
     if (lightDir) {
         dir = *lightDir;
@@ -518,15 +515,70 @@ void calculateShadow(CVector *shadowPos, CVector *lightPos, CVector *lightDir, f
     *rightY = fmaxf(fminf(rotatedRightY, 1.0f), -1.0f);
 }
 
+static void CShadows_CalcPedShadowValuesImpl(
+    CVector *shadowPos, 
+    CVector *lightPos, 
+    CVector *lightDir,
+    float* shadowFrontX,
+    float* shadowFrontY,
+    float* shadowSideX,
+    float* shadowSideY,
+    float* shadowDisplacementX,
+    float* shadowDisplacementY
+) {
+    float negSunDirX;         
+    float negSunDirY;         
+    float magnitudeFront;     
+    float invMagnitudeFront;  
+    float scaleFactor;        
+
+    CVector dir;
+
+    if (false/*lightDir*/) {
+        dir = *lightDir;
+    } else {
+        dir.x = lightPos->x - shadowPos->x;
+        dir.y = lightPos->y - shadowPos->y;
+        dir.z = lightPos->z - shadowPos->z;
+
+        dir = normalize(dir);
+    }
+
+    negSunDirX = -dir.x;
+    *shadowFrontX = negSunDirX;
+
+    negSunDirY = -dir.y;
+    *shadowFrontY = negSunDirY;
+
+    magnitudeFront = sqrtf(*shadowFrontX * *shadowFrontX + negSunDirY * negSunDirY);
+    invMagnitudeFront = 1.0f / magnitudeFront;
+
+    scaleFactor = (magnitudeFront + 1.0f) * invMagnitudeFront;
+    *shadowFrontX = scaleFactor * *shadowFrontX;
+    *shadowFrontY = scaleFactor * *shadowFrontY;
+
+    *shadowSideX = -(dir.y * invMagnitudeFront);
+    *shadowSideY = dir.x * invMagnitudeFront;
+
+    *shadowDisplacementX = negSunDirX;
+    *shadowDisplacementY = negSunDirY;
+
+    *shadowFrontX *= 0.5f;
+    *shadowFrontY *= 0.5f;
+    *shadowSideX *= 0.5f;
+    *shadowSideY *= 0.5f;
+    *shadowDisplacementX *= 0.5f;
+    *shadowDisplacementY *= 0.5f;
+}
+
 typedef struct {
     float range;
     float dist;
 } RangeData;
 
-void (*CShadows_CalcPedShadowValues)(CVector *sunPosn, float* displacementX, float* displacementY, float* frontX, float* frontY, float* sideX, float* sideY) = 
-(void (*)(CVector *sunPosn, float* displacementX, float* displacementY, float* frontX, float* frontY, float* sideX, float* sideY))0x11C640;
+void CShadows_CalcPedShadowValues(CVector *sunPosn, float* displacementX, float* displacementY, float* frontX, float* frontY, float* sideX, float* sideY);
 
-bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
+static bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
     bool has_lights = false;
     float min_dist = 0.0f;
     CColourSet* CTimeCycle_m_CurrentColours = (CColourSet*)0x7067C0;
@@ -539,7 +591,7 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
     FindPlayerCoors(&plyrPos, -1);
 
     int i = 0;
-    for (i = 0; i < *NumLights; i++) {
+    for (i = 0; i < NumLights; i++) {
         if (aLights[i].m_nType != PLTYPE_POINTLIGHT && aLights[i].m_nType != PLTYPE_SPOTLIGHT) {
             continue;
         }
@@ -555,7 +607,38 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
         lightToPlyr.y = aLights[i].m_vecPosn.y - plyrPos.y;
         lightToPlyr.z = aLights[i].m_vecPosn.z - plyrPos.z;
 
-        const float lightToPlyrDist = VectorMagnitude(&lightToPlyr);
+        float lightToPlyrDist = VectorMagnitude(&lightToPlyr);
+
+        if (aLights[i].m_pEntityToLight) {
+            if (aLights[i].m_pEntityToLight->m_nType == ENTITY_TYPE_VEHICLE) {
+			    CVector posn;
+                getVehicleDummyPos(&posn, *(uint16_t*)(((uint32_t)aLights[i].m_pEntityToLight) + 0x22), DUMMY_LIGHT_FRONT_MAIN);
+			    if (posn.x == 0.0f) posn.x = 0.15f;
+ 
+			    float light_offset = posn.x;
+
+			    posn.x = 0.0f;
+
+			    CVector* veh_pos = getVehCoordinates(aLights[i].m_pEntityToLight);
+			    float angle = getVehicleHeading(aLights[i].m_pEntityToLight);
+			    CVector shadow_draw;
+
+    		    shadow_draw.x = (posn.x) * cosf(angle) - (posn.y-1.1f) * sinf(angle);
+    		    shadow_draw.y = (posn.y-1.1f) * cosf(angle) + (posn.x) * sinf(angle);
+			    shadow_draw.z = posn.z;
+
+			    shadow_draw.x += veh_pos->x;
+			    shadow_draw.y += veh_pos->y;
+			    shadow_draw.z += veh_pos->z;
+
+                CVector carToPlyr;
+                carToPlyr.x = shadow_draw.x - plyrPos.x;
+                carToPlyr.y = shadow_draw.y - plyrPos.y;
+                carToPlyr.z = shadow_draw.z - plyrPos.z;
+
+                lightToPlyrDist = VectorMagnitude(&carToPlyr);
+            }
+        }
 
         if (lightToPlyrDist >= aLights[i].m_fRange || lightToPlyrDist == 0.f) { // NOTSA: Zero check to prevent (possible) division-by-zero
             continue;
@@ -573,6 +656,8 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
         float frontY;
         float sideX;
         float sideY;
+        float dispX;
+        float dispY;
 
         CVector light_pos = aLights[i].m_vecPosn;
 
@@ -580,15 +665,11 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
 
         CVector shadow_pos;
 
-        calculateShadow(&plyrPos, &light_pos, light_dir, &frontX, &frontY, &sideX, &sideY);
+        //calculateShadow(&plyrPos, &light_pos, light_dir, &frontX, &frontY, &sideX, &sideY);
+        CShadows_CalcPedShadowValuesImpl(&plyrPos, &light_pos, light_dir, &frontX, &frontY, &sideX, &sideY, &dispX, &dispY);
 
-        if (light_dir) {
-            shadow_pos.x = plyrPos.x + light_dir->x;
-            shadow_pos.y = plyrPos.y + light_dir->y;
-        } else {
-            shadow_pos.x = plyrPos.x - frontX - sideX;
-            shadow_pos.y = plyrPos.y - frontY - sideY;   
-        }
+        shadow_pos.x = plyrPos.x + dispX;
+        shadow_pos.y = plyrPos.y + dispY;
 
         shadow_pos.z = plyrPos.z;
 
@@ -602,8 +683,8 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
             sideY,
             CalculateShadowStrength(
                 lightToPlyrDist,
-                aLights[i].m_fRange / (light_dir? 4 : 1),
-                10 * CTimeCycle_m_CurrentColours->m_nShadowStrength / 8u // Same as mult by `0.625` and then casting to int
+                aLights[i].m_fRange,
+                CTimeCycle_m_CurrentColours->m_nShadowStrength
             ),
             0, 0, 0,
             4.0f,
@@ -617,13 +698,13 @@ bool CShadows_RenderExtraPlayerShadows(RangeData* ret) {
     return has_lights;
 }
 
-void CShadows_StoreShadowForPlayer(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings) {
+static void CShadows_StoreShadowForPlayer(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings) {
     short ped_intensity = intensity;
     RangeData distance;
 
     if (drawOnBuildings) {
         if (CShadows_RenderExtraPlayerShadows(&distance)) {
-            if (distance.dist > 1.0f) {
+            if (distance.dist > 2.f) {
                 ped_intensity = (short)((float)intensity * ((float)distance.dist / distance.range));
             } else {
                 ped_intensity = 32;
@@ -640,6 +721,8 @@ void CShadows_StoreShadowForPlayer(uint8_t type, RwTexture* texture, CVector* po
 void installSkyEdgeEngine()
 {  
     InjectRubbishPatches();
+    //injectRainGraphicsPatches();
+    InjectSkyEdgePostEffects();
 
     //MakeNop(0x1190E4);
 
@@ -676,6 +759,9 @@ void installSkyEdgeEngine()
     WriteDword(0x17E018, 0x0080402D);
     WriteDword(0x17E064, 0x0080402D);
     WriteDword(0x17E168, 0x0080402D);
+
+    WriteDword(0x17E01C, 0x0260482D);
+    WriteDword(0x17E068, 0x0260482D);
 
     //RedirectCall(0x24693C, SkyEdgeCameraClear);
 }

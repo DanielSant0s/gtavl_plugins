@@ -27,7 +27,7 @@ static uint32_t backup_radar = 0;
 
 extern int CGameLogic_GameState;
 
-void CHud_DrawBustedWastedMessage()
+static void CHud_DrawBustedWastedMessage()
 {
     RwRGBA text_color;
     RwRGBA shadow_color;

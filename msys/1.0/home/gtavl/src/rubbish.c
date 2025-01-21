@@ -14,7 +14,6 @@
 
 static void (*CVehicle_UpdatePassengerList)(void* veh) = (void (*)(void*))0x173F40;
 static void (*CGame_ShutdownRenderWare)() = (void (*)())0x242AB0;
-static void (*RenderEffects)() = (void (*)())0x246E80;
 static void (*CGame_Init1)(const char*) = (void (*)(const char*))0x88E430;
 
 #define RUBBISH_MAX_DIST (18.0f)
@@ -53,11 +52,11 @@ static CVector* getCameraPosition() {
     return &TheCamera.placeable.placement.m_vPosn;
 }
 
-float MagnitudeSqr2D(CVector* v) { return v->x * v->x + v->y * v->y; }
+static float MagnitudeSqr2D(CVector* v) { return v->x * v->x + v->y * v->y; }
 
-float Magnitude2D(CVector* v) { return sqrtf(v->x * v->x + v->y * v->y); }
+static float Magnitude2D(CVector* v) { return sqrtf(v->x * v->x + v->y * v->y); }
 
-float DistanceBetweenPointsSqr(CVector* v1, CVector* v2) {
+static float DistanceBetweenPointsSqr(CVector* v1, CVector* v2) {
     return (v2->x - v1->x) * (v2->x - v1->x) + (v2->y - v1->y) * (v2->y - v1->y);
 }
 
@@ -77,9 +76,9 @@ enum eZoneAttributes {
     ATTRZONE_FEWERCARS = 0x8000,
 };
 
-static int (*CCullZones_FindAttributesForCoors)(CVector *a1) = (int (*)(CVector *a1))0X306AC0;
+static int CCullZones_FindAttributesForCoors(CVector *a1);
 
-void CRubbish_Init(const char* a1) {
+static void CRubbish_Init(const char* a1) {
     CGame_Init1(a1);
 
     int i;
@@ -146,7 +145,7 @@ void CRubbish_Init(const char* a1) {
 	CRubbish_bRubbishInvisible = false;
 }
 
-void CRubbish_Shutdown() {
+static void CRubbish_Shutdown() {
 	RwTextureDestroy(gpRubbishTexture[0]);
 	gpRubbishTexture[0] = NULL;
 
@@ -162,7 +161,7 @@ void CRubbish_Shutdown() {
     CGame_ShutdownRenderWare();
 }
 
-void CRubbish_Render() {
+static void CRubbish_Render() {
 	if (CGame_currArea > 0)
 		return;
 
@@ -279,7 +278,7 @@ void CRubbish_Render() {
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)true);
 }
 
-void CRubbish_StirUp(CPhysical* veh) {
+static void CRubbish_StirUp(CPhysical* veh) {
 	if ((CTimer_m_FrameCounter ^ (veh->entity.m_nRandomSeed & 3)) == 0)
 		return;
 
@@ -337,7 +336,7 @@ void CRubbish_StirUp(CPhysical* veh) {
     CVehicle_UpdatePassengerList(veh);
 }
 
-void CRubbish_Update() {
+static void CRubbish_Update() {
 	char foundGround = false;
 
 	if (CRubbish_bRubbishInvisible)
@@ -465,7 +464,7 @@ void CRubbish_Update() {
 	}
 }
 
-void CRubbish_SetVisibility(bool visible) {
+static void CRubbish_SetVisibility(bool visible) {
 	CRubbish_bRubbishInvisible = (CGame_currArea > 0);
 }
 

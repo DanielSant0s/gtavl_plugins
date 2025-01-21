@@ -5,14 +5,14 @@
 
 #include "hooks.h"
 
-static void (*updatePickup)(uint32_t pickup, void *player, void *vehicle, int playerId) = (void (*)(uint32_t pickup, void *player, void *vehicle, int playerId))0x2D9D50;
-static void (*ClearSpaceForMissionEntity)(CVector* a1, uint32_t object) = (void (*)(CVector*, uint32_t))0x30AA10;
-static void (*CWorld_Remove)(uint32_t) = (void (*)(uint32_t))0x27DF60;
-static void (*CEntity_UpdateRwFrame)(uint32_t) = (void (*)(uint32_t))0x22F470;
-static void (*CWorld_Add)(uint32_t) = (void (*)(uint32_t))0x27DEA0;
-static void (*CSimpleTransform_UpdateRwMatrix)(int a1, int a2) = (void (*)(int, int))0x25FA20;
-static void (*CMatrix_UpdateRwMatrix)(uint32_t *a1, uint32_t *a2) = (void (*)(uint32_t *, uint32_t *))0x10ED80;
-static void (*CEntity_SetOrientation)(uint32_t, float, float, float) = (void (*)(uint32_t, float, float, float))0x10F200;
+void updatePickup(uint32_t pickup, void *player, void *vehicle, int playerId);
+void ClearSpaceForMissionEntity(CVector* a1, uint32_t object);
+void CWorld_Remove(uint32_t);
+void CEntity_UpdateRwFrame(uint32_t);
+void CWorld_Add(uint32_t);
+void CSimpleTransform_UpdateRwMatrix(int a1, int a2);
+void CMatrix_UpdateRwMatrix(uint32_t *a1, uint32_t *a2);
+void CEntity_SetOrientation(uint32_t, float, float, float);
 
 static float VectorSqrMagnitude(CVector *vector) { return vector->x * vector->x + vector->y * vector->y + vector->z * vector->z; }
 

@@ -233,17 +233,17 @@ typedef struct {
 } sceGsAlpha;
 
 typedef struct {
-    unsigned long SBP:14;
-    unsigned long pad14:2;
-    unsigned long SBW:6;
+    unsigned long SBP:14; // Source base pointer in words/64
+    unsigned long pad14:2; 
+    unsigned long SBW:6; // Source buffer width in pixels/64
     unsigned long pad22:2;
-    unsigned long SPSM:6;
+    unsigned long SPSM:6; // Source format
     unsigned long pad30:2;
-    unsigned long DBP:14;
+    unsigned long DBP:14; // Destination base pointer in words/64
     unsigned long pad46:2;
-    unsigned long DBW:6;
+    unsigned long DBW:6; // Destination buffer width in pixels/64
     unsigned long pad54:2;
-    unsigned long DPSM:6;
+    unsigned long DPSM:6; // Destination format (same as source format)
     unsigned long pad62:2;
 } sceGsBitbltbuf;
 
@@ -1530,6 +1530,37 @@ typedef struct {
 #define GS_LABEL        0x62
 #define GS_NOP          0x7f
 
+// Pixel-Storage Methods
+/** 32 bits per pixel. */
+#define GS_PSM_32   0x00
+/** 24 bits per pixel. */
+#define GS_PSM_24   0x01
+/** 16 bits per pixel. */
+#define GS_PSM_16   0x02
+/** 16 bits per pixel. */
+#define GS_PSM_16S  0x0A
+/** 24 bits per pixel. */
+#define GS_PSM_PS24 0x12
+/** 8 bits per pixel, palettized. */
+#define GS_PSM_8    0x13
+/** 4 bits per pixel, palettized. */
+#define GS_PSM_4    0x14
+/** 8 bits per pixel, 24 to 32 */
+#define GS_PSM_8H   0x1B
+/** 4 bits per pixel, 28 to 32 */
+#define GS_PSM_4HL  0x24
+/** 4 bits per pixel, 24 to 27 */
+#define GS_PSM_4HH  0x2C
+/** 32 bits per pixel. */
+#define GS_PSMZ_32  0x30
+/** 24 bits per pixel. */
+#define GS_PSMZ_24  0x31
+/** 16 bits per pixel. */
+#define GS_PSMZ_16  0x32
+/** 16 bits per pixel. */
+#define GS_PSMZ_16S 0x3A
+
+#define GS_SET_TEXFLUSH(A) (uint64_t)((A)&0xFFFFFFFF)
 
 #ifdef __cplusplus
 }

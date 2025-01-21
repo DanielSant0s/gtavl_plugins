@@ -18,13 +18,11 @@
 
 void (*CProjectileInfo_Update)(void) = (void (*)(void))0x131650;
 
+void Multiply3x3(CVector *out, CMatrix *m, CVector *in);
 
+static void CPhysical_AddToMovingList(CPhysical* this);
 
-static void (*Multiply3x3)(CVector *out, CMatrix *m, CVector *in) = (void (*)(CVector *out, CMatrix *m, CVector *in))0x1100D0;
-
-static void (*CPhysical_AddToMovingList)(CPhysical* this) = (void (*)(CPhysical* this))0x24C2D0;
-
-void CProjectileInfo_UpdateRotation() {
+static void CProjectileInfo_UpdateRotation() {
     CVector v173, outVec;
 
     CProjectileInfo_Update();
@@ -59,8 +57,7 @@ void CProjectileInfo_UpdateRotation() {
     }
 }
 
-void (*CWeapon_DoBulletImpact)(void* this, CEntity* pFiringEntity, CEntity* pCollideEntity, CVector* vecStart, CVector* vecEnd, CColPoint* pColPoint, CVector2D vecAhead) = 
-(void (*)(void* this, CEntity* pFiringEntity, CEntity* pCollideEntity, CVector* vecStart, CVector* vecEnd, CColPoint* pColPoint, CVector2D vecAhead))0x136AF0;
+void CWeapon_DoBulletImpact(void* this, CEntity* pFiringEntity, CEntity* pCollideEntity, CVector* vecStart, CVector* vecEnd, CColPoint* pColPoint, CVector2D vecAhead);
 
 enum eExplosionType {
     EXPLOSION_GRENADE,
@@ -78,14 +75,13 @@ enum eExplosionType {
     EXPLOSION_RC_VEHICLE
 };
 
-bool (*CExplosion_AddExplosion)(CEntity* victim, CEntity* creator, int explosionType, CVector *posn, unsigned int time, unsigned char makeSound, float camShake, unsigned char visibility) = 
-(bool (*)(CEntity* victim, CEntity* creator, int explosionType, CVector *posn, unsigned int time, unsigned char makeSound, float camShake, unsigned char visibility))0x12E1E0;
+bool CExplosion_AddExplosion(CEntity* victim, CEntity* creator, int explosionType, CVector *posn, unsigned int time, unsigned char makeSound, float camShake, unsigned char visibility);
 
-void (*CWorld_Remove)(CEntity* entity) = (void (*)(CEntity* entity))0x27DF60;
+void CWorld_Remove(CEntity* entity);
 
-void (*FxSystem_c_Kill)(void* fx_system) = (void (*)(void* fx_system))0x3D5800;
+void FxSystem_c_Kill(void* fx_system);
 
-void CWeapon_DoBulletImpactEvent(void* this, CEntity* pFiringEntity, CEntity* pCollideEntity, CVector* vecStart, CVector* vecEnd, CColPoint* pColPoint, CVector2D vecAhead) {
+static void CWeapon_DoBulletImpactEvent(void* this, CEntity* pFiringEntity, CEntity* pCollideEntity, CVector* vecStart, CVector* vecEnd, CColPoint* pColPoint, CVector2D vecAhead) {
     int i;
     CVector last_exploded_projectile = { 0.0f, 0.0f, 0.0f };
     for (i = 0; i < 32; i++) {
@@ -129,9 +125,9 @@ void CWeapon_DoBulletImpactEvent(void* this, CEntity* pFiringEntity, CEntity* pC
     CWeapon_DoBulletImpact(this, pFiringEntity, pCollideEntity, vecStart, vecEnd, pColPoint, vecAhead);
 }
 
-void (*CTaskSimpleUseGun_AimGun)(void* task, CEntity* ped) = (void (*)(void* task, CEntity* ped))0x407230;
+void CTaskSimpleUseGun_AimGun(void* task, CEntity* ped);
 
-void CTaskSimpleUseGun_AimGunSmoothIK(void* task, CEntity* ped) {
+static void CTaskSimpleUseGun_AimGunSmoothIK(void* task, CEntity* ped) {
 
      // MoveState
 	if (*(uint32_t*)(((uint32_t)(ped) + 0x570)) <= 4)

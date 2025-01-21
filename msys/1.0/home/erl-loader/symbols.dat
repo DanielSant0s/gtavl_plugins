@@ -171,8 +171,12 @@ RwRasterLockPalette 0x343370
 RwRasterUnlock 0x343330
 RwTextureCreate 0x346418
 RwTextureDestroy 0x3464A0
+RwTextureRead 0x345A80
 
 RpSkyTexCacheRasterLock 0x368EE8
+
+RpSkyTexCacheAccessSpeculate 0x3694C0
+RpSkyTexCacheAccessRaster 0x3688D8
 
 RwOsGetFileInterface 0x3332B8
 
@@ -265,10 +269,10 @@ FrontEndMenuManager_m_nTargetBlipi 0x6FF970
 load_code_overlay 0x3C6990
 unload_code_overlay 0x3C6AA0
 
-load_plugin 0x8902C0
-unload_erl 0x890038
-erl_find_local_symbol 0x88DFF8
-erl_find_symbol 0x88E0D8
+load_plugin 0x890390
+unload_erl 0x890108
+erl_find_local_symbol 0x88dfc8
+erl_find_symbol 0x88e0a8
 
 missionLocals 0x6F3AC0
 
@@ -355,9 +359,55 @@ byte_66CAD8 0x66CAD8
 
 CLoadingScreen_DisplayNextSplash 0x592D10
 AudioEngine 0x889C80
+CAEAudioHardware 0x876990
+AECutsceneTrackManager 0x880260
 CAudioEngine_ServiceLoadingTune 0x580920
 
+CAEAudioHardware_SetChannelVolume 0x5582B0
+CAEAudioHardware_SetChannelFlags 0x558140
+
+sub_419FF0 0x419FF0
+
+CTaskComplexDieInCar_PreparePedVehicleForPedDeath 0x419B80
+
+CFireManager_StartScriptFire 0x29ED50
+
+CCullZones_FindAttributesForCoors 0x306AC0
+
+CShadows_CalcPedShadowValues 0x11C640
+
+CShadows_StoreShadowForVehicle 0x1142A0
+
+CCollision_CalculateTrianglePlanes 0x11EF30
+
+CTimeCycle_m_VectorToSun 0x709380
+
+CMatrix_mul 0x110310
+
+aLights 0x7C1B10
+
+NumLights 0x66BBE0
+
 TheText 0x69F290
+
+Multiply3x3 0x1100D0
+
+CPhysical_AddToMovingList 0x24C2D0
+
+CPad_GetExitVehicle 0x2499D0
+
+CTaskSimplePlayerOnFoot_ProcessPlayerWeapon 0x463BB0
+CWorld_UseDetonator 0x288470
+
+Camera_FollowCar 0x209C90
+
+CGeneral_GetATanOfXY 0x245200
+
+CDamageManager_GetLightStatus 0x162500
+
+CShadows_StoreShadowToBeRendered 0x113FF0
+
+CAutomobile_ProcessControlInputs 0x155170
 
 CSprite2d_DrawRect 0x2B2090
 CSprite2d_DrawTextureRect 0x2B0960
@@ -395,10 +445,28 @@ ThePaths 0x6A6180
 CTheScripts_IsPlayerOnAMission 0x1FA3E0
 CSprite2d_SetMaskVertices 0x2B1FD0
 CSprite2d_maVertices 0x7C32F0
+
+CAudioEngine_PreloadCutsceneTrack 0x581010
+CAudioEngine_PlayPreloadedCutsceneTrack 0x5811A0
+CAudioEngine_StopCutsceneTrack 0x5814E0
+
+
+_rwDMAWaitQueue 0x34FA18
+
 skyRasterExt 0x66C208
 skyFrame_1 0x667928
-_rwDMAWaitQueue 0x34FA18
 skyZbuf_1 0x667920
+skyTest_1 0x667930
+skyXyoffset_1 0x667938
+skyFogcol 0x667940
+skyClamp_1 0x667948
+skyTex1_1 0x667950
+skyAlpha_1 0x667958
+skyDisplayRaster 0x667960
+skyDrawRaster 0x667964
+skyPrim_State 0x667968
+skySrcBlend 0x667970
+skyDestBlend 0x667974
 
 CTaskSimpleDie_Constructor 0x419400
 CTaskSimpleDie_Constructor0 0x4194B0
@@ -470,6 +538,30 @@ CClock_ms_nGameClockMinutes 0x66B7B0
 CWeather_CloudCoverage 0x66BD40
 CWeather_Foggyness 0x66BD44
 
+CSprite_RenderBufferedOneXLUSprite2D 0x3C4500
+CSprite_RenderBufferedOneXLUSprite_Rotate 0x3C43A0
+
+updatePickup 0x2D9D50
+ClearSpaceForMissionEntity 0x30AA10
+CWorld_Remove 0x27DF60
+CEntity_UpdateRwFrame 0x22F470
+CWorld_Add 0x27DEA0
+CSimpleTransform_UpdateRwMatrix 0x25FA20
+CMatrix_UpdateRwMatrix 0x10ED80
+CEntity_SetOrientation 0x10F200
+
+
+CAudioEngine_PreloadBeatTrack 0x581310
+CAudioEngine_PlayPreloadedBeatTrack 0x5814A0
+CAudioEngine_StopBeatTrack 0x5814E0
+CAudioEngine_Service 0x580730
+
+CGame_InitialiseCoreDataAfterRW 0x88E320
+
+CSprite_CalcScreenCoors 0x11D0E0
+CSprite_RenderOneXLUSprite 0x11DA20
+CSprite_RenderBufferedOneXLUSprite 0x3C4260
+
 CTimeCycle_m_nAmbientRed 0x706860
 CTimeCycle_m_nAmbientGreen 0x706920
 CTimeCycle_m_nAmbientBlue 0x7069E0
@@ -519,3 +611,8 @@ CTimeCycle_m_fCloudAlpha 0x708B80
 CTimeCycle_m_nHighLightMinIntensity 0x708C40
 CTimeCycle_m_nWaterFogAlpha 0x708D00
 CTimeCycle_m_nDirectionalMult 0x708DC0
+
+CTaskSimpleUseGun_AimGun 0x407230
+FxSystem_c_Kill 0x3D5800
+CExplosion_AddExplosion 0x12E1E0
+CWeapon_DoBulletImpact 0x136AF0

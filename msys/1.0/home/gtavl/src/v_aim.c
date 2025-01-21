@@ -33,7 +33,7 @@ typedef struct {
 static tAimingCamData gData[4];
 static CVector gOffsets[17] = { };
 
-void Process_AdvancedAimWeapon(uint32_t cam, CVector *vec, float arg3, float arg4, float arg5) {
+static void Process_AdvancedAimWeapon(uint32_t cam, CVector *vec, float arg3, float arg4, float arg5) {
     uint32_t playa = FindPlayerPed(-1);
     uint8_t active_weapon;
     CVector obj_space;
@@ -108,7 +108,7 @@ void Process_AdvancedAimWeapon(uint32_t cam, CVector *vec, float arg3, float arg
 
 float WeaponAimZoomSpeed = 4.0f;
 
-void AdjustTimeStep() {
+static void AdjustTimeStep() {
     uint32_t a1;
     float weapon_zoom;
 
@@ -131,7 +131,7 @@ void AdjustTimeStep() {
 
 
 
-float (*CGeneral_GetATanOfXY)(float x, float y) = (float (*)(float x, float y))0x245200;
+float CGeneral_GetATanOfXY(float x, float y);
 
 static float mymodf(float numerator, float denominator) {
     float quotient = numerator / denominator;
@@ -154,7 +154,7 @@ void CCamera_Find3rdPersonCamTargetVector(CCamera *this, float dist, CVector* po
 static CVector PlayerTargettedVector = {};
 static CVector UnkVector = {};
 
-static void (*Multiply3x3)(CVector *out, CMatrix *m, CVector *in) = (void (*)(CVector *out, CMatrix *m, CVector *in))0x1100D0;
+void Multiply3x3(CVector *out, CMatrix *m, CVector *in);
 
 #define clamp(v, low, high) ((v)<(low) ? (low) : (v)>(high) ? (high) : (v))
 
@@ -178,7 +178,7 @@ static float expClamp(float valor, float max, float ln) {
 
 bool crosshair_defined = false;
 
-void ThrowProjectileControl() {
+static void ThrowProjectileControl() {
     uint32_t a1, a2;
     asm("move %0, $s2" : "=r" (a1)); // get from our parent function
     asm("move %0, $s1" : "=r" (a2)); // get from our parent function
@@ -229,7 +229,7 @@ void ThrowProjectileControl() {
 
 }
 
-char CWeapon_CustomTargetFire(void *this, CEntity *owner, CVector *vecOrigin, CVector *vecEffectPosn, CEntity *targetEntity, CVector *vecTarget, CVector *arg_14) {
+static char CWeapon_CustomTargetFire(void *this, CEntity *owner, CVector *vecOrigin, CVector *vecEffectPosn, CEntity *targetEntity, CVector *vecTarget, CVector *arg_14) {
     if (owner == FindPlayerPed(-1)) {
         CWeapon_Fire(this, owner, vecOrigin, vecEffectPosn, targetEntity, &PlayerTargettedVector, arg_14);
     } else {
@@ -237,7 +237,7 @@ char CWeapon_CustomTargetFire(void *this, CEntity *owner, CVector *vecOrigin, CV
     }
 }
 
-void VCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
+static void VCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
     CVector out, obj_space;
     uint32_t playa = FindPlayerPed(-1);
 
@@ -266,10 +266,10 @@ void VCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) 
 
 }
 
-void (*CTaskSimplePlayerOnFoot_ProcessPlayerWeapon)(void* this, CEntity* ped) = (void (*)(void* this, CEntity* ped))0x463BB0;
-void (*CWorld_UseDetonator)(CEntity* ped) = (void (*)(CEntity* ped))0x288470;
+void CTaskSimplePlayerOnFoot_ProcessPlayerWeapon(void* this, CEntity* ped);
+void CWorld_UseDetonator(CEntity* ped);
 
-void CTaskSimplePlayerOnFoot_CustomProcessPlayerWeapon(void* this, CEntity* ped) {
+static void CTaskSimplePlayerOnFoot_CustomProcessPlayerWeapon(void* this, CEntity* ped) {
     CPad* pad = CPad_GetPad(0);
     if (pad->NewState.DPadLeft && !pad->OldState.DPadLeft) {
         CWorld_UseDetonator(ped);

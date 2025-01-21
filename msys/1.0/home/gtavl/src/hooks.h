@@ -2,8 +2,6 @@
 #include <CVector.h>
 #include "bios_alloc.h"
 
-extern void (*CCustomRadar_LimitRadarPoint)(CVector*);
-
 void setupFOVPatches();
 void setupCloudsPatches();
 void setupAimPatches();

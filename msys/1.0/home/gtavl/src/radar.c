@@ -38,12 +38,12 @@ static float angle = 0.0f;
 
 static CTexture hud_textures[10];
 
-RwTexture dummy_tex = { 0 };
-RwRaster dummy_raster = { 0 };
+static RwTexture dummy_tex = { 0 };
+static RwRaster dummy_raster = { 0 };
 
-RwRaster *base_raster;
+static RwRaster *base_raster;
 
-VirtualMemoryBlock hud_textures_block;
+static VirtualMemoryBlock hud_textures_block;
 
 typedef struct {
     size_t texture;
@@ -52,13 +52,13 @@ typedef struct {
     size_t palette;
 } TextureOffsets;
 
-TextureOffsets radar_cop_offsets;
+static TextureOffsets radar_cop_offsets;
 
 static void (*CGame_Init1)(const char*);
+static void (*CCustomRadar_LimitRadarPoint)(CVector*);
 
-static RwTexture* (*RwTextureRead)(const char* name, const char* mask) = (RwTexture* (*)(const char* name, const char* mask))0x345A80;
 
-void preload_hud_textures(const char* a1) {
+static void preload_hud_textures(const char* a1) {
     CGame_Init1(a1);
 
     RwTexture* tmp_tex = NULL;
@@ -159,18 +159,18 @@ static bool bActivateRadarColorChange = false;
 static uint32_t bRadarColorTimer = 0;
 
 extern uint32_t AudioEngine;
-void (*CAudioEngine_PreloadCutsceneTrack)(uint32_t*, short, char) = (void (*)(uint32_t*, short , char))0x581010;
-void (*CAudioEngine_PlayPreloadedCutsceneTrack)(uint32_t*) = (void (*)(uint32_t*))0x5811A0;
-void (*CAudioEngine_StopCutsceneTrack)(uint32_t*) = (void (*)(uint32_t*))0x5814E0;
+void CAudioEngine_PreloadCutsceneTrack(uint32_t*, short, char);
+void CAudioEngine_PlayPreloadedCutsceneTrack(uint32_t*);
+void CAudioEngine_StopCutsceneTrack(uint32_t*);
 
-static uint32_t* CAEAudioHardware = (uint32_t*)0x876990;
-uint32_t AECutsceneTrackManager = 0x880260;
+extern uint32_t CAEAudioHardware;
+extern uint32_t AECutsceneTrackManager;
 
-void (*CAEAudioHardware_SetChannelVolume)(uint32_t*, short channel, uint16_t channelId, float volume, uint8_t a4) = (void (*)(uint32_t*, short channel, uint16_t channelId, float volume, uint8_t a4))0x5582B0;
-void (*CAEAudioHardware_SetChannelFlags)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags) = (void (*)(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags))0x558140;
-bool playingOST = false;
+void CAEAudioHardware_SetChannelVolume(uint32_t*, short channel, uint16_t channelId, float volume, uint8_t a4);
+void CAEAudioHardware_SetChannelFlags(uint32_t*, short channel, uint16_t channelId, int, int, int, short flags);
+static bool playingOST = false;
 
-void DrawRadarCop(void* radar) {
+static void DrawRadarCop(void* radar) {
     CVector screen_coords, radar_coords, *ent_coords;
     RwRGBA blip_colour;
 
@@ -238,23 +238,23 @@ void DrawRadarCop(void* radar) {
 
                 if (ent_coords->x != 0.0f && ent_coords->y != 0.0f ) {
                     if (!hud_textures[0].texture) {
-                        //load_vhud_texture("radar_cop", 0);
-                        hud_textures[0].texture = &dummy_tex;
-
-                        base_raster = RwRasterCreate(32, 32, 4, rwRASTERTYPETEXTURE | rwRASTERFORMAT8888 | rwRASTERFORMATPAL4);
-
-                        read_block(&hud_textures_block, &dummy_tex, radar_cop_offsets.texture, sizeof(RwTexture));
-                        //read_block(&hud_textures_block, &dummy_raster, radar_cop_offsets.raster, sizeof(RwRaster));
- //
-                        //dummy_raster.originalPixels = br_alloc((32*32)/2);
-                        //dummy_raster.cpPixels = dummy_raster.originalPixels;
-                        //dummy_raster.palette = br_alloc(16*sizeof(RwRGBA));
-
-                        dummy_tex.raster = base_raster;
-                        RwRasterLock(base_raster, 0, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
-                        RwRasterLockPalette(base_raster, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
-                        read_block(&hud_textures_block, base_raster->cpPixels, radar_cop_offsets.pixels, (32*32/2));
-                        read_block(&hud_textures_block, base_raster->palette, radar_cop_offsets.palette, 16*sizeof(RwRGBA));
+                        load_vhud_texture("radar_cop", 0);
+                        //hud_textures[0].texture = &dummy_tex;
+//
+                        //base_raster = RwRasterCreate(32, 32, 4, rwRASTERTYPETEXTURE | rwRASTERFORMAT8888 | rwRASTERFORMATPAL4);
+//
+                        //read_block(&hud_textures_block, &dummy_tex, radar_cop_offsets.texture, sizeof(RwTexture));
+                        ////read_block(&hud_textures_block, &dummy_raster, radar_cop_offsets.raster, sizeof(RwRaster));
+//
+                        ////dummy_raster.originalPixels = br_alloc((32*32)/2);
+                        ////dummy_raster.cpPixels = dummy_raster.originalPixels;
+                        ////dummy_raster.palette = br_alloc(16*sizeof(RwRGBA));
+//
+                        //dummy_tex.raster = base_raster;
+                        //RwRasterLock(base_raster, 0, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
+                        //RwRasterLockPalette(base_raster, rwRASTERLOCKWRITE | rwRASTERLOCKNOFETCH);
+                        //read_block(&hud_textures_block, base_raster->cpPixels, radar_cop_offsets.pixels, (32*32/2));
+                        //read_block(&hud_textures_block, base_raster->palette, radar_cop_offsets.palette, 16*sizeof(RwRGBA));
 
                         //memcpy(base_raster, &dummy_raster, sizeof(RwRaster));
                     }
@@ -308,8 +308,8 @@ void DrawRadarCop(void* radar) {
         }
 
         if (hud_textures[0].texture) {
-            //CSprite2d_Delete(&hud_textures[0]);
-            RwRasterDestroy(base_raster);
+            CSprite2d_Delete(&hud_textures[0]);
+            //RwRasterDestroy(base_raster);
             hud_textures[0].texture = NULL;
         }
 
@@ -324,7 +324,7 @@ void DrawRadarCop(void* radar) {
     CRadar_DrawBlips(radar);
 }
 
-int sub_10001600(float *a1, float *a2, float *a3, float *a4)
+static int sub_10001600(float *a1, float *a2, float *a3, float *a4)
 {
     int result;
     float v5;
@@ -513,7 +513,7 @@ int sub_10001600(float *a1, float *a2, float *a3, float *a4)
     return result;
 }
 
-float rectLimitRadarPoint(float *a1)
+static float rectLimitRadarPoint(float *a1)
 {
     float result; // st7
     float v2; // st7
@@ -562,11 +562,11 @@ static void hookedRadarCentre() {
 void injectRadarPatches() {
     hud_textures[0].texture = NULL;
     hud_textures[1].texture = NULL;
-
     
-    CGame_Init1 = (void (*)())ReadCall(0x242B9C);
+    CGame_Init1 = (void (*)(const char*))ReadCall(0x242B9C);
+    CCustomRadar_LimitRadarPoint = (void (*)(CVector*))ReadCall(0x268164);
 
-    RedirectCall(0x242B9C, preload_hud_textures);
+    //RedirectCall(0x242B9C, preload_hud_textures);
 
     WriteWord(0x559B80, 0xc140);
     WriteWord(0x559BE4, 0xc140);

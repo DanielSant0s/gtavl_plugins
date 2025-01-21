@@ -17,9 +17,9 @@
 
 #include "virtual_mem.h"
 
-uint32_t LookBehindTimeLimit = 0;
+static uint32_t LookBehindTimeLimit = 0;
 
-bool CPad_GetLookBehindForCar(CPad *this)
+static bool CPad_GetLookBehindForCar(CPad *this)
 {
     if ( this->DisablePlayerControls )
         return false;
@@ -41,7 +41,7 @@ bool CPad_GetLookBehindForCar(CPad *this)
     return false;
 }
 
-void (*CCustomRadar_LimitRadarPoint)(CVector*);
+
 
 
 inline void nopdelay(void)
@@ -53,7 +53,7 @@ inline void nopdelay(void)
     } while (i-- != -1);
 }
 
-bool wait_device(char *path) {
+static bool wait_device(char *path) {
     struct sce_stat buffer;
     int ret = -1;
     int retries = 500;
@@ -69,9 +69,7 @@ bool wait_device(char *path) {
     return ret == 0;
 }
 
-void injectPatches() {
-    CCustomRadar_LimitRadarPoint = (void (*)(CVector*))ReadCall(0x268164);
-
+static void injectPatches() {
     installOilSystem();
     injectLimitHooks();
     setupColourFilterPatches();
@@ -108,15 +106,20 @@ void injectPatches() {
 
 int _start()
 {
-    if (sceSifSearchModuleByName("usbd") < 0) {
-        sceSifLoadModule("cdrom0:\\SYSTEM\\USBD.IRX", 0, 0);
-    }
+    struct sce_stat buffer;
+    int ret = -1;
 
-    if (sceSifSearchModuleByName("bdm") < 0) {
-        //sceSifLoadModule("cdrom0:\\SYSTEM\\USBHDFSD.IRX", 0, 0);
-        sceSifLoadModule("cdrom0:\\SYSTEM\\BDM.IRX", 0, 0);
-        sceSifLoadModule("cdrom0:\\SYSTEM\\BDMFS_FATFS.IRX", 0, 0);
-        sceSifLoadModule("cdrom0:\\SYSTEM\\USBMASS_BD.IRX", 0, 0);
+    ret = sceGetstat("mass:", &buffer);
+
+    if (sceSifSearchModuleByName("usbd") < 0 && ret != 0) {
+        sceSifLoadModule("cdrom0:\\SYSTEM\\USBD.IRX", 0, 0);
+
+        if (sceSifSearchModuleByName("bdm") < 0) {
+            //sceSifLoadModule("cdrom0:\\SYSTEM\\USBHDFSD.IRX", 0, 0);
+            sceSifLoadModule("cdrom0:\\SYSTEM\\BDM.IRX", 0, 0);
+            sceSifLoadModule("cdrom0:\\SYSTEM\\BDMFS_FATFS.IRX", 0, 0);
+            sceSifLoadModule("cdrom0:\\SYSTEM\\USBMASS_BD.IRX", 0, 0);
+        }
     }
 
     br_init(true);

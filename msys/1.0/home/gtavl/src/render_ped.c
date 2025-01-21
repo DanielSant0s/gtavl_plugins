@@ -19,11 +19,11 @@
 #include "hooks.h"
 
 
-void *splate = NULL;
-RpClump *cplate = NULL;
-RpAtomic *aplate = NULL;
-RwFrame *fplate = NULL;
-RwTexture *tplate = NULL;
+static void *splate = NULL;
+static RpClump *cplate = NULL;
+static RpAtomic *aplate = NULL;
+static RwFrame *fplate = NULL;
+static RwTexture *tplate = NULL;
 
 //Events_initGameEvent.before += []
 //{
@@ -43,8 +43,6 @@ RwTexture *tplate = NULL;
 //		if (helmets[i]) RpClumpDestroy(helmets[i]);
 //	}
 //};
-
-static RwTexture* (*RwTextureRead)(const char* name, const char* mask) = (RwTexture* (*)(const char* name, const char* mask))0x345A80;
 
 void CPed_Render(uint32_t ped);
 
@@ -212,7 +210,7 @@ typedef struct {
     unsigned int bUsedForReplay : 1; // This ped is controlled by replay and should be removed when replay is done.
 } m_nPedFlags;
 
-void CPed_CustomRender(uint32_t ped) {
+static void CPed_CustomRender(uint32_t ped) {
     CPed_Render(ped);
 
     //(*(m_nPedFlags *)(ped + 0x4A4)).bForceDieInCar = true;
@@ -285,17 +283,17 @@ void CPed_CustomRender(uint32_t ped) {
 	}
 }
 
-int (*sub_419FF0)(int, int, int) = (int (*)(int, int, int))0x419FF0;
+int sub_419FF0(int, int, int);
 
-int CTaskComplexDieInCar_CreateSubTask(int a1, int a2, int a3) {
+static int CTaskComplexDieInCar_CreateSubTask(int a1, int a2, int a3) {
     (*(m_nPedFlags *)(a3 + 0x4A4)).bCanBeShotInVehicle = false;
 
     return sub_419FF0(a1, 214, a3);
 }
 
-void (*CTaskComplexDieInCar_PreparePedVehicleForPedDeath)(int, int) = (void (*)(int, int))0x419B80;
+void CTaskComplexDieInCar_PreparePedVehicleForPedDeath(int, int);
 
-int CTaskComplexDieInCar_CreateSubTaskPrepare(int a1, int a2, int a3) {
+static int CTaskComplexDieInCar_CreateSubTaskPrepare(int a1, int a2, int a3) {
     CTaskComplexDieInCar_PreparePedVehicleForPedDeath(a1, *(int *)(a3 + 1484));
     *(uint32_t *)(a1 + 16) = CTimer_m_snTimeInMilliseconds;
     *(uint32_t *)(a1 + 20) = 2000;
@@ -306,10 +304,9 @@ int CTaskComplexDieInCar_CreateSubTaskPrepare(int a1, int a2, int a3) {
     return sub_419FF0(a1, 214, a3);
 }
 
-int (*CFireManager_StartScriptFire)(uint32_t *this, CVector* pos, CEntity* target, float _fUnused, char _nUnused, char nGenerations, int nStrength) = 
-(int (*)(uint32_t *this, CVector* pos, CEntity* target, float _fUnused, char _nUnused, char nGenerations, int nStrength))0x29ED50;
+int CFireManager_StartScriptFire(uint32_t *this, CVector* pos, CEntity* target, float _fUnused, char _nUnused, char nGenerations, int nStrength);
 
-void FireOnDrivers() {
+static void FireOnDrivers() {
     uint32_t s3;
     asm("move %0, $s3" : "=r" (s3)); // get from our parent function
 

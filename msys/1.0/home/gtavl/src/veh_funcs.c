@@ -15,34 +15,11 @@
 
 static CVector* TheCamera_m_vecGameCamPos = (CVector*)(0x6FE530 + 0x908);
 
-extern uint32_t CModelInfo_ms_modelInfoPtrs[];
+int CDamageManager_GetLightStatus(uint32_t, uint8_t);
 
-void getVehicleDummyPos(CVector* ret, uint16_t veh_id, uint16_t dummy_id) {
-	CVector* base = &(*(CVector**)(CModelInfo_ms_modelInfoPtrs[veh_id] + 0x5C))[dummy_id];
-	ret->x = base->x;
-	ret->y = base->y;
-	ret->z = base->z;
-}
+void CShadows_StoreShadowToBeRendered(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char);
 
-static int (*CDamageManager_GetLightStatus)(uint32_t, uint8_t) = (int (*)(uint32_t, uint8_t))0x162500;
-
-float getVehicleHeading(uint32_t vehicle) {
-	uint32_t v70;
-	float v71;
-
-    v70 = *(uint32_t *)(vehicle + 20);
-    if ( v70 )
-        v71 = atan2f(-*(float *)(v70 + 16), *(float *)(v70 + 20));
-    else
-        v71 = *(float *)(vehicle + 16);
-	return v71;
-}
-
-static void (*CShadows_StoreShadowToBeRendered)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char) = (
-	void (*)(unsigned char, CVector *, float, float, float, float, short, unsigned char, unsigned char, unsigned char)
-)0x113FF0;
-
-void drawRearLights(CVector *pos, float a, float length, uint8_t r, uint8_t g, uint8_t b) {
+static void drawRearLights(CVector *pos, float a, float length, uint8_t r, uint8_t g, uint8_t b) {
 	float x1 = 0.0f, y1 = 0.0f;
 
     if ( a == 0.0f ) {
@@ -68,14 +45,14 @@ void drawRearLights(CVector *pos, float a, float length, uint8_t r, uint8_t g, u
 
 static void DrawVehicleReverselights(uint32_t vehicle) {
 	CVector posn;
-    getVehicleDummyPos(&posn, *(uint16_t*)(vehicle + 0x22), 1);
+    getVehicleDummyPos(&posn, *(uint16_t*)(vehicle + 0x22), DUMMY_LIGHT_REAR_MAIN);
 	if (posn.x == 0.0f) posn.x = 0.15f;
 	posn.x -= 0.1f;
 
 	float light_offset = posn.x;
 
 	posn.x = 0.0f;
-
+ 
 	CVector* veh_pos = getVehCoordinates(vehicle);
 	float angle = getVehicleHeading(vehicle);
 	CVector shadow_draw;
@@ -103,7 +80,7 @@ static void DrawVehicleReverselights(uint32_t vehicle) {
 	}
 }
 
-void hookedVehicleRender(uint32_t vehicle) {
+static void hookedVehicleRender(uint32_t vehicle) {
 	uint8_t veh_lights = getVehicleBombLightsWinchFlags(vehicle);
 
 	if ((getVehicleSubClass(vehicle) == VEHICLE_AUTOMOBILE || getVehicleSubClass(vehicle) == VEHICLE_BIKE) &&
@@ -112,7 +89,7 @@ void hookedVehicleRender(uint32_t vehicle) {
 	{
 		if (test_bit(veh_lights, 4)) {
 			CVector posn;
-            getVehicleDummyPos(&posn, *(uint16_t*)(vehicle + 0x22), 1);
+            getVehicleDummyPos(&posn, *(uint16_t*)(vehicle + 0x22), DUMMY_LIGHT_REAR_MAIN);
 			if (posn.x == 0.0f) posn.x = 0.15f;
 
 			float light_offset = posn.x;
@@ -148,19 +125,19 @@ void hookedVehicleRender(uint32_t vehicle) {
 	CVehicle_Render(vehicle);
 }
 
-int (*get_exit_vehicle)(int a1) = (int (*)(int a1))0x2499D0;
+int CPad_GetExitVehicle(int a1);
 
-int hookedExitVehicle(int a1) {
-	int ret = get_exit_vehicle(a1);
+static int hookedExitVehicle(int a1) {
+	int ret = CPad_GetExitVehicle(a1);
 	if(ret) {
 		CVehicle__SetEngineState(FindPlayerVehicle(-1, 0), false);
 	}
 	return ret;
 }
 
-static void (*Camera_FollowCar)(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) = (void (*)(uint32_t, CVector *, int, int, int, char))0x209C90;
+void Camera_FollowCar(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6);
 
-void VCarCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
+static void VCarCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a6) {
     CVector out, obj_space, ret;
     out.x = 0.0f;
     out.y = 0.0f;
@@ -170,9 +147,9 @@ void VCarCamera(uint32_t this, CVector *a2, float a3, float a4, float a5, char a
     Camera_FollowCar(this, &ret, a3, a4, a5, a6);
 }
 
-void (*CAutomobile_ProcessControlInputs)(uint32_t vehicle, uint8_t a2) = (void (*)(uint32_t vehicle, uint8_t a2))0x155170;
+void CAutomobile_ProcessControlInputs(uint32_t vehicle, uint8_t a2);
 
-void MyCAutomobile_ProcessControlInputs(uint32_t vehicle, uint8_t a2) {
+static void MyCAutomobile_ProcessControlInputs(uint32_t vehicle, uint8_t a2) {
 	CPad* pad = CPad_GetPad(0);
 	uint8_t veh_lights = getVehicleBombLightsWinchFlags(vehicle);
 
@@ -190,7 +167,7 @@ void MyCAutomobile_ProcessControlInputs(uint32_t vehicle, uint8_t a2) {
 	}
 }
 
-void CalculateDoorLock() {
+static void CalculateDoorLock() {
     uint32_t *vehicle;
     int lockChance = rand() % 101;
 

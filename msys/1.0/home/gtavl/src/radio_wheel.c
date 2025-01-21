@@ -9,6 +9,7 @@
 #include <CRGBA.h>
 #include <math.h>
 #include <injector.h>
+#include <string.h>
 #include "hooks.h"
 #include "colour_filter.h"
 
@@ -28,21 +29,22 @@ static CTexture radio_icon[12];
 static CTexture radio_selector;
 
 static const char* radio_names[12] = {
-    "radio_playback",
-    "radio_krose",
-    "radio_KDST",
-    "radio_bounce",
-    "radio_SFUR",
-    "radio_RLS",
-    "radio_RADIOX",
-    "radio_csr",
-    "radio_kjah",
-    "radio_mastersounds",
-    "radio_WCTR",
-    "radio_off"
+    "playback",
+    "krose",
+    "KDST",
+    "bounce",
+    "SFUR",
+    "RLS",
+    "RADIOX",
+    "csr",
+    "kjah",
+    "mastersounds",
+    "WCTR",
+    "off"
 };
 
 static void RadioHud_loadTextures() {
+    char radio_name[32] = "radio_";
     //CStreaming_MakeSpaceFor(66328);
     //CStreaming_ImGonnaUseStreamingMemory();
     //CGame_TidyUpMemory(false, true);
@@ -56,7 +58,9 @@ static void RadioHud_loadTextures() {
 
     int i;
     for (i = 0; i < 12; i++) {
-        CSprite2d_SetTexture(&radio_icon[i], radio_names[i], 0);
+        strcat(radio_name, radio_names[i]);
+        CSprite2d_SetTexture(&radio_icon[i], radio_name, 0);
+        radio_name[6] = '\0';
     }
 
     CSprite2d_SetTexture(&radio_selector, "radio_selector", 0);

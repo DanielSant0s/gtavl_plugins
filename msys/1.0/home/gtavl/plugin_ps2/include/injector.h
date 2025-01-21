@@ -27,5 +27,7 @@ void MakeRetn(uint32_t address);
 
 void MakeBranch(uint32_t address, uint16_t offset);
 
+void CallOnEvent(uint32_t address, uint16_t event, bool after);
+
 
 #endif

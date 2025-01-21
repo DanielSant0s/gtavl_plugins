@@ -87,7 +87,7 @@ static void ColourFilterHook(RwRGBA c1, RwRGBA c2) {
                         .b = (float)((c2.b * add_weights.b) / 255.0f) * (customFilterAddColor.b / 255.0f), 
                         .a = (float)((c2.a * add_weights.a) / 255.0f) * (customFilterAddColor.a / 255.0f) };
 
-        CPostEffects_ColourFilter(out1, out2);
+        //CPostEffects_ColourFilter(out1, out2);
         if(enable_blur) {
             if (bCustomBlurColor) {
                 out1.r = BlurFilterReplaceColor.r;
@@ -107,7 +107,7 @@ static void ColourFilterHook(RwRGBA c1, RwRGBA c2) {
     RenderCustomFiltering();
 }
 
-void toggleBlurFilter() {
+static void toggleBlurFilter() {
     enable_blur ^= 1;
 }
 

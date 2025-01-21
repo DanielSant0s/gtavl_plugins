@@ -392,7 +392,7 @@ static int apply_reloc(u8 * reloc, int type, u32 addr) {
 		printf("Unaligned reloc (%p) type=%d!\n", reloc, type);
 	}
 	memcpy(&u_current_data, reloc, 4);
-	memcpy(&s_current_data, reloc, 4);
+    s_current_data = (s32)u_current_data;
 
     switch (type) {
 	case R_MIPS_32:
@@ -564,7 +564,8 @@ static int read_erl(FILE* elf_handle, u8 * elf_mem, u32 addr, struct erl_record_
     struct elf_header_t head;
     struct elf_section_t * sec = 0;
     struct elf_symbol_t * sym = 0;
-    struct elf_reloc_t reloc;
+    struct elf_reloc_t reloc, next_reloc;
+    int has_next_reloc = 0;
     int i, j;
     // int erx_compressed; // Not used
     char * names = 0, * strtab_names = 0, * reloc_section = 0;
@@ -822,10 +823,19 @@ return code
 	dprintf("   Num: Offset   Type           Symbol\n");
 	for (j = 0; (u32)j < (sec[i].sh_size / sec[i].sh_entsize); j++) {
 	    int sym_n;
+        int next_sym_n;
 
 	    reloc = *((struct elf_reloc_t *) (reloc_section + j * sec[i].sh_entsize));
 
-	    sym_n = reloc.r_info >> 8;
+        sym_n = reloc.r_info >> 8;
+
+        has_next_reloc = 0;
+        if ((u32)j+1 < (sec[i].sh_size / sec[i].sh_entsize)) {
+            next_reloc = *((struct elf_reloc_t *) (reloc_section + ((j+1) * sec[i].sh_entsize)));
+            next_sym_n = reloc.r_info >> 8;
+            has_next_reloc = 1;
+        }
+	    
 	    dprintf("%6i: %08X %-14s %3i: ", j, reloc.r_offset, reloc_types[reloc.r_info & 255], sym_n);
 
 	    switch(sym[sym_n].st_info & 15) {
@@ -854,6 +864,21 @@ return code
 	    case SECTION:
 		    rprintf("internal section reloc to section %i (%s)\n", sym[sym_n].st_shndx, names + sec[sym[sym_n].st_shndx].sh_name);
 		    dprintf("Relocating at %08X.\n", erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr);
+
+            if ((reloc.r_info & 255) == R_MIPS_HI16 && 
+                (has_next_reloc && ((next_reloc.r_info & 255) == R_MIPS_LO16)) &&
+                (sec[sym[sym_n].st_shndx].sh_addr == sec[sym[next_sym_n].st_shndx].sh_addr) &&
+                (*(u16*)(erl_record->bytes + sec[sec[i].sh_info].sh_addr + next_reloc.r_offset) + ((u32) (erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr) & 0x0000ffff)) >= 0x8000
+                ) {
+                    u32 data = *(u32*)(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset);
+                    *(u32*)(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset) = 
+                        data + !(data & 0xf);
+
+                    printf("addr 0x%x next_addr 0x%x\n",
+                        *(u32*)(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset),
+                        *(u32*)(erl_record->bytes + sec[sec[i].sh_info].sh_addr + next_reloc.r_offset));
+                }
+
 		    if (apply_reloc(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, (u32) (erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr)) < 0) {
 		        dprintf("Something went wrong in relocation.");
 		        free_and_return(-1);
@@ -876,10 +901,11 @@ return code
 		        }
 		        add_dependancy(erl_record, s->provider);
 		    } else {
-    	    	    dprintf("Relocating at %08X.\n", erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr + sym[sym_n].st_value);
+    	    	dprintf("Relocating at %08X.\n", erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr + sym[sym_n].st_value);
+
 		        if (apply_reloc(erl_record->bytes + sec[sec[i].sh_info].sh_addr + reloc.r_offset, reloc.r_info & 255, (u32) (erl_record->bytes + sec[sym[sym_n].st_shndx].sh_addr + sym[sym_n].st_value)) < 0) {
-		    	dprintf("Something went wrong in relocation.");
-		    	free_and_return(-1);
+		    	    dprintf("Something went wrong in relocation.");
+		    	    free_and_return(-1);
 		        }
 		    }
 		    break;

@@ -1089,6 +1089,24 @@ enum RwPrimitiveType
     rwPRIMITIVETYPEFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
 };
 
+enum RwBlendFunction
+{
+    rwBLENDNABLEND = 0,
+    rwBLENDZERO,            /**<(0,    0,    0,    0   ) */
+    rwBLENDONE,             /**<(1,    1,    1,    1   ) */
+    rwBLENDSRCCOLOR,        /**<(Rs,   Gs,   Bs,   As  ) */
+    rwBLENDINVSRCCOLOR,     /**<(1-Rs, 1-Gs, 1-Bs, 1-As) */
+    rwBLENDSRCALPHA,        /**<(As,   As,   As,   As  ) */
+    rwBLENDINVSRCALPHA,     /**<(1-As, 1-As, 1-As, 1-As) */
+    rwBLENDDESTALPHA,       /**<(Ad,   Ad,   Ad,   Ad  ) */
+    rwBLENDINVDESTALPHA,    /**<(1-Ad, 1-Ad, 1-Ad, 1-Ad) */
+    rwBLENDDESTCOLOR,       /**<(Rd,   Gd,   Bd,   Ad  ) */
+    rwBLENDINVDESTCOLOR,    /**<(1-Rd, 1-Gd, 1-Bd, 1-Ad) */
+    rwBLENDSRCALPHASAT,     /**<(f,    f,    f,    1   )  f = min (As, 1-Ad) */
+    rwBLENDFUNCTIONFORCEENUMSIZEINT = RWFORCEENUMSIZEINT
+};
+typedef enum RwBlendFunction RwBlendFunction;
+
 enum RwRenderState
 {
     rwRENDERSTATENARENDERSTATE = 0,
@@ -1393,6 +1411,11 @@ RwRaster* RpSkyTexGetTex0(RwRaster *r, RwUInt32 *msb, RwUInt32 *lsb);
 RwRaster* RpSkyGetDisplayBufferRaster(void);
 RwRaster* RpSkyGetDrawBufferRaster(void);
 
+RwTexture* RwTextureRead(const char* name, const char* mask);
+
+void RpSkyTexCacheAccessSpeculate(RwRaster *raster);
+bool RpSkyTexCacheAccessRaster(RwRaster *raster, bool useContext2);
+
 
 void *RwStreamOpen(uint32_t type, uint32_t accessType, const void *pData);
 bool RwStreamClose(void * stream, void *pData);
@@ -1487,7 +1510,7 @@ int _rwDMAOpenVIFPkt(RwUInt32, RwUInt32);
                 ((unsigned long int)(NREG)	<< 60);
 
 
-#define ADDTOPKT(_a, _b) { __uint128_t _c; MAKE128(_c, _a, _b); *_rwDMAPktPtr++ = _c; }
+#define ADDTOPKT(_a, _b) do { __uint128_t _c; MAKE128(_c, _a, _b); *_rwDMAPktPtr++ = _c; } while(0)
 
 
 extern uint32_t skyFrameBit;
@@ -1496,6 +1519,15 @@ extern bool skySuspended;
 extern void _rwDMAFlipData;
 
 extern void skyInitialClear;
+
+extern sceGsZbuf skyZbuf_1;
+
+extern long skyTest_1;
+extern long skyXyoffset_1;
+extern long skyFogcol;
+extern long skyClamp_1;
+extern long skyTex1_1;
+extern long skyAlpha_1;
 
 extern uint32_t currentMode;
 int sceGsSyncV(int mode);

@@ -30,15 +30,29 @@ typedef struct {
 #define ALPHA_FIX 2
 #define ALPHA(A,B,C,D,FIX) ( (((uint64_t)(A))&3) | ((((uint64_t)(B))&3)<<2) | ((((uint64_t)(C))&3)<<4) | ((((uint64_t)(D))&3)<<6) | ((((uint64_t)(FIX)))<<32UL) )//(A - B)*C >> 7 + D
 
+#define SRC_RGB 0
+#define DST_RGB 1
+#define ZERO_RGB 2
+
+#define SRC_ALPHA 0
+#define DST_ALPHA 1
+#define ALPHA_FIX 2
+
 #define GS_ALPHA_BLEND_NORMAL (ALPHA(ALPHA_SRC,ALPHA_DST,ALPHA_SRC,ALPHA_DST,0x00))
 #define GS_ALPHA_BLEND_ADD_NOALPHA    (ALPHA(ALPHA_SRC,ALPHA_ZERO,ALPHA_FIX,ALPHA_DST,0x80))
 #define GS_ALPHA_BLEND_ADD    (ALPHA(ALPHA_SRC,ALPHA_ZERO,ALPHA_SRC,ALPHA_DST,0x00))
+
+#define GS_RGBA(r, g, b, a) (r | (g << 8) | (b << 16) | (a << 24))
 
 enum GsRenderState {
     GS_SCISSORTESTENABLE,
     GS_ALPHATESTENABLE,
     GS_ALPHATESTMETHOD,
     GS_ALPHATESTFAIL,
+    GS_DESTALPHATESTENABLE,
+    GS_DESTALPHATESTMETHOD,
+    GS_DEPTHTESTENABLE,
+    GS_DEPTHTESTMETHOD,
     GS_BLENDMETHOD,
 };
 
@@ -75,16 +89,40 @@ enum GsAlphaTestMethod
          *  the reference value */
 };
 
+enum GsDepthTestMethod
+{
+    GS_DEPTHTESTMETHODNEVER,         
+        /**<Always fail the test */
+    GS_DEPTHTESTMETHODALWAYS,   
+        /**<Always pass the test */
+    GS_DEPTHTESTMETHODGREATEREQUAL,  
+        /**<Accept the new pixel if its alpha value is greater than or equal
+         *  to the value of the reference value */
+    GS_DEPTHTESTMETHODGREATER,       
+        /**<Accept the new pixel if its alpha value is greater than the value 
+         *  of the reference value */
+};
+
 void SetScissorRect(Rect* rect);
 
 bool GsRenderStateSet(int state, void* value);
 
 void SetPABE(uint8_t PerPixel);
 
-void GetBackBuffer(RwRaster *raster);
-
-void GetBackBufferOffset(RwRaster *raster, int x, int y);
+void seGetBackBufferOffset(RwRaster *raster, int x, int y);
 
 void SetAlphaMode(uint64_t AlphaMode);
+
+extern sceGsDBuffDc *_rwDMAFlipData_db;
+
+typedef enum
+{
+	CHANNEL_RED,
+	CHANNEL_GREEN,
+	CHANNEL_BLUE,
+	CHANNEL_ALPHA,
+} ColourChannels;
+
+void performChannelCopy(ColourChannels channelIn, ColourChannels channelOut, uint32_t blockX, uint32_t blockY, uint32_t source, uint32_t width, uint32_t height, uint32_t palette);
 
 #endif

@@ -25,7 +25,12 @@
     "bios_alloc.h": "c",
     "alloc.h": "c",
     "stdbool.h": "c",
-    "ctexture.h": "c"
+    "ctexture.h": "c",
+    "renderbuffer.h": "c",
+    "*.txt": "cpp",
+    "cpad.h": "c",
+    "sifdev.h": "c",
+    "ccoronas.h": "c"
   },
   "C_Cpp.default.compilerPath": "d:\\Backup\\msys\\1.0\\local\\ps2dev\\ee\\bin\\ee-gcc.exe",
   "C_Cpp_Runner.cCompilerPath": "C:/msys/MinGW/bin/gcc.exe",
@@ -83,5 +88,6 @@
   "C_Cpp_Runner.useUndefinedSanitizer": false,
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
-  "C_Cpp_Runner.useLinkTimeOptimization": false
+  "C_Cpp_Runner.useLinkTimeOptimization": false,
+  "C_Cpp.errorSquiggles": "disabled"
 }

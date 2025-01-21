@@ -6,5 +6,7 @@
 
 void SunGlareInject(uint32_t vehicle, uint32_t a2);
 void InjectRubbishPatches();
+void injectRainGraphicsPatches();
+void InjectSkyEdgePostEffects();
 
 #endif
