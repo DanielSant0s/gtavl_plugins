@@ -838,5 +838,6 @@ extern uint32_t CModelInfo_ms_modelInfoPtrs[];
 
 void CShadows_StoreShadowToBeRenderedSingle(uint8_t type, RwTexture* texture, CVector* posn, float topX, float topY, float rightX, float rightY, short intensity, uint8_t red, uint8_t green, uint8_t blue, float zDistance, bool drawOnWater, float scale, void* realTimeShadow, bool drawOnBuildings);
 
+float CGeneral_GetATanOfXY(float x, float y);
 
 #endif

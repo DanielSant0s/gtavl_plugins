@@ -129,10 +129,6 @@ static void AdjustTimeStep() {
     }*/
 }
 
-
-
-float CGeneral_GetATanOfXY(float x, float y);
-
 static float mymodf(float numerator, float denominator) {
     float quotient = numerator / denominator;
     float integer_part = (quotient >= 0.0f) ? (int)quotient : (int)(quotient - 1);

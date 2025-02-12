@@ -8,6 +8,8 @@
 
 #include <CPad.h>
 
+#include <CCam.h>
+
 #include "bios_alloc.h"
 
 static void (*CGame_ShutdownRenderWare)();
@@ -17,9 +19,48 @@ static void (*CGame_Init1)(const char*);
 
 static RwRaster *pColorPaletteRaster, *pDOFTable, *pDepthTempBuffer;
 
-static void CSkyEdgePostEffects_Init(const char* a1) {
-    int i, j;
+static void CSkyEdgePostEffects_ScaleDepthMask(RwRaster* palette, uint8_t initial_value, uint8_t factors[16]) {
+    int i, j, k = initial_value;
 
+    static const uint8_t factor_order[16][2] = {
+        { 0,   7 }, 
+        { 16,  23 }, 
+        { 8,   15 }, 
+        { 24,  39 }, 
+        { 48,  55 }, 
+        { 40,  47 }, 
+        { 56,  71 }, 
+        { 80,  87 }, 
+        { 72,  79 }, 
+        { 88,  103 }, 
+        { 112, 119 }, 
+        { 104, 111 }, 
+        { 120, 135 }, 
+        { 144, 151 }, 
+        { 136, 143 }, 
+        { 152, 255 }
+    };
+
+    RwRGBA *pal_rgba = (RwRGBA *)RwRasterLock(palette, 0, rwRASTERLOCKWRITE);
+
+    for (j = 0; j < 16; j++) {
+	    for (i = factor_order[j][0]; i < factor_order[j][1]+1; i++)
+	    {
+	    	pal_rgba[i].r = k;
+	    	pal_rgba[i].g = k;
+	    	pal_rgba[i].b = k;
+	    	pal_rgba[i].a = k;
+
+	    	if (k < 128 || factors[j] >= 128) {
+	    		k += factors[j];
+	    	} else if (k != 128) {
+	    		k = 128;
+	    	}
+	    }  
+    }
+}
+
+static void CSkyEdgePostEffects_Init(const char* a1) {
     CGame_Init1(a1);
 
     printf("Generating depth tables\n");
@@ -28,174 +69,18 @@ static void CSkyEdgePostEffects_Init(const char* a1) {
 
     pDOFTable = RwRasterCreate(16, 16, 32, rwRASTERTYPETEXTURE);
 
-    RwRGBA *dof_pal = (RwRGBA *)RwRasterLock(pDOFTable, 0, rwRASTERLOCKWRITE);
+    uint8_t dof_scale[16] = { 24, 24, 24, 24, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	j = 0;
-    
-	for (i = 0; i < 8; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-
-		if (j < 128) {
-			j += 24;
-		} else if (j != 128) {
-			j = 128;
-		}
-	}      
-
-	for (i = 16; i < 24; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-
-		if (j < 128) {
-			j += 24;
-		} else if (j != 128) {
-			j = 128;
-		}
-	}      
-
-	for (i = 8; i < 16; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-
-		if (j < 128) {
-			j += 24;
-		} else if (j != 128) {
-			j = 128;
-		}
-	}      
-
-	for (i = 24; i < 40; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-
-		if (j < 128) {
-			j += 24;
-		} else if (j != 128) {
-			j = 128;
-		}
-	}      
-
-	for (i = 48; i < 56; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-
-		if (j < 128) {
-			j += 12;
-		} else if (j != 128) {
-			j = 128;
-		}
-	}      
-
-	for (i = 40; i < 48; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 56; i < 72; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 80; i < 88; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 72; i < 80; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 88; i < 104; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 112; i < 120; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 104; i < 112; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 120; i < 136; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-	
-	for (i = 144; i < 152; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 136; i < 144; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}      
-
-	for (i = 152; i < 256; i++)
-	{
-		dof_pal[i].r = j;
-		dof_pal[i].g = j;
-		dof_pal[i].b = j;
-		dof_pal[i].a = j;
-	}
+    CSkyEdgePostEffects_ScaleDepthMask(pDOFTable, 0, dof_scale);    
 
     pColorPaletteRaster = RwRasterCreate(16, 16, 32, rwRASTERTYPETEXTURE);
-    
-    RwRGBA *in_pallete = (RwRGBA *)RwRasterLock(pColorPaletteRaster, 0, rwRASTERLOCKWRITE);
 
-    // 0 means full fog
-    // 128 means no fog
+    uint8_t fog_scale[16] = { 4, 2, 6, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    CSkyEdgePostEffects_ScaleDepthMask(pColorPaletteRaster, 0, fog_scale);    
+
+    // 0 means full opaque
+    // 128 means full transparent
 
     // 1st plane: 0  - 7
     // 2st plane: 16 - 23
@@ -204,135 +89,6 @@ static void CSkyEdgePostEffects_Init(const char* a1) {
     // 5st plane: 48 - 56
     // 6st plane: 40 - 48
     // 7st plane: 56 - 72
-
-    
-	for (i = 0, j = 4; i < 8; i++, j += 4)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 16; i < 24; i++, j += 2)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 8; i < 16; i++, j += 6)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 24; i < 40; i++, j += 2)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 48; i < 56; i++, j++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 40; i < 48; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 56; i < 72; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 80; i < 88; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 72; i < 80; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 88; i < 104; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 112; i < 120; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 104; i < 112; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 120; i < 136; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 144; i < 152; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 136; i < 144; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
-
-	for (i = 152; i < 256; i++)
-	{
-        in_pallete[i].r = j;
-        in_pallete[i].g = j;
-        in_pallete[i].b = j;
-        in_pallete[i].a = j;
-	}
 
     printf("Depth tables generated\n");
 }
@@ -447,7 +203,7 @@ static void CSkyEdgePostEffects_RenderFog(RwRaster* table, uint32_t tl_c, uint32
     ADDTOPKT(GS_XYOFFSET_1, skyXyoffset_1);
 }
 
-static void CSkyEdgePostEffects_RenderDepthOfField(RwRaster* table, uint32_t sprite_col, int pass_count) {
+static void CSkyEdgePostEffects_RenderDepthOfField(RwRaster* table, uint32_t sprite_col) {
     RwRGBA sprite_color = *(RwRGBA*)(&sprite_col);
 
     uint32_t zbuffer = ((skyFrameBit? _rwDMAFlipData_db->draw01.zbuf1.ZBP : _rwDMAFlipData_db->draw11.zbuf1.ZBP) << 5);
@@ -463,6 +219,7 @@ static void CSkyEdgePostEffects_RenderDepthOfField(RwRaster* table, uint32_t spr
 
     ADDTOPKT(GS_TEST_1, GS_SET_TEST_1(0, 0, 0, 0, 0, 0, 1, 1));
 
+    // Output = (((DST_RGB - SRC_RGB) * DST_ALPHA) >> 7) + SRC_RGB
     ADDTOPKT(GS_ALPHA_1, GS_SET_ALPHA_1(DST_RGB, SRC_RGB, DST_ALPHA, SRC_RGB, 0));
 
     ADDTOPKT(GS_XYOFFSET_1, GS_SET_XYOFFSET_1(0, 0));
@@ -553,6 +310,9 @@ static void CSkyEdgePostEffects_RenderDepthOfField(RwRaster* table, uint32_t spr
     ADDTOPKT(GS_XYOFFSET_1, skyXyoffset_1);
 }
 
+float old_up_z = 0.0f, new_up_z = 0.0f;
+
+static uint8_t dof_scale[16] = { 24, 24, 24, 24, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 static void CSkyEdgePostEffects_Update() {
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void *)false);
@@ -567,9 +327,22 @@ static void CSkyEdgePostEffects_Update() {
     //                              GS_RGBA(0x40, 0x40, 0x40, 0x00), 
     //                              GS_RGBA(0x40, 0x40, 0x40, 0x00));
 
-    CSkyEdgePostEffects_RenderDepthOfField(pDOFTable, 
-                                           GS_RGBA(0xC0, 0xC0, 0xC0, 0x00),
-                                           2);
+    if (TheCamera.placeable.m_matrix->up.z < -0.1f) {
+        new_up_z = TheCamera.placeable.m_matrix->up.z;
+        
+        if (old_up_z != new_up_z) {
+            dof_scale[0] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
+            dof_scale[1] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
+            dof_scale[2] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+            dof_scale[3] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+            dof_scale[4] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+
+            CSkyEdgePostEffects_ScaleDepthMask(pDOFTable, (uint8_t)(128-(-1*(((new_up_z+0.1f)*4)*128)) < 0? 0 : 128-(-1*(((new_up_z+0.1f)*4)*128))), dof_scale);  
+        }
+
+        CSkyEdgePostEffects_RenderDepthOfField(pDOFTable, GS_RGBA(0xA0, 0xA0, 0xA0, 0xA0));
+        old_up_z = new_up_z;
+    }
 
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void *)false);
     RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)true);
@@ -582,7 +355,6 @@ static void CSkyEdgePostEffects_Update() {
 }
 
 static void CSkyEdgePostEffects_Render() {
-
 
     CMovingThings_Render();
 }
