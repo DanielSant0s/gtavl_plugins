@@ -5,6 +5,8 @@
 #include <string.h>
 #include "hooks.h"
 
+#include <CPed.h>
+
 #include "anim_association.h"
 
 CEntity* LastCharDamageEntity;
@@ -505,7 +507,97 @@ static void SetupCustomColorCycleData() {
     }
 }
 
+static CObject *(*CWaterLevel_CreateBeachToy)(CVector *pos, int toy) = 0x18AB80;
+
+void VectorScale(CVector *out, CVector *in, float scale) {
+    out->x = in->x * scale;
+    out->y = in->y * scale;
+    out->z = in->z * scale;
+}
+
+void renderBeachToys(CPhysical *ped) {
+    if (randint(0, 10) > 5) return;
+
+    float size, sizea;
+    CVector posn, outVec, v133;
+
+    posn.x = ped->entity.placeable.m_matrix->pos.x;
+    posn.y = ped->entity.placeable.m_matrix->pos.y;
+    posn.z = ped->entity.placeable.m_matrix->pos.z;
+
+    CVector *p_right = &ped->entity.placeable.m_matrix->right;
+
+    size = random_float(-4.0f, 4.0f);
+
+    if (size > -1.5f && size < 1.5f) {
+        if (size > 0) {
+            size = 1.5f;
+        } else {
+            size = -1.5f;
+        }
+    }
+
+    VectorScale(&outVec, p_right, size);
+
+    posn.x += outVec.x;
+    posn.y += outVec.y;
+    posn.z += outVec.z;
+
+    CMatrix *v81 = ped->entity.placeable.m_matrix;
+    sizea = random_float(-0.5f, 4.0f);
+    VectorScale(&v133, &v81->up, sizea);
+
+    v133.x += posn.x;
+    v133.y += posn.y;
+    v133.z += posn.z;
+    posn.z -= 0.75f;
+
+    CWaterLevel_CreateBeachToy(&posn, randint(0, 10) < 5? 12 : 13);
+}
+
+int shouldRenderLotion() {
+    CPhysical *ped;
+    asm volatile("move %0, $s1" : "=r" (ped));
+
+    renderBeachToys(ped);
+
+    int pedType = getPedType(ped);
+
+    return !(pedType == PED_TYPE_CIVFEMALE && randint(0, 10) <= 7);
+}
+
+static void * (*CObject_new)(int size) = 0x1B0F40;
+
+static void *extend_beach_toys(int size, int toy) {
+    int isStatic = 1;
+    int ObjectId = 0;
+
+    if (toy > 11) {
+        switch (toy) {
+            case 12:
+                ObjectId = 1610;
+                isStatic = 1;
+                break;
+            case 13:
+                ObjectId = 1611;
+                isStatic = 1;
+                break;
+        }
+
+        asm volatile("move $s1, %0" : : "r" (isStatic));
+        asm volatile("move $s2, %0" : : "r" (ObjectId));
+    }
+
+    return CObject_new(size);
+}
+
 void injectMiscPatches() {
+    MakeNop(0x1AB918);
+    RedirectCall(0x1AB91C, shouldRenderLotion);
+    MakeNop(0x1AB920);
+
+    RedirectCall(0x18AD40, extend_beach_toys);
+
     RedirectCall(0x2457F0, &SetupCustomColorCycleData);
 
     RedirectJump(0x3C44F0, &CSprite_RenderBufferedOneXLUSprite_Rotate_Aspect);

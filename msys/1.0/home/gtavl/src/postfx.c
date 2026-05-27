@@ -327,22 +327,22 @@ static void CSkyEdgePostEffects_Update() {
     //                              GS_RGBA(0x40, 0x40, 0x40, 0x00), 
     //                              GS_RGBA(0x40, 0x40, 0x40, 0x00));
 
-    if (TheCamera.placeable.m_matrix->up.z < -0.1f) {
-        new_up_z = TheCamera.placeable.m_matrix->up.z;
-        
-        if (old_up_z != new_up_z) {
-            dof_scale[0] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
-            dof_scale[1] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
-            dof_scale[2] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
-            dof_scale[3] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
-            dof_scale[4] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
-
-            CSkyEdgePostEffects_ScaleDepthMask(pDOFTable, (uint8_t)(128-(-1*(((new_up_z+0.1f)*4)*128)) < 0? 0 : 128-(-1*(((new_up_z+0.1f)*4)*128))), dof_scale);  
-        }
-
-        CSkyEdgePostEffects_RenderDepthOfField(pDOFTable, GS_RGBA(0xA0, 0xA0, 0xA0, 0xA0));
-        old_up_z = new_up_z;
-    }
+    //if (TheCamera.placeable.m_matrix->up.z < -0.1f) {
+    //    new_up_z = TheCamera.placeable.m_matrix->up.z;
+    //    
+    //    if (old_up_z != new_up_z) {
+    //        dof_scale[0] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
+    //        dof_scale[1] = (uint8_t)(24-(-1*((new_up_z+0.1f)*24)));
+    //        dof_scale[2] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+    //        dof_scale[3] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+    //        dof_scale[4] = (uint8_t)(12-(-1*((new_up_z+0.1f)*12)));
+//
+    //        CSkyEdgePostEffects_ScaleDepthMask(pDOFTable, (uint8_t)(128-(-1*(((new_up_z+0.1f)*4)*128)) < 0? 0 : 128-(-1*(((new_up_z+0.1f)*4)*128))), dof_scale);  
+    //    }
+//
+    //    CSkyEdgePostEffects_RenderDepthOfField(pDOFTable, GS_RGBA(0xA0, 0xA0, 0xA0, 0xA0));
+    //    old_up_z = new_up_z;
+    //}
 
     RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void *)false);
     RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)true);
@@ -371,8 +371,8 @@ void InjectSkyEdgePostEffects() {
     CMovingThings_Render =     (void (*)())ReadCall(0x246EA8);
     CGame_ShutdownRenderWare = (void (*)())ReadCall(0x247388);
 
-    RedirectCall(0x242B9C, &CSkyEdgePostEffects_Init);
-    RedirectCall(0x246990, &CSkyEdgePostEffects_Update);
-    RedirectCall(0x246EA8, &CSkyEdgePostEffects_Render);
-    RedirectCall(0x247388, &CSkyEdgePostEffects_Shutdown);
+    //RedirectCall(0x242B9C, &CSkyEdgePostEffects_Init);
+    //RedirectCall(0x246990, &CSkyEdgePostEffects_Update);
+    //RedirectCall(0x246EA8, &CSkyEdgePostEffects_Render);
+    //RedirectCall(0x247388, &CSkyEdgePostEffects_Shutdown);
 }

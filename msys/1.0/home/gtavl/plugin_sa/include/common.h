@@ -667,6 +667,7 @@ typedef struct {
 
 #define getPedActiveWeaponSlot(ped) *(uint8_t*)((uint32_t)ped + 0x758)
 #define getPedWeapons(ped) (CWeapon*)((uint32_t)ped + 0x5E0)
+#define getPedType(ped) *(int*)((uint32_t)ped + 0x5D8)
 
 char CPed_GetWeaponSkill(void* ped);
 
